@@ -1,3 +1,0 @@
-Quero fazer um software para gerir o processo de candidaturas a  vagas de emprego, um software que reune empregadores que querem anunciar as vagas para suas empresas, e os candidatos a vagas. Quero que os empregadores abram uma vaga, adicionem os detalhes da vaga, e tão logo termine a vaga fique disponivel para os candidatos inscritos na plataforma enviarem os seus cvs.
-
-Ajuda-me a tirar os requisitos funcionais desse software
