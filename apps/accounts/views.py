@@ -30,11 +30,7 @@ class LoginView(View):
         return redirect('accounts:login')
     
 
-#Decora o metodo dispatch(2º metodo a ser chamado quando a class é inicializada) da class com login_required
-@method_decorator(
-    login_required(login_url="accounts:login", redirect_field_name='next'), 
-    name='dispatch'
-)
+@method_decorator(login_required(login_url="accounts:login", redirect_field_name='next'), name='dispatch')
 class LogoutView(View):
     # @method_decorator(login_required(login_url="accounts:login", redirect_field_name='next'))
     def get(self, request, *args, **kwargs):
@@ -47,3 +43,7 @@ class LogoutView(View):
     #     messages.error(request, "Logout com sucesso!")
     #     return redirect('accounts:login')
     
+
+class SignupView(View):
+    def get(self, request, *args, **kwargs):
+        return render(request, "accounts/signup.html")
