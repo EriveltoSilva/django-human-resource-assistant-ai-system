@@ -4,10 +4,8 @@ from django.contrib.messages import constants as messages
 
 load_dotenv()
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = str(os.getenv("SECRET_KEY"))
 DEBUG =  bool(str(os.getenv("DEBUG")))
 ALLOWED_HOSTS = []
@@ -21,9 +19,20 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    #Personal Apps
     # 'apps.chat.apps.ChatConfig',
+    'apps.accounts.apps.AccountsConfig',
     'apps.users.apps.UsersConfig',
     'apps.general.apps.GeneralConfig',
+
+    #Django allauth apps
+    # 'allauth',
+    # 'allauth.account',
+    # 'allauth.socialaccount',
+    # 'allauth.socialaccount.providers.google',
+    # 'allauth.socialaccount.providers.linkedin',
+    # 'allauth.socialaccount.providers.linkedin_oauth2',
 ]
 
 
@@ -41,6 +50,7 @@ INSTALLED_APPS = [
 #     # }
 # }
 
+# SITE_ID = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -50,6 +60,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    # Add the account middleware:
+    # "allauth.account.middleware.AccountMiddleware",
 ]
 
 ROOT_URLCONF = 'setup.urls'
@@ -91,9 +104,12 @@ DATABASES = {
     # }
 }
 
+# Used by django-allauth
+# AUTHENTICATION_BACKENDS = [
+#     'django.contrib.auth.backends.ModelBackend',
+#     'allauth.account.auth_backends.AuthenticationBackend',
+# ]
 
-# Password validation
-# https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -115,7 +131,6 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
 LANGUAGE_CODE = 'pt-pt'
-
 TIME_ZONE = 'Africa/Luanda'
 USE_I18N = True
 USE_TZ = True
@@ -162,8 +177,5 @@ EMAIL_HOST = str(os.getenv('EMAIL_HOST'))
 #         ),
 #     }
 # }
-
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
