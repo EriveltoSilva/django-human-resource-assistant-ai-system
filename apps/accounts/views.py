@@ -28,4 +28,14 @@ class LoginView(View):
         return redirect('accounts:login')
     
 
-
+class LogoutView(View):
+    def get(self, request, *args, **kwargs):
+        auth.logout(request)
+        messages.error(request, "Logout com sucesso!")
+        return redirect('accounts:login')
+    
+    def post(self, request, *args, **kwargs):
+        auth.logout(request)
+        messages.error(request, "Logout com sucesso!")
+        return redirect('accounts:login')
+    
