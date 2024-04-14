@@ -22,10 +22,10 @@ class LoginView(View):
             if user:
                 auth.login(request, user=user)
                 messages.success(request, f"Bem-vindo de volta Sr(a).{request.user.get_full_name()}!")
-                return redirect('home')
-            messages.error(request, f"Ups! Usuário não Encontrado! Verifique por favor as credências!")
+                return redirect('landing_page')
+            messages.error(request, "Ups! Usuário não Encontrado! Verifique por favor as credências!")
         else:
-            messages.error(request, f"Error validando o formulário!")
+            messages.error(request, "Error validando o formulário!")
 
         return redirect('accounts:login')
     
