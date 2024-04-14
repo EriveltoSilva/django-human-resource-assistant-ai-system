@@ -2,14 +2,16 @@ html {
   scroll-behavior: smooth;
 }
 
-
+body{
+  background: #e8eff9;
+}
 #personal {
   height: 100vh;
 }
 
 #business {
   height: 100vh;
-  background-image: url('../images/bg-company.jpg');
+  background-image: url('/static/assets/accounts/images/bg-company.jpg');
   background-repeat: no-repeat;
   background-size: cover;
 }
@@ -19,7 +21,6 @@ html {
   height: 100%;
   background-color: rgba(120, 182, 216, .6)
 }
-
 
 /*
  * Header

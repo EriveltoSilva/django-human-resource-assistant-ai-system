@@ -6,23 +6,18 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="keywords" content="Login, My Job, Busca, emprego">
-    <meta name="description" content="Página de Login da My Job">
-    <title>My Job - Login </title>
+    <meta name="keywords" content="Tipo, Cadastro, Empresa, Conta Pessoal">
+    <meta name="description" content="Seleção do tipo de conta, Pessoal ou Empresarial">
+    <title>My Job - Tipo de Casdastro </title>
     
-    <link rel="shortcut icon" href="{% static 'assets/accounts/images/logo.png' %}" />
     <link href="{% static 'assets/vendors/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
     <link href="{% static 'assets/vendors/bootstrap5/css/bootstrap.min.css' %}" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'assets/accounts/css/login.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/accounts/css/signup.css' %}">
 
 </head>
 
 <body>
     <div class="row vh-100 g-0">
-        <div class="col-lg-6 position-relative d-none d-lg-block">
-            <img src="{% static 'assets/accounts/images/bg.jpg' %}" alt="Imagem de Fundo do Login na My Job" class="bg-holder">
-        </div>
-
         <div class="col-lg-6">
             <div class="row align-items-center justify-content-center h-100 g-0 px-4 px-sm-0">
                 <div class="col col-sm-6 col-lg-7 col-xl-6">
@@ -31,18 +26,18 @@
                     </a>
 
                     <div class="text-center mb-5">
-                        <h3 class="fw-bold">Faça o seu Login</h3>
+                        <h3 class="fw-bold">Criar Conta o seu Login</h3>
                         <p class="text-secondary">Acesse a sua conta</p>
                     </div>
 
                     <!-- Links sociais -->
                     <button class="btn btn-lg btn-outline-secondary btn-outline-custom w-100 mb-3" disabled>
                         <i class="bi bi-google text-danger me-1 fs-6"></i>
-                        Login com o Google
+                        Registro com o Google
                     </button>
                     <button class="btn btn-lg btn-outline-secondary btn-outline-custom w-100" disabled>
                         <i class="bi bi-facebook text-primary me-1 fs-6 "></i>
-                        Login com o Facebook
+                        Registro com o Facebook
                     </button>
                     <!--/ End Links sociais -->
 
@@ -61,19 +56,21 @@
                             {% include 'partials/_alerts.html' %}
                         </div>
 
-                        {% for field in form.visible_fields %}
+                        
                         <div class="input-group mb-3">
                             <span class="input-group-text">
-                                {% if field.name == 'username' %}
                                 <i class="bi bi-person"></i>
-                                {% else %}
-                                <i class="bi bi-lock"></i>
-                                {% endif %}
                             </span>
-                            {{ field }}
+                            <input type="text" name="username" placeholder="Username" class="form-control form-control-lg fs-6" required id="id_username">
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">
+                                <i class="bi bi-lock"></i>
+                            </span>
+                            <input type="password" name="password" placeholder="Senha" class="form-control form-control-lg fs-6" required id="id_username">
                         </div>
 
-                        {% endfor %}
+                
 
                         <div class="input-group mb-3 d-flex justify-content-end">
                             <div>
@@ -88,12 +85,18 @@
                     <div class="text-center">
                         <small>
                             Não tem uma conta ainda?
-                            <a href="{% url 'landing_page' %}" class="fw-bold">Registre-se</a>
+                            <a href="" class="fw-bold">Registre-se</a>
                         </small>
                     </div>
                 </div>
             </div>
         </div>
+
+        <div class="col-lg-6 position-relative d-none d-lg-block">
+            <img src="{% static 'assets/accounts/images/bg.jpg' %}" alt="Imagem de Fundo do Login na My Job" class="bg-holder">
+        </div>
+
+        
     </div>
 
     <script src="{% static 'assets/vendors/bootstrap5/js/bootstrap.bundle.min.js' %}"></script>

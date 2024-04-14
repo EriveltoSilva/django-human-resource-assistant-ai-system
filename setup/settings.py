@@ -23,7 +23,9 @@ INSTALLED_APPS = [
     #Personal Apps
     # 'apps.chat.apps.ChatConfig',
     'apps.accounts.apps.AccountsConfig',
-    'apps.users.apps.UsersConfig',
+    'apps.business.apps.BusinessConfig',
+    'apps.personal.apps.PersonalConfig',
+    # 'apps.users.apps.UsersConfig',
     'apps.general.apps.GeneralConfig',
 
     #Django allauth apps

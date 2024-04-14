@@ -44,6 +44,11 @@ class LogoutView(View):
     #     return redirect('accounts:login')
     
 
-class SignupView(View):
+class SignupPersonalView(View):
     def get(self, request, *args, **kwargs):
-        return render(request, "accounts/signup.html")
+        return render(request, "accounts/signup-personal.html")
+
+class SignupBusinessView(View):
+    def get(self, request, *args, **kwargs):
+        return render(request, "accounts/signup-business.html")
+
