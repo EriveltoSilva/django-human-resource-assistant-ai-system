@@ -4,6 +4,7 @@ html {
 
 body{
   background: #e8eff9;
+  font-family: "Roboto", sans-serif;
 }
 #personal {
   height: 100vh;
@@ -19,7 +20,7 @@ body{
 .molde {
   width: 100%;
   height: 100%;
-  background-color: rgba(120, 182, 216, .6)
+  background-color: rgba(120, 182, 216, .8)
 }
 
 /*
