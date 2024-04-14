@@ -1,6 +1,6 @@
 <!-- {% load static %} -->
 <!DOCTYPE html>
-<html lang="pt-pt">
+<html lang="pt-ao">
 
 <head>
     <meta charset="UTF-8">
@@ -14,71 +14,73 @@
     <link href="assets/vendors/bootstrap5/css/bootstrap.min.css" rel="stylesheet">
     <!-- <link rel="stylesheet" href="{% static 'assets/accounts/css/signup.css' %}"> -->
     <link rel="stylesheet" href="assets/css/signup.css">
-
 </head>
 
-<body class="text-white">
-    <header class="mb-auto d-flex w-100 p-3 mx-auto justify-content-evenly bg-dark">
-        <h3 class=" mb-0">Cover</h3>
+<body class="h-100">
+    <header class="mb-auto d-flex w-100 p-3 mx-auto justify-content-evenly bg-primary">
+        <h3 class=" mb-0">Coverr</h3>
         <nav class="nav nav-masthead justify-content-center float-md-end">
-            <a class="nav-link active" aria-current="page" href="#">Home</a>
             <a class="nav-link" href="#personal">Conta Pessoal</a>
             <a class="nav-link" href="#business">Conta Empresarial</a>
         </nav>
+        <a class="btn btn-outline-light px-5" href="Login">Iniciar Secção</a>
     </header>
 
-    <div class="row" id="personal">
-        <div class="col-6">
-            <img src="assets/images/bg.jpg" alt="Imagem de Fundo" class="">
+    <section class="row" id="personal">
+        <div class="col-12 col-md-6">
+            <img src="assets/images/bg.jpg" alt="Imagem de Trabalhador" class="w-100 h-100">
         </div>
-        <div class="col-6">
-            <div>
-                <h1>Cover your page.</h1>
-                <p class="lead">
-                    Cover is a one-page template for building simple and beautiful home pages. Download, edit
-                    the text, and add your own fullscreen background photo to make it your own.</p>
-                <p class="lead">
-                    <a href="#" class="btn btn-lg btn-secondary fw-bold border-white bg-white">Learn more</a>
-                </p>
-            </div>
-        </div>
-    </div>
 
-    <!-- <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column" id="business">
-        <header class="mb-auto">
-            <div>
-                <h3 class="float-md-start mb-0">Cover</h3>
-                <nav class="nav nav-masthead justify-content-center float-md-end">
-                    <a class="nav-link active" aria-current="page" href="#">Home</a>
-                    <a class="nav-link" href="#">Features</a>
-                    <a class="nav-link" href="#">Contact</a>
-                </nav>
-            </div>
-        </header>
-
-        <main class="px-3">
-            
-
-                <h1>Cover your page.</h1>
-                <p class="lead">Cover is a one-page template for building simple and beautiful home pages. Download, edit
-                    the text, and add your own fullscreen background photo to make it your own.</p>
-            <p class="lead">
-                <a href="#" class="btn btn-lg btn-secondary fw-bold border-white bg-white">Learn more</a>
+        <div class="col-12 col-md-6 d-flex flex-column justify-content-center align-items-center text-center">
+            <h1 class="text-start">Fique atento as melhores oportunidades profissionais do mercado de trabalho</h1>
+            <p class="text-start">
+                Veja e se candidate as melhores oportunidades para si.
+                Acompanha as vagas de sua vaga e empresa dos sonhos e se capacite para ela!
             </p>
-        </main>
+            <p class="">
+                <a href="" class="btn btn-lg btn-secondary fw-bold border-white bg-primary text-light">Criar Conta</a>
+            </p>
+        </div>
 
-        <footer class="mt-auto text-white-50">
-            <p>Cover template for <a href="../../../../index.html" class="text-white">Bootstrap</a>, by <a
-                    href="https://twitter.com/mdo" class="text-white">@mdo</a>.</p>
-        </footer>
-    </div> -->
+    </section>
+
+
+    <section id="business">
+        <div class="molde">
+            <div class="row align-items-center text-center p-5">
+                <div class="col-12 col-md-6">
+                    <h1 class="text-start">Faça um recrutamento fácil, inteligente e simplificado</h1>
+                    <p class="text-start">
+                        Tenha o melhor da tecnologia para ajuda-lo a selecionar o candidato perfeito para a vaga que sua
+                        empresa precisa.
+                    </p>
+                    <p class="lead">
+                        <a href="" class="btn btn-lg btn-primary fw-bold border-white text-light">
+                            Criar Conta Empresarial
+                        </a>
+                    </p>
+                </div>
+                <div class="col-12 col-md-6 align-items-center">
+                    <img src="assets/images/contratacao.jpg" alt="Imagem de Fundo" class="w-100 rounded">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12 text-center text-light">
+                    <h2>"A contratação de um bom empregado é o primeiro passo para o sucesso sustentável do negócio."
+                    </h2>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- <footer class="text-center">
+        <p>
+            ©2024 My Job. Todos os direitos reservados
+        </p>
+    </footer> -->
+
+
 </body>
-<!-- <body>
-   <div class="wrapper">
-        <img class="bg-image" src="assets/images/bg.jpg" alt="Imagem de Fundo">
-        
-   </div>
-    <script src="assets/vendors/bootstrap5/js/bootstrap.bundle.min.js"></script>
-</body> -->
 
 </html>
