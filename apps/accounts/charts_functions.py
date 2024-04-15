@@ -8,7 +8,7 @@ from django.db.models import Sum, Count, F, ExpressionWrapper, fields, FloatFiel
 from django.db.models.functions import Coalesce
 
 from django.shortcuts import render
-from .models import Profile
+from ..users.models import Profile
 from django.utils import timezone
 from django.db.models import Avg
 
