@@ -10,12 +10,15 @@ from .models import Profile
 from django.utils.text import slugify
 
 class LoginView(View):
+    form_class = LoginForm
+    template_name = "accounts/login.html"
+
     def get(self, request, *args, **kwargs):
-        form = LoginForm()
-        return render(request, "accounts/login.html", {"form":form})
+        form = self.form_class()
+        return render(request,self.template_name, {"form":form})
     
     def post(self, request, *args, **kwargs):
-        form = LoginForm(request.POST)
+        form = self.form_class(request.POST)
         if form.is_valid():
             user = auth.authenticate(
                 request,
@@ -29,7 +32,6 @@ class LoginView(View):
             messages.error(request, "Ups! Usuário não Encontrado! Verifique por favor as credências!")
         else:
             messages.error(request, "Error validando o formulário!")
-
         return redirect('accounts:login')
     
 @method_decorator(login_required(login_url="accounts:login", redirect_field_name='next'), name='dispatch')
@@ -49,6 +51,7 @@ class LogoutView(View):
 class SignupPersonalView(View):
     form_class = SignupPersonalForm
     template_name = "accounts/signup-personal.html"
+
     def get(self, request, *args, **kwargs):
         form = self.form_class(request.session.get("signup_personal_form_data", None))
         return render(request, self.template_name, {"form":form})
