@@ -58,6 +58,12 @@
 
                         {% for field in form %}
                             <div class="input-group mb-3">
+                                {% if field.name == "birthday" %}
+                                <label for="{{ field.id_for_label }}" class="w-100"> 
+                                    {{ field.label }}
+                                </label>
+                                {% endif %}
+
                                 <span class="input-group-text"><i class="bi bi-{{ field.field.widget.attrs.iconClass }}"></i></span>
                                 {{ field }}
                                 

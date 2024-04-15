@@ -6,6 +6,8 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
+from .models import Profile
+from django.utils.text import slugify
 
 class LoginView(View):
     def get(self, request, *args, **kwargs):
@@ -76,6 +78,13 @@ class SignupPersonalView(View):
             user = form.save(commit=False)
             user.set_password(user.password)
             user.save() 
+            Profile.objects.create(
+                user=user,
+                slug = slugify(f"{user.username}"),
+                bi = form.cleaned_data.get("bi"),
+                gender = form.cleaned_data.get("gender"),
+                birthday = form.cleaned_data.get("birthday")
+            )
             messages.success(request, "Usuário Registrado com sucesso!")
             del(request.session['signup_personal_form_data'])
             return redirect("accounts:login")

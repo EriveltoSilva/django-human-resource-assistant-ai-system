@@ -1,8 +1,9 @@
 import re
 from django import forms
+from django.utils import timezone 
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
-
+from .. import utils
 # from django.contrib.auth.models import User
 User = get_user_model()
 
@@ -80,6 +81,55 @@ class SignupPersonalForm(forms.ModelForm):
             'required': 'Este campo é obrigatório' }
     )
 
+    bi = forms.CharField(
+        label="Nº do Bilhete",
+        required=True,
+        max_length=14,
+        widget=forms.TextInput(attrs={
+            "placeholder":"Nº do Bilhete", 
+            "class":"form-control",
+            "iconClass":"person", 
+        }), 
+    )
+
+    birthday = forms.DateField(
+        label='Data de Nascimento',
+        required=True,
+        widget=forms.DateInput(attrs={
+            'type': 'date',
+            'format':"%H/%M", 
+            'class':'form-control form-control-lg fs-6',
+            "iconClass":"calendar2-date",
+        }),
+        error_messages={
+            "required":"O campo Data de reunião não pode estar vazio!" },
+    )
+
+    phone = forms.CharField(
+        label="Telefone",
+        required=True,
+        max_length=13,
+        widget=forms.TextInput(attrs={
+            'type': 'tel',
+            "placeholder":"Telefone",
+            "class":"form-control form-control-lg fs-6",
+            "iconClass":"telephone",
+        })
+    )
+
+    gender = forms.CharField(
+        label="Gênero",
+        required=True,
+        max_length=50,
+        widget=forms.Select(attrs={
+            "class":"form-select",
+            "iconClass":"gender-male",
+
+            }, choices=utils.GENDER
+        ), 
+        error_messages={"required":"O campo genero não pode estar vazio!" },
+    )
+
     password = forms.CharField(
         label='Senha',
         required=True,
@@ -125,6 +175,27 @@ class SignupPersonalForm(forms.ModelForm):
         if ' ' in data:
             raise ValidationError("O username não pode conter espaços em branco",code='invalid')
         return data
+    
+    def clean_birthday(self):
+        birthday = self.cleaned_data.get('birthday')
+        if birthday and birthday >= timezone.now().date():
+            raise ValidationError("A data de nascimento deve estar no passado.", "invalid")
+        return birthday
+    
+    def clean_bi(self):
+        bi = self.cleaned_data.get('bi').strip()
+        if len(bi) != 14:
+            raise ValidationError("O número de identificação deve ter 14 caracteres.")
+        return bi
+    
+    def clean_phone(self):
+        phone = self.cleaned_data.get('phone').strip()
+        if phone:   
+            if "+244" not in phone:
+                phone = "+244"+ phone
+            if not re.match(r'^\+244\d{9}$', phone):
+                raise ValidationError("O número de telefone deve conter 9 digitos.")
+        return phone
     
     def clean(self):
         cleaned_data = super().clean()

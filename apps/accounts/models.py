@@ -8,6 +8,7 @@ User = get_user_model()
 class Profile(models.Model):
     user = models.OneToOneField(to=User, on_delete=models.CASCADE, related_name="profile")
     slug = models.SlugField(unique=True)
+    bi = models.CharField(max_length=14, null=False, unique=True)
     gender = models.CharField(max_length=50, choices=utils.GENDER, default=utils.GENDER[0])
     birthday = models.DateField(null=True,blank=True)
     image = models.ImageField(upload_to="perfil", blank=True)
