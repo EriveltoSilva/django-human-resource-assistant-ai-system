@@ -1,13 +1,13 @@
-from .forms import LoginForm, SignupPersonalForm
+from .models import Profile
 from django.views import View 
 from django.urls import reverse
+from django.utils.text import slugify
 from django.contrib import messages, auth
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
+from .forms import LoginForm, SignupPersonalForm
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
-from .models import Profile
-from django.utils.text import slugify
 
 class LoginView(View):
     form_class = LoginForm
@@ -33,6 +33,7 @@ class LoginView(View):
         else:
             messages.error(request, "Error validando o formulário!")
         return redirect('accounts:login')
+login = LoginView.as_view()
     
 @method_decorator(login_required(login_url="accounts:login", redirect_field_name='next'), name='dispatch')
 class LogoutView(View):
@@ -46,8 +47,8 @@ class LogoutView(View):
     #     auth.logout(request)
     #     messages.error(request, "Logout com sucesso!")
     #     return redirect('accounts:login')
+logout = LogoutView.as_view()
     
-
 class SignupPersonalView(View):
     form_class = SignupPersonalForm
     template_name = "accounts/signup-personal.html"
@@ -75,9 +76,7 @@ class SignupPersonalView(View):
             return redirect("accounts:login")
         print(form.errors)
         return redirect("accounts:signup-personal")
-
 signup_personal = SignupPersonalView.as_view()
-
 
 class SignupBusinessView(View):
     def get(self, request, *args, **kwargs):
