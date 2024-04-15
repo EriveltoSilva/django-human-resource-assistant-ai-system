@@ -24,13 +24,14 @@ def add_placeholder(field, placeholder_val):
 class SignupPersonalForm(forms.ModelForm):
     class Meta:
         model = User
-        fields =['first_name', 'last_name', 'username','email','password']
+        fields =[
+            'first_name', 'last_name', 'username',
+            'email','bi', 'phone', 'birthday', 
+            'gender','password', 'password2']
 
 
     def __init__(self, *args, **kwargs)->None:
         super().__init__(*args, **kwargs)
-        # add_attr(self.fields['username'], 'placeholder', 'Hello')
-        # add_placeholder(self.fields['username'],  'wprçd')
     
     first_name = forms.CharField(
         label="Primeiro Nome",

@@ -46,24 +46,6 @@ class LogoutView(View):
     #     return redirect('accounts:login')
     
 
-# ###############################################################################################
-# def register_view(request):
-#     form = SignupPersonalForm(request.session.get("signup_personal_form_data", None))
-#     return render(request, "accounts/signup-personal.html", {"form": form})
-
-# ###############################################################################################
-# def register_create(request):    
-#     request.session['signup_personal_form_data'] = request.POST
-#     form = SignupPersonalForm(request.POST)
-#     if form.is_valid():
-#        user = form.save(commit=False)
-#        user.set_password(user.password)
-#        user.save() 
-#        messages.success(request, "Usuário Registrado com sucesso!")
-#        del(request.session['signup_personal_form_data'])
-#     return redirect("accounts:signup-personal")
- 
-
 class SignupPersonalView(View):
     form_class = SignupPersonalForm
     template_name = "accounts/signup-personal.html"
