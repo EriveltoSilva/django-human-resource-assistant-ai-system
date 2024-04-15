@@ -27,7 +27,7 @@ class SignupPersonalForm(forms.ModelForm):
         fields =[
             'first_name', 'last_name', 'username',
             'email','bi', 'phone', 'birthday', 
-            'gender','password', 'password2']
+            'gender', 'address','password', 'password2']
 
 
     def __init__(self, *args, **kwargs)->None:
@@ -125,10 +125,20 @@ class SignupPersonalForm(forms.ModelForm):
         widget=forms.Select(attrs={
             "class":"form-select",
             "iconClass":"gender-male",
-
             }, choices=utils.GENDER
         ), 
         error_messages={"required":"O campo genero não pode estar vazio!" },
+    )
+
+    address = forms.CharField(
+        label="Endereço",
+        required=True,
+        max_length=255,
+        widget=forms.TextInput(attrs={
+            "placeholder":"Endereço", 
+            "class":"form-control form-control-lg fs-6",
+            "iconClass":"house", 
+        }), 
     )
 
     password = forms.CharField(

@@ -4,6 +4,7 @@ from django import forms
 from django.utils import timezone 
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
+from ..models import Sector
 
 User = get_user_model()
 
@@ -16,7 +17,6 @@ def add_attr(field, attr_name, attr_val):
     existing_attr = field.widget.attrs.get(attr_name, '')
     field.widget.attrs[attr_name] = f'{existing_attr} {attr_val}'.strip()
 
-
 def add_placeholder(field, placeholder_val):
     field.widget.attrs['placeholder'] = f'{placeholder_val}'.strip()
 
@@ -25,35 +25,35 @@ class SignupBusinessForm(forms.ModelForm):
     class Meta:
         model = User
         fields =[
-            'first_name', 'last_name', 'username',
-            'email', 'nif', 'phone', 
+            'first_name', 'username',
+            'email', 'nif', 'sector','phone', 'address','website', 
             'password', 'password2']
 
     
     first_name = forms.CharField(
-        label="Primeiro Nome",
+        label="Nome",
         required=True,
         max_length=100,
         widget=forms.TextInput(attrs={
-            "placeholder":"Primeiro Nome",
+            "placeholder":"Nome da empresa",
             "class":"form-control form-control-lg fs-6",
             "iconClass":"person",
         }),
         error_messages={
-            "required":"O campo primeiro nome não pode estar vazio!" 
+            "required":"O campo nome não pode estar vazio!" 
         },
     )
 
-    last_name = forms.CharField(
-        label="Sobrenome",
-        required=True,
-        max_length=100,
-        widget=forms.TextInput(attrs={
-            "placeholder":"Sobrenome",
-            "class":"form-control form-control-lg fs-6",
-            "iconClass":"person",
-        })
-    )
+    # last_name = forms.CharField(
+    #     label="Sobrenome",
+    #     required=True,
+    #     max_length=100,
+    #     widget=forms.TextInput(attrs={
+    #         "placeholder":"Sobrenome",
+    #         "class":"form-control form-control-lg fs-6",
+    #         "iconClass":"person",
+    #     })
+    # )
 
     username = forms.CharField(
         label="Username",
@@ -72,7 +72,7 @@ class SignupBusinessForm(forms.ModelForm):
         max_length=100,
         widget=forms.EmailInput(attrs={
             "placeholder":"E-mail",
-            "class":"form-control",
+            "class":"form-control form-control-lg fs-6",
             "iconClass":"envelope", 
         }),
         error_messages={
@@ -85,10 +85,23 @@ class SignupBusinessForm(forms.ModelForm):
         max_length=14,
         widget=forms.TextInput(attrs={
             "placeholder":"Nif", 
-            "class":"form-control",
+            "class":"form-control form-control-lg fs-6",
             "iconClass":"person", 
         }), 
     )
+    
+
+    sector = forms.ModelChoiceField(
+        label='Sector',
+        required=True,
+        queryset=Sector.objects.all(),
+        widget=forms.Select(attrs={
+            "placeholder":"Sector", 
+            "class":"form-select form-control-lg fs-6",
+            "iconClass":"company", 
+        }), 
+    )
+
 
     phone = forms.CharField(
         label="Telefone",
@@ -100,6 +113,28 @@ class SignupBusinessForm(forms.ModelForm):
             "class":"form-control form-control-lg fs-6",
             "iconClass":"telephone",
         })
+    )
+
+    address = forms.CharField(
+        label="Endereço",
+        required=True,
+        max_length=255,
+        widget=forms.TextInput(attrs={
+            "placeholder":"Endereço", 
+            "class":"form-control form-control-lg fs-6",
+            "iconClass":"house", 
+        }), 
+    )
+    
+    website = forms.URLField(
+        label="Website",
+        required=True,
+        max_length=255,
+        widget=forms.URLInput(attrs={
+            "placeholder":"Ex.:https://company.com", 
+            "class":"form-control form-control-lg fs-6",
+            "iconClass":"globe", 
+        }), 
     )
 
     password = forms.CharField(

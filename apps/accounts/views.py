@@ -1,4 +1,3 @@
-from .models import PersonalProfile, CompanyProfile
 from django.views import View 
 from django.urls import reverse
 from django.utils.text import slugify
@@ -6,6 +5,7 @@ from django.contrib import messages, auth
 from django.core.paginator import Paginator
 from django.http import HttpResponseRedirect
 from django.contrib.auth import get_user_model
+from .models import PersonalProfile, CompanyProfile
 from django.utils.decorators import method_decorator
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
@@ -72,8 +72,10 @@ class SignupPersonalView(View):
             PersonalProfile.objects.create(
                 user=user,
                 slug = slugify(f"{user.username}"),
-                identification_number = form.cleaned_data.get("bi"),
+                bi = form.cleaned_data.get("bi"),
                 gender = form.cleaned_data.get("gender"),
+                phone = form.cleaned_data.get("phone"),
+                address = form.cleaned_data.get("address"),
                 birthday = form.cleaned_data.get("birthday")
             )
             messages.success(request, "Usuário Registrado com sucesso!")
@@ -98,12 +100,15 @@ class SignupBusinessView(View):
             user = form.save(commit=False)
             user.set_password(user.password)
             user.save() 
+            print(form.cleaned_data.get("sector"))
             CompanyProfile.objects.create(
                 user=user,
+                sector=form.cleaned_data.get("sector"),
                 slug = slugify(f"{user.username}"),
-                identification_number = form.cleaned_data.get("bi"),
-                gender = form.cleaned_data.get("gender"),
-                birthday = form.cleaned_data.get("birthday")
+                nif = form.cleaned_data.get("nif"),
+                phone = form.cleaned_data.get("phone"),
+                address = form.cleaned_data.get("address"),
+                website = form.cleaned_data.get("website")
             )
             messages.success(request, "Usuário Registrado com sucesso!")
             del(request.session['signup_business_form_data'])

@@ -1,7 +1,14 @@
 from django.contrib import admin
-from .models import PersonalProfile, CompanyProfile
+from .models import PersonalProfile, CompanyProfile, Sector
 
 # Register your models here.
+class SectorAdmin(admin.ModelAdmin):
+    list_display= ['id', 'name', 'created_at',]
+    list_display_links =['id','name', 'created_at',]
+    list_per_page=25    
+    list_filter = ['name', 'created_at']
+admin.site.register(Sector, SectorAdmin)
+
 class PersonalProfileAdmin(admin.ModelAdmin):
     list_display= ['get_user']
     list_display_links =['get_user',]
