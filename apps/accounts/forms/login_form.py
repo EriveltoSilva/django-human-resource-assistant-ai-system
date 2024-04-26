@@ -2,20 +2,20 @@ from django import forms
 from django.core.exceptions import ValidationError
 
 class LoginForm(forms.Form):
-    username = forms.CharField(
-         label="Username", 
+    email = forms.CharField(
+         label="E-mail", 
          required=True,
          widget=forms.TextInput(attrs={
-              "placeholder":"Username",
+              "placeholder":"E-mail",
               'class':"form-control form-control-lg fs-6"
          })
     )
     
     password = forms.CharField(
-         label="Senha", 
+         label="Palavra-passe", 
          required=True,
          widget=forms.PasswordInput(attrs={
-              "placeholder":"Senha",
+              "placeholder":"Palavra-passe",
               'class':"form-control form-control-lg fs-6"
          })
     )

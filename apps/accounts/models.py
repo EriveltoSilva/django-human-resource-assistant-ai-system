@@ -1,9 +1,46 @@
+import uuid
 from . import utils
 from django.db import models
 from django.urls import reverse
+from django.utils.text import slugify
 from django.contrib.auth import get_user_model
+from django.db.models.signals import post_save
+from django.contrib.auth.models import AbstractUser
 
-User = get_user_model()
+class User(AbstractUser):
+    id = models.UUIDField(primary_key=True,default=uuid.uuid4, unique=True, editable=False)
+    slug = models.SlugField(unique=True)
+    email = models.EmailField(unique=True, null=False, blank=False)
+    username = models.CharField(max_length=100, unique=True, null=False, blank=False)
+    full_name = models.CharField(max_length=255, null=False, blank=False)
+    otp = models.CharField(max_length=100, null=True, blank=True)
+    reset_token  = models.CharField(max_length=1000, null=True, blank=True)
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['username']
+
+    def __str__(self) -> str:
+        return self.email
+    
+    def save(self, *args, **kwargs) -> None:
+        email_username, _ = self.email.split('@')
+        names = self.full_name.split(" ")
+        if names:
+            self.first_name = names[0]
+            self.last_name = names[-1]
+        elif self.first_name and self.last_name:
+            self.full_name = f"{self.first_name} {self.last_name}"
+
+        elif self.full_name == "" or self.full_name == None:
+            self.full_name = email_username
+        if self.username == "" or self.username == None:
+            self.username = email_username
+        
+        if not self.slug:
+            self.slug = slugify(self.full_name)
+        return super(User, self).save(*args, **kwargs)
+    
+
 
 class Sector(models.Model):
     name = models.CharField(max_length=250, null=False, blank=False)
@@ -19,9 +56,10 @@ class Sector(models.Model):
 
     
 class AbstractProfile(models.Model):
+    id = models.UUIDField(primary_key=True,default=uuid.uuid4, unique=True, editable=False)
     slug = models.SlugField(unique=True)
     image = models.ImageField(upload_to="perfil", blank=True)
-    phone = models.CharField(max_length=13, unique=True, null=True)
+    phone = models.CharField(max_length=20, unique=True, null=True)
     address = models.CharField(max_length=255, blank=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -74,3 +112,4 @@ class CompanyProfile(AbstractProfile):
     def get_absolute_url(self):
         return reverse("edit-user", kwargs={"slug": self.slug})
     
+

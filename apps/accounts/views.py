@@ -1,4 +1,5 @@
-from django.views import View 
+from . import utils
+from django.views import View
 from django.urls import reverse
 from django.utils.text import slugify
 from django.contrib import messages, auth
@@ -10,7 +11,8 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import LoginForm, SignupPersonalForm, SignupBusinessForm
+from .forms import LoginForm, SignupPersonalForm, SignupBusinessForm, PasswordChangeForm, PasswordResetForm
+
 
 User = get_user_model()
 
@@ -27,7 +29,7 @@ class LoginView(View):
         if form.is_valid():
             user = auth.authenticate(
                 request,
-                username=form.cleaned_data.get('username', ''), 
+                email=form.cleaned_data.get('email', ''), 
                 password=form.cleaned_data.get('password', '')
             )
             if user:
@@ -48,10 +50,10 @@ class LogoutView(View):
         messages.error(request, "Logout com sucesso!")
         return redirect('accounts:login')
     
-    # def post(self, request, *args, **kwargs):
-    #     auth.logout(request)
-    #     messages.error(request, "Logout com sucesso!")
-    #     return redirect('accounts:login')
+    def post(self, request, *args, **kwargs):
+        auth.logout(request)
+        messages.error(request, "Logout com sucesso!")
+        return redirect('accounts:login')
 logout = LogoutView.as_view()
     
 class SignupPersonalView(View):
@@ -67,6 +69,8 @@ class SignupPersonalView(View):
         form = self.form_class(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
+            user.first_name = form.cleaned_data.get("first_name")
+            user.last_name = form.cleaned_data.get("last_name")
             user.set_password(user.password)
             user.save() 
             PersonalProfile.objects.create(
@@ -98,13 +102,15 @@ class SignupBusinessView(View):
         form = self.form_class(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
+            user.first_name = form.cleaned_data.get("first_name")
+            user.last_name = form.cleaned_data.get("last_name")
             user.set_password(user.password)
             user.save() 
             print(form.cleaned_data.get("sector"))
             CompanyProfile.objects.create(
                 user=user,
                 sector=form.cleaned_data.get("sector"),
-                slug = slugify(f"{user.username}"),
+                slug = slugify(f"{form.cleaned_data.get("username")}"),
                 nif = form.cleaned_data.get("nif"),
                 phone = form.cleaned_data.get("phone"),
                 address = form.cleaned_data.get("address"),
@@ -116,6 +122,65 @@ class SignupBusinessView(View):
         print(form.errors)
         return redirect("accounts:signup-business")
 signup_business = SignupBusinessView.as_view()
+
+class PasswordResetEmailVerifyView(View):
+    form_class = PasswordResetForm
+    template_name = "accounts/password-reset.html"
+
+    def get(self, request, *args, **kwargs):
+        form = self.form_class(request.session.get("password_reset_form_data", None))
+        return render(request,self.template_name, {"form":form})
+
+    def post(self, request, *args, **kwargs):
+        request.session['password_reset_form_data'] = request.POST
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            try:
+                user = get_object_or_404(User, email=form.cleaned_data.get('email'))
+                user.otp = otp = utils.generate_otp()
+                user.save()
+                uidb64 = user.id
+                link = f'http://localhost:8000/accounts/alterar-palavra-passe?otp={otp}&uidb64={uidb64}'
+
+                # Send email do user with link 
+                print("#"*100)           
+                print('Clique aqui:',link)
+                print("#"*100)  
+
+                del request.session['password_reset_form_data'] 
+                messages.success(request, "Enviamos um email de recuperação de palavra-passe para si!")
+            except:
+                messages.error(request, "Não temos nenhum usuário vinculado a este e-mail")    
+        else:
+            messages.error(request, "Error validando o formulário!")
+        previous_page = request.META.get('HTTP_REFERER')
+        return HttpResponseRedirect(previous_page or '')
+password_reset = PasswordResetEmailVerifyView.as_view()
+
+
+class PasswordChangeView(View):
+    form_class = PasswordChangeForm 
+    template_name = "accounts/password-change.html"
+
+    def get(self, request, *args, **kwargs):
+        form = self.form_class()
+        return render(request,self.template_name, {"form":form})
+    
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            user = User.objects.get(id=request.GET.get("uidb64"), otp=request.GET.get("otp"))
+            if user:
+                user.set_password(form.cleaned_data.get('new_password'))
+                user.otp=""
+                user.reset_token=""
+                user.save()
+                messages.success(request, "Palavra-passe alterada com sucesso!")   
+        else:
+            messages.error(request, "Error validando o formulário!")
+        previous_page = request.META.get('HTTP_REFERER')
+        return HttpResponseRedirect(previous_page or '')    
+password_change = PasswordChangeView.as_view()
 
 ###############################################################################################
 # @require_POST
