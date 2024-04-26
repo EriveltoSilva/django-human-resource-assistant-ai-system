@@ -8,6 +8,7 @@ from django.db.models.signals import post_save
 from django.contrib.auth.models import AbstractUser
 
 class User(AbstractUser):
+    USER_TYPE=(("P","P"), ("B", "B"))
     id = models.UUIDField(primary_key=True,default=uuid.uuid4, unique=True, editable=False)
     slug = models.SlugField(unique=True)
     email = models.EmailField(unique=True, null=False, blank=False)
@@ -15,6 +16,7 @@ class User(AbstractUser):
     full_name = models.CharField(max_length=255, null=False, blank=False)
     otp = models.CharField(max_length=100, null=True, blank=True)
     reset_token  = models.CharField(max_length=1000, null=True, blank=True)
+    type = models.CharField(max_length=1, choices=USER_TYPE, default="P")
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
