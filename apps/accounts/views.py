@@ -27,15 +27,14 @@ class LoginView(View):
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
         if form.is_valid():
-            user = auth.authenticate(
-                request,
-                email=form.cleaned_data.get('email', ''), 
-                password=form.cleaned_data.get('password', '')
-            )
+            email= form.cleaned_data.get('email', '')
+            user = auth.authenticate(request, email=email, password=form.cleaned_data.get('password', ''))
             if user:
                 auth.login(request, user=user)
                 messages.success(request, f"Bem-vindo de volta Sr(a).{request.user.get_full_name()}!")
-                return redirect('landing_page')
+                u = get_object_or_404(User, email=email)
+                user_type = "personal" if u.type == 'P' else "business"
+                return redirect(reverse(f'{user_type}:home'))
             messages.error(request, "Ups! Usuário não Encontrado! Verifique por favor as credências!")
         else:
             messages.error(request, "Error validando o formulário!")
@@ -72,6 +71,7 @@ class SignupPersonalView(View):
             user.first_name = form.cleaned_data.get("first_name")
             user.last_name = form.cleaned_data.get("last_name")
             user.set_password(user.password)
+            user.type = "P"
             user.save() 
             PersonalProfile.objects.create(
                 user=user,
@@ -105,6 +105,7 @@ class SignupBusinessView(View):
             user.first_name = form.cleaned_data.get("first_name")
             user.last_name = form.cleaned_data.get("last_name")
             user.set_password(user.password)
+            user.type = "B"
             user.save() 
             print(form.cleaned_data.get("sector"))
             CompanyProfile.objects.create(
@@ -176,6 +177,7 @@ class PasswordChangeView(View):
                 user.reset_token=""
                 user.save()
                 messages.success(request, "Palavra-passe alterada com sucesso!")   
+                return redirect('accounts:login')
         else:
             messages.error(request, "Error validando o formulário!")
         previous_page = request.META.get('HTTP_REFERER')
