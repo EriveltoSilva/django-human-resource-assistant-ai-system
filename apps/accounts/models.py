@@ -9,7 +9,7 @@ from django.contrib.auth.models import AbstractUser
 
 class User(AbstractUser):
     USER_TYPE=(("P","P"), ("B", "B"))
-    id = models.UUIDField(primary_key=True,default=uuid.uuid4, unique=True, editable=False)
+    uid = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
     slug = models.SlugField(unique=True)
     email = models.EmailField(unique=True, null=False, blank=False)
     username = models.CharField(max_length=100, unique=True, null=False, blank=False)
@@ -31,18 +31,13 @@ class User(AbstractUser):
     
     def save(self, *args, **kwargs) -> None:
         email_username, _ = self.email.split('@')
-        # names = self.full_name.split(" ")
-        # if email_username:
-        #     self.first_name = names[0]
-        #     self.last_name = names[-1]
-        # elif self.first_name and self.last_name:
-            # self.full_name = f"{self.first_name} {self.last_name}"
 
-        # elif self.full_name == "" or self.full_name == None:
-            # self.full_name = email_username
+        if not self.last_name:
+            self.last_name = ""
+            
         if not self.username:
             self.username = email_username
-        
+
         if not self.slug:
             self.slug = slugify(f"{self.first_name} {self.last_name} {utils.generate_short_id(4)}")
         return super(User, self).save(*args, **kwargs)
@@ -50,7 +45,7 @@ class User(AbstractUser):
 
 
 class Sector(models.Model):
-    id = models.UUIDField(primary_key=True,default=uuid.uuid4, unique=True, editable=False)
+    sid = models.UUIDField(default=uuid.uuid4, unique=True, editable=False) 
     name = models.CharField(max_length=250, null=False, blank=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -64,7 +59,7 @@ class Sector(models.Model):
 
     
 class AbstractProfile(models.Model):
-    id = models.UUIDField(primary_key=True,default=uuid.uuid4, unique=True, editable=False)
+    pid = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
     slug = models.SlugField(unique=True)
     image = models.ImageField(upload_to="perfil", blank=True)
     phone = models.CharField(max_length=20, unique=True, null=True)

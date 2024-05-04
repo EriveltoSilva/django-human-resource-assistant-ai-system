@@ -25,9 +25,17 @@ class SignupBusinessForm(forms.ModelForm):
     class Meta:
         model = User
         fields =[
-            'first_name', 'username',
-            'email', 'nif', 'sector','phone', 'address','website', 
-            'password', 'password2']
+            'first_name', 
+            'username',
+            'email', 
+            'nif', 
+            'sector',
+            'phone', 
+            'address',
+            'website', 
+            'password', 
+            'password2'
+        ]
 
     
     first_name = forms.CharField(
@@ -44,16 +52,7 @@ class SignupBusinessForm(forms.ModelForm):
         },
     )
 
-    # last_name = forms.CharField(
-    #     label="Sobrenome",
-    #     required=True,
-    #     max_length=100,
-    #     widget=forms.TextInput(attrs={
-    #         "placeholder":"Sobrenome",
-    #         "class":"form-control form-control-lg fs-6",
-    #         "iconClass":"person",
-    #     })
-    # )
+
 
     username = forms.CharField(
         label="Username",
@@ -166,8 +165,8 @@ class SignupBusinessForm(forms.ModelForm):
     def clean_first_name(self):
         return self.cleaned_data.get('first_name').strip()
     
-    def clean_last_name(self):
-        return self.cleaned_data.get('last_name').strip()
+    # def clean_last_name(self):
+    #     return self.cleaned_data.get('last_name').strip()
     
     def clean_email(self):
         email = self.cleaned_data.get('email').strip()
