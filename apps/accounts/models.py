@@ -13,7 +13,6 @@ class User(AbstractUser):
     slug = models.SlugField(unique=True)
     email = models.EmailField(unique=True, null=False, blank=False)
     username = models.CharField(max_length=100, unique=True, null=False, blank=False)
-    full_name = models.CharField(max_length=255, null=False, blank=False)
     otp = models.CharField(max_length=100, null=True, blank=True)
     reset_token  = models.CharField(max_length=1000, null=True, blank=True)
     type = models.CharField(max_length=1, choices=USER_TYPE, default="P")
@@ -21,25 +20,31 @@ class User(AbstractUser):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
 
+    class Meta:
+        ordering = ['-date_joined', 'first_name']
+        verbose_name = ("Utilizador")
+        verbose_name_plural = ("Utilizadores")
+
     def __str__(self) -> str:
         return self.email
     
+    
     def save(self, *args, **kwargs) -> None:
         email_username, _ = self.email.split('@')
-        names = self.full_name.split(" ")
-        if names:
-            self.first_name = names[0]
-            self.last_name = names[-1]
-        elif self.first_name and self.last_name:
-            self.full_name = f"{self.first_name} {self.last_name}"
+        # names = self.full_name.split(" ")
+        # if email_username:
+        #     self.first_name = names[0]
+        #     self.last_name = names[-1]
+        # elif self.first_name and self.last_name:
+            # self.full_name = f"{self.first_name} {self.last_name}"
 
-        elif self.full_name == "" or self.full_name == None:
-            self.full_name = email_username
-        if self.username == "" or self.username == None:
+        # elif self.full_name == "" or self.full_name == None:
+            # self.full_name = email_username
+        if not self.username:
             self.username = email_username
         
         if not self.slug:
-            self.slug = slugify(self.full_name)
+            self.slug = slugify(f"{self.first_name} {self.last_name} {utils.generate_short_id(4)}")
         return super(User, self).save(*args, **kwargs)
     
 

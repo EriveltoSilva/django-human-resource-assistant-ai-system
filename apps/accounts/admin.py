@@ -5,9 +5,9 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 class UserAdmin(admin.ModelAdmin):
-    list_display = ['id', 'full_name', 'username','email',]
-    list_display_links = ['id', 'full_name', 'username','email',]
-    search_fields = ['full_name', 'username','email']
+    list_display = ['id', 'first_name', 'last_name', 'username','email',]
+    list_display_links = ['id','first_name', 'last_name', 'username','email',]
+    search_fields = ['first_name', 'last_name', 'username','email']
     list_per_page = 20
 admin.site.register(User, UserAdmin)
 

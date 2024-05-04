@@ -112,7 +112,7 @@ class SignupPersonalForm(forms.ModelForm):
         max_length=13,
         widget=forms.TextInput(attrs={
             'type': 'tel',
-            "placeholder":"Telefone",
+            "placeholder":"Ex:940811141",
             "class":"form-control form-control-lg fs-6",
             "iconClass":"telephone",
         })
