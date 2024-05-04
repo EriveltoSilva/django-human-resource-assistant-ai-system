@@ -45,6 +45,7 @@ class User(AbstractUser):
 
 
 class Sector(models.Model):
+    id = models.UUIDField(primary_key=True,default=uuid.uuid4, unique=True, editable=False)
     name = models.CharField(max_length=250, null=False, blank=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -99,7 +100,8 @@ class CompanyProfile(AbstractProfile):
     sector = models.ForeignKey(Sector, models.PROTECT)
     nif = models.CharField(max_length=14, null=False, unique=True)
     website = models.URLField(max_length=255,blank=True)
-    
+    is_verified = models.BooleanField(default=False)
+
     class Meta:
         verbose_name_plural = "Perfils Empresariais"
         ordering = ["user"]

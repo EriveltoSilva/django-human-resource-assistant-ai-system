@@ -1,4 +1,5 @@
-from pathlib import Path, os
+import os
+from pathlib import Path
 from dotenv import load_dotenv
 from django.contrib.messages import constants as messages
 
@@ -9,6 +10,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get("SECRET_KEY", "INSECURE")
 DEBUG = True if os.environ.get("DEBUG") == '1' else False
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+
 
 # Application definition
 INSTALLED_APPS = [
@@ -93,8 +95,8 @@ WSGI_APPLICATION = 'setup.wsgi.application'
 
 DATABASES = {
     'default': {
-    'ENGINE': os.environ.get('DATABASE_ENGINE'),
-    'NAME': os.environ.get('DATABASE_NAME'),
+    'ENGINE': os.environ.get('DATABASE_ENGINE', 'django.db.backends.sqlite3'),
+    'NAME': os.environ.get('DATABASE_NAME', 'db.sqlite3'),
     'USER': os.environ.get('DATABASE_USER'),
     'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
     'HOST': os.environ.get('DATABASE_HOST'),
@@ -159,8 +161,8 @@ MESSAGE_TAGS ={
 
 EMAIL_HOST_USER = str(os.getenv('EMAIL_HOST_USER'))
 EMAIL_HOST_PASSWORD = str(os.getenv('EMAIL_HOST_PASSWORD'))
-EMAIL_USE_TLS = str(os.getenv('EMAIL_USE_TLS'))
-EMAIL_PORT = str(os.getenv('EMAIL_PORT'))
+EMAIL_USE_TLS = bool(os.getenv('EMAIL_USE_TLS'))
+EMAIL_PORT = int(os.getenv('EMAIL_PORT'))
 EMAIL_HOST = str(os.getenv('EMAIL_HOST'))
 
 # CKEDITOR_UPLOAD_PATH = 'media-contents/'
