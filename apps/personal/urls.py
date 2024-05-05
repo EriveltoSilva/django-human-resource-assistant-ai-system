@@ -10,6 +10,7 @@ urlpatterns = [
     path('formacao/profissional/deletar/<uuid:id>', views.delete_profissional_formation, name="delete-profissional-formation"),
     
     path('expericia-profissional/nova/', views.add_profissional_experience, name="add-profissional-experience"),
+    path('documentacao/actualizar/', views.add_documentation, name="add-documentation"),
     
 
     path('home/', views.home, name="home"),

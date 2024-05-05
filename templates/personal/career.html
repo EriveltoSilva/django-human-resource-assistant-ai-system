@@ -38,14 +38,14 @@ Vagas expontâneas
             </li>
 
             <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="pills-experience-tab" data-toggle="pill" data-target="#pills-experience"
+                <button class="nav-link" id="pills-experience-tab" data-toggle="pill" data-target="#pills-experience"
                     type="button" role="tab" aria-controls="pills-experience" aria-selected="false">
                     <i class="bi bi-person-lines-fill"></i>
                     Experiência Profissional
                 </button>
             </li>
             <li class="nav-item" role="presentation">
-                <button class="nav-link" id="pills-documents-tab" data-toggle="pill" data-target="#pills-documents"
+                <button class="nav-link active" id="pills-documents-tab" data-toggle="pill" data-target="#pills-documents"
                     type="button" role="tab" aria-controls="pills-documents" aria-selected="false">
                     <i class="bi bi-file-earmark-text"></i>
                     Documentos 
@@ -69,4 +69,7 @@ Vagas expontâneas
 {% endblock %}
 
 {% block local_script %}
+<script src="{% static 'assets/js/file-upload.js' %}"></script>
+  <script src="{% static 'assets/js/typeahead.js' %}"></script>
+  <script src="{% static 'assets/js/select2.js' %}"></script>
 {% endblock %}

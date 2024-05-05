@@ -1,4 +1,77 @@
 {% load static %}
-<div class="tab-pane fade" id="pills-documents" role="tabpanel" aria-labelledby="pills-documents-tab">
-    Documentos
+<div class="tab-pane fade show active" id="pills-documents" role="tabpanel" aria-labelledby="pills-documents-tab">
+    <div class="row">
+        <div class="col-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Seus Documentos</h4>
+                    <p class="card-description">
+                        Ter os documentos actualizados é fundamental para aproveitar as oportunidades que aparecem
+                    </p>
+                    <form id="documentationForm" method="post" action="{% url 'personal:add-documentation' %}"
+                        enctype="multipart/form-data" class="forms-sample">
+                        {% csrf_token %}
+
+                        <div class="row">
+                            {% for field in personal_documentation_form.visible_fields %}
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="{{ field.id_for_label }}"> {{ field.label }}</label>
+                                    {{ field }}
+
+                                    <div class="input-group col-xs-12">
+                                        {% if field.value %}
+                                        <input type="text" class="form-control file-upload-info" disabled placeholder="{{ field.value.url }}">
+                                        {% else %}
+                                        <input type="text" class="form-control file-upload-info" disabled placeholder="{{ field.label }}">
+                                        {% endif %}
+                                        <span class="input-group-append">
+                                            <button class="file-upload-browse btn btn-primary" type="button">Carregar
+                                                Ficheiro</button>
+                                        </span>
+                                    </div>
+
+                                    {% if field.help_text %}
+                                    <p class="text-muted"> <small>{{ field.help_text }}</small> </p>
+                                    {% endif %}
+
+                                    {% if field.errors %}
+                                    <div class="text-danger error-messages"> {{ field.errors }} </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% endfor %}
+
+                            <!-- <div class="col-6">
+                                <div class="form-group">
+                                    <label>File upload</label>
+                                    <input type="file" name="img[]" class="file-upload-default">
+                                    <div class="input-group col-xs-12">
+                                      <input type="text" class="form-control file-upload-info" disabled placeholder="Upload Image">
+                                      <span class="input-group-append">
+                                        <button class="file-upload-browse btn btn-primary" type="button">Upload</button>
+                                      </span>
+                                    </div>
+                                  </div>
+                            </div> -->
+
+                        </div>
+                        <button type="submit" class="btn btn-primary mr-2" id="btnUploadFiles">
+                            <i class="bi bi-send"></i>
+                            Enviar Ficheiros
+                        </button>
+                        <button type="reset" class="btn btn-light">Cancel</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
+
+
+<script>
+    document.getElementById("btnUploadFiles").addEventListener("click", function (e) {
+        document.getElementById("documentationForm").submit();
+    })
+</script>

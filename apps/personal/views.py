@@ -2,10 +2,10 @@ from django.shortcuts import render
 from django.contrib import messages
 from django.views import View, generic
 from apps.accounts.models import PersonalProfile
-from .forms import PersonalInformationForm, PersonalProfileInformationForm, AcademicFormationForm, ProfissionalFormationForm, ProfissionalExperienceForm
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
-from .models import Formation, AcademicFormationItem, ProfissionalFormationItem, ProfissionalExperienceItem, ProfissionalExperience
+from .models import Formation, AcademicFormationItem, ProfissionalFormationItem, ProfissionalExperienceItem, ProfissionalExperience, Documentation
+from .forms import PersonalInformationForm, PersonalProfileInformationForm, AcademicFormationForm, ProfissionalFormationForm, ProfissionalExperienceForm, PersonalDocumentationForm
 
 from django.http import HttpResponseRedirect
 
@@ -19,6 +19,7 @@ class CareerView(View):
     def get(self, request, *args, **kwargs):
         formation, created = Formation.objects.get_or_create(user=request.user)
         experience, exe_created = ProfissionalExperience.objects.get_or_create(user=request.user)
+        documentation , _ = Documentation.objects.get_or_create(user=request.user)
 
         personal_info_form = PersonalInformationForm(instance=request.user)
         personal_profile_form = PersonalProfileInformationForm(request.session.get('personal_info_form_data'), instance=request.user.personal_profile)
@@ -27,12 +28,15 @@ class CareerView(View):
         personal_profissional_formation_form = ProfissionalFormationForm(request.session.get('personal_profissional_formation_form_data', None))
 
         personal_profissional_experience_form = ProfissionalExperienceForm(request.session.get('personal_profissional_experience_form_data', None))
+        personal_documentation_form = PersonalDocumentationForm(request.session.get('doc_files_form_data', None), instance=documentation)
+
 
         acad_formation_items = AcademicFormationItem.objects.filter(formation=formation)
         prof_formation_items = ProfissionalFormationItem.objects.filter(formation=formation)
 
         prof_experience_items = ProfissionalExperienceItem.objects.filter(profissional_experience=experience)
 
+        
 
         return render(self.request, self.template_name, {
             "personal_info_form":personal_info_form,
@@ -41,6 +45,7 @@ class CareerView(View):
             "personal_profissional_formation_form":personal_profissional_formation_form,
 
             "personal_profissional_experience_form":personal_profissional_experience_form,
+            "personal_documentation_form":personal_documentation_form,
 
             "acad_formation_items":acad_formation_items,
             "prof_formation_items":prof_formation_items,          
@@ -49,6 +54,28 @@ class CareerView(View):
             })
 career = CareerView.as_view()
 
+
+@method_decorator([login_required(login_url="accounts:login", redirect_field_name="next"),], name='dispatch')
+class AddDocumentation(View):
+    form_class = PersonalDocumentationForm
+    def post(self, request, *args, **kwargs):
+        documentation , _ = Documentation.objects.get_or_create(user=request.user)
+        request.session['personal_documentation_form_data'] = request.POST
+        request.session['doc_files_form_data'] = request.FILES
+        form = self.form_class(request.session['personal_documentation_form_data'], request.FILES, instance=documentation)
+        if form.is_valid():
+            doc = form.save(commit=False)
+            doc.user = request.user
+            doc.save()
+            messages.success(request, "Documentos Carregados com sucesso!")
+            del(request.session['personal_documentation_form_data'])
+            del(request.session['doc_files_form_data'])
+        else:
+            messages.error(request, "Erro: Carregue todos os documentos obrigatórios!")
+            print(form.errors)
+        previous_page = self.request.META.get('HTTP_REFERER')
+        return HttpResponseRedirect(previous_page or '')
+add_documentation = AddDocumentation.as_view()
 
 
 @method_decorator([login_required(login_url="accounts:login", redirect_field_name="next"),], name='dispatch')
