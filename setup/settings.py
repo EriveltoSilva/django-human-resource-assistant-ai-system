@@ -14,6 +14,7 @@ ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 # Application definition
 INSTALLED_APPS = [
+    'jazzmin',
     # "daphne", # django-channels
     'django.contrib.admin',
     'django.contrib.auth',
@@ -164,6 +165,18 @@ EMAIL_HOST_PASSWORD = str(os.getenv('EMAIL_HOST_PASSWORD'))
 EMAIL_USE_TLS = bool(os.getenv('EMAIL_USE_TLS'))
 EMAIL_PORT = int(os.getenv('EMAIL_PORT'))
 EMAIL_HOST = str(os.getenv('EMAIL_HOST'))
+
+JAZZMIN_SETTINGS = {
+    "site_title": "HeadHunter",
+    "site_header": "HeadHunter",
+    "site_brand": "HeadHunter",
+    "site_logo": "assets/images/logo/logo.png",
+    "login_logo": "assets/images/logo/logo-horizontal.png",
+    "site_icon": "assets/images/logo/logo.png",
+    "welcome_sign": "Bem Vindo a Administração do HeadHunter",
+    "copyright": "HeadHunter",
+}
+
 
 # CKEDITOR_UPLOAD_PATH = 'media-contents/'
 # CKEDITOR_CONFIGS = {

@@ -1,1 +1,2 @@
 from .personal_information_form import PersonalInformationForm, PersonalProfileInformationForm
+from .personal_formation_form import AcademicFormationForm

@@ -3,7 +3,8 @@ from . import views
 app_name= "personal"
 
 urlpatterns = [
-    path('actualizar/perfil/', views.profile_update, name="profile-update"),
+    path('perfil/actualizar/', views.profile_update, name="profile-update"),
+    path('formacao/academica/nova/', views.add_academic_formation, name="add-academic-formation"),
     
     path('home/', views.home, name="home"),
     path('minha-carreira-profissional/', views.career, name="career"),
