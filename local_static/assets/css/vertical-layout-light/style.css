@@ -12671,10 +12671,17 @@ input[type="button"].btn-block {
   border-radius: 0.25rem;
 }
 
+.nav-pills .nav-link {
+  /* Aqui */
+  color: var(--primary);
+  background-color: var(--white);
+}
+
 .nav-pills .nav-link.active,
 .nav-pills .show > .nav-link {
   color: #fff;
-  background-color: #007bff;
+  /* background-color: #007bff; */
+  background-color:var(--primary);
 }
 
 .nav-fill .nav-item {

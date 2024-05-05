@@ -31,9 +31,9 @@ class LoginView(View):
             user = auth.authenticate(request, email=email, password=form.cleaned_data.get('password', ''))
             if user:
                 auth.login(request, user=user)
-                messages.success(request, f"Bem-vindo de volta Sr(a).{request.user.get_full_name()}!")
                 u = get_object_or_404(User, email=email)
                 user_type = "personal" if u.type == 'P' else "business"
+                messages.success(request, f"Bem-vindo de volta Sr(a).{request.user.get_full_name()}!")
                 return redirect(reverse(f'{user_type}:home'))
             messages.error(request, "Ups! Usuário não Encontrado! Verifique por favor as credências!")
         else:
@@ -43,7 +43,6 @@ login = LoginView.as_view()
     
 @method_decorator(login_required(login_url="accounts:login", redirect_field_name='next'), name='dispatch')
 class LogoutView(View):
-    # @method_decorator(login_required(login_url="accounts:login", redirect_field_name='next'))
     def get(self, request, *args, **kwargs):
         auth.logout(request)
         messages.error(request, "Logout com sucesso!")

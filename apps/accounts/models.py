@@ -43,7 +43,6 @@ class User(AbstractUser):
         return super(User, self).save(*args, **kwargs)
     
 
-
 class Sector(models.Model):
     sid = models.UUIDField(default=uuid.uuid4, unique=True, editable=False) 
     name = models.CharField(max_length=250, null=False, blank=False)
@@ -66,8 +65,17 @@ class AbstractProfile(models.Model):
     address = models.CharField(max_length=255, blank=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
     class Meta:
         abstract = True
+
+    def imageURL(self):
+        try:
+            url = self.image.url
+        except:
+            url = '/static/assets/images/user.png'
+        return url
+    
 
 class PersonalProfile(AbstractProfile):
     user = models.OneToOneField(to=User, on_delete=models.CASCADE, related_name="personal_profile")
@@ -86,13 +94,14 @@ class PersonalProfile(AbstractProfile):
     def get_full_name(self) -> str:
         return self.user.get_full_name()
     
+    
     def get_gender(self):
         """Retorna a representação amigável para exibição do campo 'gender'."""
         return [item for item in (utils.GENDER) ]
+    
 
     def get_absolute_url(self):
         return reverse("edit-user", kwargs={"slug": self.slug})
-
 
 
 class CompanyProfile(AbstractProfile):
@@ -116,4 +125,3 @@ class CompanyProfile(AbstractProfile):
     def get_absolute_url(self):
         return reverse("edit-user", kwargs={"slug": self.slug})
     
-
