@@ -4,6 +4,36 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
+class ProfissionalExperience(models.Model):
+    pid = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name_plural = "Experiências Profissional"
+        ordering = ['user']
+
+    def __str__(self) -> str:
+        return f"Experência - {self.user}"
+
+class ProfissionalExperienceItem(models.Model):
+    pid = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
+    institution = models.CharField(max_length=255, null=True, blank=False)
+    description = models.TextField()
+    years = models.PositiveIntegerField()
+    
+    
+    profissional_experience = models.ForeignKey(ProfissionalExperience, on_delete=models.CASCADE, related_name="profissional_experience_item")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name_plural = "Item Experiências Profissional"
+        ordering = ['institution']
+    def __str__(self) -> str:
+        return f"Experência - {self.name}"
+
 
 class AcademicInstituition(models.Model):
     name = models.CharField(max_length=255, null=False, blank=False)
@@ -80,7 +110,4 @@ class ProfissionalFormationItem(models.Model):
         ordering = ['title']
     def __str__(self) -> str:
         return f"{self.title}"
-    
-
-
     

@@ -1,6 +1,21 @@
 from django.contrib import admin
 from .models import *
 
+
+
+class ProfissionalExperienceItemAdminInline(admin.TabularInline):
+   model = ProfissionalExperienceItem
+   extra = 0
+
+
+@admin.register(ProfissionalExperience)
+class ProfissionalExperienceAdmin(admin.ModelAdmin):
+   list_display = ['user', 'created_at']
+   list_display_links = ['user', 'created_at']
+   list_per_page = 20
+   inlines = [ProfissionalExperienceItemAdminInline]
+
+
 @admin.register(AcademicInstituition)
 class AcademicInstituitionAdmin(admin.ModelAdmin):
    list_display = ['id', 'name', 'created_at']

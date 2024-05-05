@@ -9,6 +9,9 @@ urlpatterns = [
     path('formacao/profissional/nova/', views.add_profissional_formation, name="add-profissional-formation"),
     path('formacao/profissional/deletar/<uuid:id>', views.delete_profissional_formation, name="delete-profissional-formation"),
     
+    path('expericia-profissional/nova/', views.add_profissional_experience, name="add-profissional-experience"),
+    
+
     path('home/', views.home, name="home"),
     path('minha-carreira-profissional/', views.career, name="career"),
 

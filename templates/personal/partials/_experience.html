@@ -1,4 +1,67 @@
 {% load static %}
-<div class="tab-pane fade" id="pills-experience" role="tabpanel" aria-labelledby="pills-experience-tab">
-    Experiência
+<div class="tab-pane fade show active" id="pills-experience" role="tabpanel" aria-labelledby="pills-experience-tab">
+    <h1 class="text-center"> Ter experiência na área a que está se candidatando pode </h1>
+
+
+    <div class="row justify-content-center">
+        <div class="col-10 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h2>Experiência Profissional</h2>
+                    <p class="card-description">
+                        Quanto mais experiência melhor as chances de ser recrutado!
+                    </p>
+
+                    <form method="post" action="{% url 'personal:add-profissional-experience' %}" class="forms-sample">
+                        {% csrf_token %}
+
+                        <div class="row justify-content-end text-start">
+                            {% for field in personal_profissional_experience_form.visible_fields %}
+                            <div class="col-12 mt-3">
+                                <label for="{{ field.id_for_label }}"> {{ field.label }}</label>
+                                {{ field }}
+
+                                {% if field.help_text %}
+                                <p class="text-muted"> <small>{{ field.help_text }}</small> </p>
+                                {% endif %}
+
+                                {% if field.errors %}
+                                <div class="text-danger error-messages"> {{ field.errors }} </div>
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+
+                            <div class="col-12">
+                                <label for="" class="w-50" style="visibility: hidden;">Adicionar</label>
+                                <button type="submit" class="btn btn-primary w-50 " id="btnAddItens">
+                                    <i class="bi bi-pencil-square"></i>
+                                    Adicionar
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+        {% for experience in  prof_experience_items %}
+        <article class="col-10 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">{{experience.institution}}</h4>
+                    <p class="card-description">
+                        {{experience.years}} anos de trabalho
+                    </p>
+                    <p>
+                        {{experience.description}}
+                    </p>
+                </div>
+            </div>
+        </article>
+        {% empty %}
+        <p class="text-muted">Não há Experiências registradas</p>
+        {% endfor %}
+    </div>
+
 </div>

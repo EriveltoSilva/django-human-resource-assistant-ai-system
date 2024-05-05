@@ -4,7 +4,7 @@ from apps.accounts import utils
 from django.utils import timezone 
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
-from ..models import AcademicInstituition,ProfissionalInstituition, Formation, AcademicFormationItem, ProfissionalFormationItem
+from ..models import AcademicInstituition, ProfissionalInstituition, AcademicFormationItem, ProfissionalFormationItem
 
 # from django.contrib.auth.models import User
 User = get_user_model()
