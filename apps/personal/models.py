@@ -7,6 +7,7 @@ User = get_user_model()
 
 class AcademicInstituition(models.Model):
     name = models.CharField(max_length=255, null=False, blank=False)
+    aid = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -17,6 +18,7 @@ class AcademicInstituition(models.Model):
         return self.name
 
 class ProfissionalInstituition(models.Model):
+    pid = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
     name = models.CharField(max_length=255, null=False, blank=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -28,6 +30,7 @@ class ProfissionalInstituition(models.Model):
         return self.name
 
 class Formation(models.Model):
+    fid = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -39,6 +42,7 @@ class Formation(models.Model):
         return ("Formação de %s" % (self.user))
 
 class AcademicFormationItem(models.Model):
+    aid = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
     course = models.CharField(max_length=255, null=True, blank=True)
     institution = models.ForeignKey(AcademicInstituition, on_delete=models.PROTECT)
     start_year = models.PositiveIntegerField()
@@ -54,11 +58,15 @@ class AcademicFormationItem(models.Model):
         ordering = ['course']
     def __str__(self) -> str:
         return f"{self.course}"
+    
+    def get_finished_status(self):
+        return "SIM" if self.is_finished else "NÂO"
 
 class ProfissionalFormationItem(models.Model):
+    pid = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
     title = models.CharField(max_length=255, null=False, blank=False)
-    institution = models.ForeignKey(AcademicInstituition, on_delete=models.PROTECT)
-    code = models.CharField(max_length=255,blank=True)
+    institution = models.ForeignKey(ProfissionalInstituition, on_delete=models.PROTECT)
+    # code = models.CharField(max_length=255,blank=True)
     hours = models.DecimalField(max_digits=7, decimal_places=2)
     year = models.PositiveIntegerField()
 
