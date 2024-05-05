@@ -47,6 +47,16 @@ class DeleteAcademicFormationItem(View):
         return HttpResponseRedirect(previous_page or '')
 delete_academic_formation = DeleteAcademicFormationItem.as_view()
 
+@method_decorator([login_required(login_url="accounts:login", redirect_field_name="next"),], name='dispatch')
+class DeleteProfissionalFormationItem(View):
+    def post(self, *args, **kwargs):
+        formation = ProfissionalFormationItem.objects.get(aid=self.kwargs['id'])
+        formation.delete()
+        messages.success(self.request,"Formação eliminada com sucesso!")
+        previous_page = self.request.META.get('HTTP_REFERER')
+        return HttpResponseRedirect(previous_page or '')
+delete_profissional_formation = DeleteProfissionalFormationItem.as_view()
+
 
 @method_decorator([login_required(login_url="accounts:login", redirect_field_name="next"),], name='dispatch')
 class AddProfissionalFormationItem(View):

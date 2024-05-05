@@ -6,7 +6,8 @@ urlpatterns = [
     path('perfil/actualizar/', views.profile_update, name="profile-update"),
     path('formacao/academica/nova/', views.add_academic_formation, name="add-academic-formation"),
     path('formacao/academica/deletar/<uuid:id>', views.delete_academic_formation, name="delete-academic-formation"),
-    path('formacao/profissinal/nova/', views.add_profissional_formation, name="add-profissioanl-formation"),
+    path('formacao/profissional/nova/', views.add_profissional_formation, name="add-profissional-formation"),
+    path('formacao/profissional/deletar/<uuid:id>', views.delete_profissional_formation, name="delete-profissional-formation"),
     
     path('home/', views.home, name="home"),
     path('minha-carreira-profissional/', views.career, name="career"),

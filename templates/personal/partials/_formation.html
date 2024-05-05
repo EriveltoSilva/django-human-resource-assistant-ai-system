@@ -1,6 +1,6 @@
 {% load static %}
 <div class="tab-pane fade  show active" id="pills-formation" role="tabpanel" aria-labelledby="pills-formation-tab">
-    <h1>Sua Formação ajuda-nos a Saber o que você é capaz</h1>
+    <h1 class="text-center">Sua Formação ajuda-nos a Saber o que você é capaz</h1>
     <div class="row justify-content-center">
         <div class="col-10 grid-margin stretch-card">
             <div class="card">
@@ -42,46 +42,7 @@
                                 </button>
                             </div>
                         </div>
-
-
-
-
-                        <!-- <div class="row justify-content-end text-start">
-
-                            <div class="col-12 col-sm-6 col-md-6 col-lg-4">
-                                <label for="center_cost">Código</label>
-                                <input type="text" name="code" id="code" class="form-control">
-                            </div>
-
-                            <div class="col-12 col-sm-6 col-md-6 col-lg-4">
-                                <label for="detail">Detalhes do Material</label>
-                                <textarea name="detail" id="detail" cols="30" rows="1" class="form-control"></textarea>
-                            </div>
-
-
-                            <div class="col-12 col-sm-6 col-md-6 col-lg-4">
-                                <label for="approximated_value">Preço</label>
-                                <input type="number" name="price" id="price" class="form-control">
-                            </div>
-
-                            <div class="col-12 col-sm-6 col-md-6 col-lg-4">
-                                <label for="quantity">Quantidade</label>
-                                <input type="number" name="quantity" id="quantity" class="form-control">
-                            </div>
-
-
-
-                            <div class="col-12 col-sm-6 col-md-6 col-lg-4">
-                                <label for="" class="w-100" style="visibility: hidden;">Adicionar</label>
-                                <button type="submit" class="btn btn-primary w-100 " id="btnAddItens">
-                                    <i class="bi bi-plus"></i>
-                                    Adicionar
-                                </button>
-                            </div>
-                        </div> -->
                     </form>
-
-
                 </div>
             </div>
         </div>
@@ -150,7 +111,7 @@
                         Os seus dados ajudaram os recrutadores a saber mais sobre você!
                     </p>
 
-                    <form method="post" action="{% url 'personal:add-profissioanl-formation' %}" class="forms-sample">
+                    <form method="post" action="{% url 'personal:add-profissional-formation' %}" class="forms-sample">
                         {% csrf_token %}
                         <div class="row justify-content-start text-start">
                             {% for field in personal_profissional_formation_form.visible_fields %}
@@ -180,6 +141,59 @@
 
                     </form>
 
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-10 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Formações Profissionais</h4>
+                    <p class="card-description">
+                        Formações já registradas</code>
+                    </p>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>Instituição</th>
+                                    <th>Horas</th>
+                                    <th>Ano</th>
+                                    <th>Acções</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for formation in prof_formation_items %}
+                                <tr>
+                                    <td>{{formation.title}}</td>
+                                    <td>{{formation.institution}}</td>
+                                    <td>{{formation.hours}}</td>
+                                    <td>{{formation.year}}</td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <form method="post" action="{% url 'personal:delete-profissional-formation' formation.pid %}">
+                                                {% csrf_token %}
+                                                <button title="Eliminar formação rofissional" type="submit"
+                                                class="btn btn-primary btn-sm  mr-3" data-toggle="modal"
+                                                data-target="#modalLawyerDelete{{lawyer.id}}">
+                                                <i class="typcn typcn-delete-outline btn-icon-append"></i>
+                                                Deletar
+                                            </button>
+                                        </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="4"><p>Não há formações academicas registradas!</p></td>
+                                </tr>
+                                {% endfor %}
+
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
