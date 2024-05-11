@@ -9,6 +9,7 @@ urlpatterns = [
     path('registro-empresarial/', views.signup_business, name="signup-business"),    
     path('recuperacao-de-palavra-passe/', views.password_reset, name="password-reset"),    
     path('alterar-palavra-passe/', views.password_change, name="password-change"),  
+    path('controller/', views.account_controller, name="controller"),  
 
 
     # path('ver-perfil/', views.password_change, name="profile"),  

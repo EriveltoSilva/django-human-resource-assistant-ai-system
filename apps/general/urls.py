@@ -2,9 +2,9 @@ from . import views
 from django.urls import path
 
 urlpatterns = [
+    path('', views.LandingPageView.as_view(),name="landing_page"),
     # path('search/', views.search, name='search'),
     # path('', views.home,name="home"),
-    path('', views.LandingPageView.as_view(),name="landing_page"),
 
     # path('get_notifications/<int:id>', views.get_notifications, name='get-notifications'),
     # path('read-all-notifications/', views.read_all_notifications, name='read-all-notifications'),

@@ -8,17 +8,19 @@ from .models import Formation, AcademicFormationItem, ProfissionalFormationItem,
 from .forms import PersonalInformationForm, PersonalProfileInformationForm, AcademicFormationForm, ProfissionalFormationForm, ProfissionalExperienceForm, PersonalDocumentationForm
 
 from django.http import HttpResponseRedirect
+from django.urls import reverse
+
 
 def home(request):
     return render(request, "personal/home.html")
 
 
-@method_decorator([login_required(login_url="accounts:login", redirect_field_name="next"),], name='dispatch')
+@method_decorator([login_required(login_url='landing_page', redirect_field_name="next"),], name='dispatch')
 class CareerView(View):
     template_name = "personal/career.html"
     def get(self, request, *args, **kwargs):
-        formation, created = Formation.objects.get_or_create(user=request.user)
-        experience, exe_created = ProfissionalExperience.objects.get_or_create(user=request.user)
+        formation, _ = Formation.objects.get_or_create(user=request.user)
+        experience, _ = ProfissionalExperience.objects.get_or_create(user=request.user)
         documentation , _ = Documentation.objects.get_or_create(user=request.user)
 
         personal_info_form = PersonalInformationForm(instance=request.user)
@@ -54,8 +56,7 @@ class CareerView(View):
             })
 career = CareerView.as_view()
 
-
-@method_decorator([login_required(login_url="accounts:login", redirect_field_name="next"),], name='dispatch')
+@method_decorator([login_required(login_url='landing_page', redirect_field_name="next"),], name='dispatch')
 class AddDocumentation(View):
     form_class = PersonalDocumentationForm
     def post(self, request, *args, **kwargs):
@@ -77,8 +78,7 @@ class AddDocumentation(View):
         return HttpResponseRedirect(previous_page or '')
 add_documentation = AddDocumentation.as_view()
 
-
-@method_decorator([login_required(login_url="accounts:login", redirect_field_name="next"),], name='dispatch')
+@method_decorator([login_required(login_url='landing_page', redirect_field_name="next"),], name='dispatch')
 class AddProfissionalExperienceItem(View):
     form_class = ProfissionalExperienceForm
 
@@ -100,7 +100,7 @@ class AddProfissionalExperienceItem(View):
         return HttpResponseRedirect(previous_page or '')
 add_profissional_experience = AddProfissionalExperienceItem.as_view()
 
-@method_decorator([login_required(login_url="accounts:login", redirect_field_name="next"),], name='dispatch')
+@method_decorator([login_required(login_url='landing_page', redirect_field_name="next"),], name='dispatch')
 class DeleteProfissionalFormationItem(View):
     def post(self, *args, **kwargs):
         formation = ProfissionalFormationItem.objects.get(aid=self.kwargs['id'])
@@ -110,7 +110,7 @@ class DeleteProfissionalFormationItem(View):
         return HttpResponseRedirect(previous_page or '')
 delete_profissional_formation = DeleteProfissionalFormationItem.as_view()
 
-@method_decorator([login_required(login_url="accounts:login", redirect_field_name="next"),], name='dispatch')
+@method_decorator([login_required(login_url='landing_page', redirect_field_name="next"),], name='dispatch')
 class DeleteAcademicFormationItem(View):
     def post(self, *args, **kwargs):
         formation = AcademicFormationItem.objects.get(aid=self.kwargs['id'])
@@ -121,7 +121,7 @@ class DeleteAcademicFormationItem(View):
 delete_academic_formation = DeleteAcademicFormationItem.as_view()
 
 
-@method_decorator([login_required(login_url="accounts:login", redirect_field_name="next"),], name='dispatch')
+@method_decorator([login_required(login_url='landing_page', redirect_field_name="next"),], name='dispatch')
 class AddProfissionalFormationItem(View):
     form_class = ProfissionalFormationForm
 
@@ -144,7 +144,7 @@ class AddProfissionalFormationItem(View):
 add_profissional_formation = AddProfissionalFormationItem.as_view()
 
 
-@method_decorator([login_required(login_url="accounts:login", redirect_field_name="next"),], name='dispatch')
+@method_decorator([login_required(login_url='landing_page', redirect_field_name="next"),], name='dispatch')
 class AddAcademicFormationItem(View):
     form_class = AcademicFormationForm
 
@@ -168,7 +168,7 @@ class AddAcademicFormationItem(View):
 add_academic_formation = AddAcademicFormationItem.as_view()
 
 
-@method_decorator([login_required(login_url="accounts:login", redirect_field_name="next"),], name='dispatch')
+@method_decorator([login_required(login_url='landing_page', redirect_field_name="next"),], name='dispatch')
 class ProfileUpdateView(View):
     form_class = PersonalProfileInformationForm
 

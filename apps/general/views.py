@@ -1,10 +1,13 @@
-from django.shortcuts import render
+from django.urls import reverse
 from django.http import HttpResponse
-from django.views import View
+from django.views import View, generic
+from django.shortcuts import render, redirect
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
 
-def home(request):
-    return HttpResponse("<h1>Hello</h1>")
 
-class LandingPageView(View):
-    def get(self, request, *args, **kwargs):
-        return render(request, "landing-page.html")
+
+    
+
+class LandingPageView(generic.TemplateView):
+    template_name = 'landing-page.html'

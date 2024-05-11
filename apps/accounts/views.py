@@ -8,13 +8,22 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth import get_user_model
 from .models import PersonalProfile, CompanyProfile
 from django.utils.decorators import method_decorator
-from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import LoginForm, SignupPersonalForm, SignupBusinessForm, PasswordChangeForm, PasswordResetForm
 
-
 User = get_user_model()
+
+
+@method_decorator([login_required(login_url='landing_page', redirect_field_name="next"),], name='dispatch')
+class AccountController(View):
+    def get(self, *args,**kwargs):
+        user_type = "personal" if self.request.user.type == 'P' else "business"
+        print("---------------------------------------------->")
+        print("Middleware".center(25))
+        print("---------------------------------------------->")
+        return redirect(reverse(f'{user_type}:home'))
+account_controller = AccountController.as_view()
 
 class LoginView(View):
     form_class = LoginForm
@@ -31,27 +40,25 @@ class LoginView(View):
             user = auth.authenticate(request, email=email, password=form.cleaned_data.get('password', ''))
             if user:
                 auth.login(request, user=user)
-                u = get_object_or_404(User, email=email)
-                user_type = "personal" if u.type == 'P' else "business"
                 messages.success(request, f"Bem-vindo de volta Sr(a).{request.user.get_full_name()}!")
-                return redirect(reverse(f'{user_type}:home'))
+                return redirect(reverse('accounts:controller'))
             messages.error(request, "Ups! Usuário não Encontrado! Verifique por favor as credências!")
         else:
             messages.error(request, "Error validando o formulário!")
         return redirect('accounts:login')
 login = LoginView.as_view()
     
-@method_decorator(login_required(login_url="accounts:login", redirect_field_name='next'), name='dispatch')
+@method_decorator(login_required(login_url='landing_page', redirect_field_name='next'), name='dispatch')
 class LogoutView(View):
     def get(self, request, *args, **kwargs):
         auth.logout(request)
-        messages.error(request, "Logout com sucesso!")
-        return redirect('accounts:login')
+        messages.success(request, "Logout com sucesso!")
+        return redirect('landing_page')
     
     def post(self, request, *args, **kwargs):
         auth.logout(request)
-        messages.error(request, "Logout com sucesso!")
-        return redirect('accounts:login')
+        messages.success(request, "Logout com sucesso!")
+        return redirect('landing_page')
 logout = LogoutView.as_view()
     
 class SignupPersonalView(View):
@@ -157,7 +164,6 @@ class PasswordResetEmailVerifyView(View):
         return HttpResponseRedirect(previous_page or '')
 password_reset = PasswordResetEmailVerifyView.as_view()
 
-
 class PasswordChangeView(View):
     form_class = PasswordChangeForm 
     template_name = "accounts/password-change.html"
@@ -185,7 +191,7 @@ password_change = PasswordChangeView.as_view()
 
 ###############################################################################################
 # @require_POST
-# @login_required(login_url="accounts:login", redirect_field_name="next")
+# @login_required(login_url='landing_page', redirect_field_name="next")
 # def delete_user(request, id):
 #     user = get_object_or_404(User, pk=id)
 #     user.delete()
@@ -195,7 +201,7 @@ password_change = PasswordChangeView.as_view()
 
 ###############################################################################################
 # @require_POST
-# @login_required(login_url="accounts:login", redirect_field_name="next")
+# @login_required(login_url='landing_page', redirect_field_name="next")
 # def list_accounts(request):
 #     list_accounts = User.objects.all()
 #     paginator = Paginator(list_accounts, 10)
@@ -205,7 +211,7 @@ password_change = PasswordChangeView.as_view()
 #     return render(request, "accounts/list.html",{"accounts":accounts, "page":page})
 
 ###############################################################################################
-# @login_required(login_url="accounts:login", redirect_field_name="next")
+# @login_required(login_url='landing_page', redirect_field_name="next")
 # def edit_view(request, id):
 #     user = get_object_or_404(User, pk=id)
 #     if request.session.get("edit_form_data", None):
@@ -216,7 +222,7 @@ password_change = PasswordChangeView.as_view()
 
 
 ###############################################################################################
-# @login_required(login_url="accounts:login", redirect_field_name="next")
+# @login_required(login_url='landing_page', redirect_field_name="next")
 # def edit_user(request, id):
 #     if request.method != 'POST':
 #         raise Http404()
