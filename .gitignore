@@ -4,6 +4,9 @@
 ztemplate-examples
 ztemplate-examples/*
 
+
+.vscode
+
 ### Django ###
 *.log
 *.pot

@@ -42,7 +42,6 @@ class User(AbstractUser):
             self.slug = slugify(f"{self.first_name} {self.last_name} {utils.generate_short_id(4)}")
         return super(User, self).save(*args, **kwargs)
     
-
 class Sector(models.Model):
     sid = models.UUIDField(default=uuid.uuid4, unique=True, editable=False) 
     name = models.CharField(max_length=250, null=False, blank=False)
@@ -56,7 +55,6 @@ class Sector(models.Model):
     def __str__(self) -> str:
         return self.name
 
-    
 class AbstractProfile(models.Model):
     pid = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
     slug = models.SlugField(unique=True)
@@ -76,7 +74,6 @@ class AbstractProfile(models.Model):
             url = '/static/assets/images/user.png'
         return url
     
-
 class PersonalProfile(AbstractProfile):
     user = models.OneToOneField(to=User, on_delete=models.CASCADE, related_name="personal_profile")
     bi = models.CharField(max_length=14, null=False, unique=True)
@@ -103,7 +100,6 @@ class PersonalProfile(AbstractProfile):
     def get_absolute_url(self):
         return reverse("edit-user", kwargs={"slug": self.slug})
 
-
 class CompanyProfile(AbstractProfile):
     user = models.OneToOneField(to=User, on_delete=models.CASCADE, related_name="company_profile")
     sector = models.ForeignKey(Sector, models.PROTECT)
@@ -124,4 +120,5 @@ class CompanyProfile(AbstractProfile):
 
     def get_absolute_url(self):
         return reverse("edit-user", kwargs={"slug": self.slug})
+    
     

@@ -1,14 +1,14 @@
-from django.shortcuts import render
+from django.views import View
+from django.urls import reverse
 from django.contrib import messages
-from django.views import View, generic
+from django.shortcuts import render
+from django.http import HttpResponseRedirect
 from apps.accounts.models import PersonalProfile
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from .models import Formation, AcademicFormationItem, ProfissionalFormationItem, ProfissionalExperienceItem, ProfissionalExperience, Documentation
 from .forms import PersonalInformationForm, PersonalProfileInformationForm, AcademicFormationForm, ProfissionalFormationForm, ProfissionalExperienceForm, PersonalDocumentationForm
 
-from django.http import HttpResponseRedirect
-from django.urls import reverse
 
 
 def home(request):
@@ -120,7 +120,6 @@ class DeleteAcademicFormationItem(View):
         return HttpResponseRedirect(previous_page or '')
 delete_academic_formation = DeleteAcademicFormationItem.as_view()
 
-
 @method_decorator([login_required(login_url='landing_page', redirect_field_name="next"),], name='dispatch')
 class AddProfissionalFormationItem(View):
     form_class = ProfissionalFormationForm
@@ -142,7 +141,6 @@ class AddProfissionalFormationItem(View):
         previous_page = self.request.META.get('HTTP_REFERER')
         return HttpResponseRedirect(previous_page or '')
 add_profissional_formation = AddProfissionalFormationItem.as_view()
-
 
 @method_decorator([login_required(login_url='landing_page', redirect_field_name="next"),], name='dispatch')
 class AddAcademicFormationItem(View):
@@ -166,7 +164,6 @@ class AddAcademicFormationItem(View):
         previous_page = self.request.META.get('HTTP_REFERER')
         return HttpResponseRedirect(previous_page or '')
 add_academic_formation = AddAcademicFormationItem.as_view()
-
 
 @method_decorator([login_required(login_url='landing_page', redirect_field_name="next"),], name='dispatch')
 class ProfileUpdateView(View):

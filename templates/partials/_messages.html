@@ -6,8 +6,11 @@
             {% for message in messages %}
             <p class="text-{{ message.tags }}">{{message}}</p>
             {% endfor %}
-            <i class="typcn typcn-delete-outline" id="bannerClose"></i>
+            <span class="btn download-button purchase-button ml-auto" style="visibility: hidden;">Invisible</span>
+            <i class="typcn typcn-delete-outline text-primary" id="bannerClose"></i>
         </span>
     </div>
 </div>
+{% else %}
+    <i class="typcn typcn-delete-outline text-primary d-none" id="bannerClose"></i>
 {% endif %}

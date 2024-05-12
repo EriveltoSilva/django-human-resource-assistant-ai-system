@@ -1,0 +1,1 @@
+from .register_vacancy_form import RegisterVacancyForm
