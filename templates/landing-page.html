@@ -1,110 +1,87 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="pt-ao">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="keywords" content="Tipo, Cadastro, Empresa, Conta Pessoal">
-    <meta name="description" content="Seleção do tipo de conta, Pessoal ou Empresarial">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="keywords" content="Tipo, Cadastro, Empresa, Conta Pessoal" />
+    <meta name="description" content="Seleção do tipo de conta, Pessoal ou Empresarial" />
     <title>HeadHunter</title>
 
     <link rel="shortcut icon" href="{% static 'assets/images/logo/logo-icon.png' %}" />
-    <link href="{% static 'assets/vendors/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
-    <link href="{% static 'assets/vendors/bootstrap5/css/bootstrap.min.css' %}" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'assets/accounts/css/landing-page.css' %}">
-</head>
+    <link href="{% static 'assets/vendors/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet" />
+    <link href="{% static 'assets/vendors/bootstrap5/css/bootstrap.min.css' %}" rel="stylesheet" />
+    <link rel="stylesheet" href="{% static 'assets/accounts/css/landing-page.css' %}" />
+  </head>
 
-<body class="h-100">
+  <body class="h-100">
     <header>
-        <nav class="navbar navbar-expand-lg fixed-top bg-light">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="{% url 'landing_page' %}">
-                    <img src="{% static 'assets/images/logo/logo-icon.png' %}" alt="" width="50"><span class="text-primary">HeadHunter</span>
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 ">
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#personal">Conta Pessoal</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" href="#business">Conta Empresarial</a>
-                        </li>
-                    </ul>
-                    <a href="{% url 'accounts:login' %}" class="btn btn-outline-primary px-5">Iniciar Secção</a>
-                </div>
-            </div>
-        </nav>
+      <nav class="navbar navbar-expand-lg fixed-top bg-light">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="{% url 'landing_page' %}"><img src="{% static 'assets/images/logo/logo-icon.png' %}" alt="" width="50" /><span class="text-primary">HeadHunter</span></a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#personal">Conta Pessoal</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" href="#business">Conta Empresarial</a>
+              </li>
+            </ul>
+            <a href="{% url 'accounts:login' %}" class="btn btn-outline-primary px-5">Iniciar Secção</a>
+          </div>
+        </div>
+      </nav>
     </header>
 
-
     <section class="row" id="personal">
-        <div class="col-12 col-md-6">
-            <img src="{% static 'assets/accounts/images/bg.jpg' %}" alt="Imagem de Trabalhador" class="w-100 h-100">
-        </div>
+      <div class="col-12 col-md-6">
+        <img src="{% static 'assets/accounts/images/bg.jpg' %}" alt="Imagem de Trabalhador" class="w-100 h-100" />
+      </div>
 
-        <div class="col-12 col-md-6 d-flex flex-column justify-content-center align-items-center text-center p-5">
-            <div>
-                {% include 'partials/_alerts.html' %}
-            </div>
-            <h1 class="text-start">Fique atento as melhores oportunidades profissionais do mercado de trabalho</h1>
-            <p class="text-start">
-                Veja e se candidate as melhores oportunidades para si.
-                Acompanha as vagas de sua vaga e empresa dos sonhos e se capacite para ela!
-            </p>
-            <p>
-                <a href="{% url 'accounts:signup-personal' %}"
-                    class="btn btn-lg btn-primary fw-bold border-white text-light">Conta Pessoal</a>
-            </p>
+      <div class="col-12 col-md-6 d-flex flex-column justify-content-center align-items-center text-center p-5">
+        <div>
+          {% include 'partials/_alerts.html' %}
         </div>
-
+        <h1 class="text-start">Fique atento as melhores oportunidades profissionais do mercado de trabalho</h1>
+        <p class="text-start">Veja e se candidate as melhores oportunidades para si. Acompanha as vagas de sua vaga e empresa dos sonhos e se capacite para ela!</p>
+        <p>
+          <a href="{% url 'accounts:signup-personal' %}" class="btn btn-lg btn-primary fw-bold border-white text-light">Conta Pessoal</a>
+        </p>
+      </div>
     </section>
-
 
     <section id="business">
-        <div class="molde">
-            <div class="row align-items-center text-center p-5">
-                <div class="col-12 col-md-6 text-light">
-                    <h1 class="text-start">Faça um recrutamento fácil, inteligente e simplificado</h1>
-                    <p class="text-start">
-                        Tenha o melhor da tecnologia para ajuda-lo a selecionar o candidato perfeito para a vaga que sua
-                        empresa precisa.
-                    </p>
-                    <p class="lead">
-                        <a href="{% url 'accounts:signup-business' %}"
-                            class="btn btn-lg btn-primary fw-bold  text-light">
-                            Conta Empresarial
-                        </a>
-                    </p>
-                </div>
-                <div class="col-12 col-md-6 align-items-center">
-                    <img src="{% static 'assets/accounts/images/contratacao.jpg' %}" alt="Imagem de Fundo"
-                        class="w-100 rounded">
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-12 text-center text-light">
-                    <h2>"A contratação de um bom empregado é o primeiro passo para o sucesso sustentável do negócio."
-                    </h2>
-                </div>
-            </div>
+      <div class="molde">
+        <div class="row align-items-center text-center p-5">
+          <div class="col-12 col-md-6 text-light">
+            <h1 class="text-start">Faça um recrutamento fácil, inteligente e simplificado</h1>
+            <p class="text-start">Tenha o melhor da tecnologia para ajuda-lo a selecionar o candidato perfeito para a vaga que sua empresa precisa.</p>
+            <p class="lead">
+              <a href="{% url 'accounts:signup-business' %}" class="btn btn-lg btn-primary fw-bold text-light">Conta Empresarial</a>
+            </p>
+          </div>
+          <div class="col-12 col-md-6 align-items-center">
+            <img src="{% static 'assets/accounts/images/contratacao.jpg' %}" alt="Imagem de Fundo" class="w-100 rounded" />
+          </div>
         </div>
+
+        <div class="row">
+          <div class="col-12 text-center text-light">
+            <h2>"A contratação de um bom empregado é o primeiro passo para o sucesso sustentável do negócio."</h2>
+          </div>
+        </div>
+      </div>
     </section>
 
-    <!-- <footer class="text-center">
+    <!--  <footer class="text-center">
         <p>
             ©2024 My Job. Todos os direitos reservados
         </p>
-    </footer> -->
+    </footer>  -->
 
     <script src="{% static 'assets/vendors/bootstrap5/js/bootstrap.bundle.min.js' %}"></script>
-</body>
-
+  </body>
 </html>

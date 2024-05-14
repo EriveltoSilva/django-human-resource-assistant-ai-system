@@ -13,5 +13,5 @@ def generate_short_id(length=6):
 
 def deb():
     print("#"*100)
-    print(f"{"Chamou": ^100}")
+    print(f"{'Chamou': ^100}")
     print("#"*100)
