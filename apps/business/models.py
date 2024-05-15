@@ -1,5 +1,6 @@
 import uuid
 from django.db import models
+from django.urls import reverse
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
@@ -12,11 +13,15 @@ class JobType(models.Model):
     class Meta:
         verbose_name_plural = 'Tipo de Trabalho'
         ordering = ['title', '-created_at']
-
+    
+    def __str__(self):
+        return self.title
+    
 class Vacancy(models.Model):
     vid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=255, null=False, blank=False)
-    job_position = models.ForeignKey(JobType, on_delete=models.SET_NULL, null=True, blank=True)
+    image = models.ImageField(upload_to="perfil", blank=True)
+    job_type = models.ForeignKey(JobType, on_delete=models.SET_NULL, null=True, blank=True)
     description = models.TextField()
     address = models.CharField(max_length=255)
     min_wage = models.DecimalField(max_digits=15, decimal_places=2)
@@ -29,7 +34,7 @@ class Vacancy(models.Model):
     company = models.ForeignKey(User, on_delete=models.CASCADE)
     # benefits = models.CharField(max_length=100)
     # skills = models.ManyToManyField(Skill,blank=False)
-    # responsabilities = models.ManyToManyField(Responsability,blank=False)
+    # responsibilities = models.ManyToManyField(Responsibility,blank=False)
 
 
     created_at = models.DateTimeField(auto_now_add=True)
@@ -41,6 +46,17 @@ class Vacancy(models.Model):
     
     def __str__(self):
         return self.title
+    
+    def get_absolute_url(self):
+        return reverse("business:vacancy_detail", kwargs={"company_slug": self.company.slug, "vid":self.vid})
+    
+    
+    def imageURL(self):
+        try:
+            url = self.image.url
+        except:
+            url = self.company.company_profile.imageURL
+        return url
     
 class Skill(models.Model):
     sid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
@@ -56,7 +72,7 @@ class Skill(models.Model):
     def __str__(self) -> str:
         return self.title
 
-class Responsability(models.Model):
+class Responsibility(models.Model):
     rid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=255, null=False, blank=False)
     vacancy = models.ForeignKey(Vacancy, on_delete=models.CASCADE)

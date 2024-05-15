@@ -66,7 +66,8 @@ class AbstractProfile(models.Model):
 
     class Meta:
         abstract = True
-
+    
+    @property
     def imageURL(self):
         try:
             url = self.image.url
@@ -79,7 +80,6 @@ class PersonalProfile(AbstractProfile):
     bi = models.CharField(max_length=14, null=False, unique=True)
     gender = models.CharField(max_length=50, choices=utils.GENDER, default=utils.GENDER[0])
     birthday = models.DateField(null=True,blank=True)
-
 
     class Meta:
         verbose_name_plural = "Perfils de Usuários"
@@ -117,8 +117,5 @@ class CompanyProfile(AbstractProfile):
     def get_full_name(self) -> str:
         return self.user.get_full_name()
     
-
     def get_absolute_url(self):
         return reverse("edit-user", kwargs={"slug": self.slug})
-    
-    

@@ -1,0 +1,35 @@
+{% extends 'business/base.html' %}
+{% load static %}
+
+{% block metas %}
+  <meta name="description" content="Encontre os melhores talentos para sua organização" />
+  <meta name="keywords" content="Talentos, Trabalhador, Recurso, Contratação, Valor" />
+{% endblock %}
+
+{% block title %}
+  Vagas
+{% endblock %}
+
+{% block local_style %}
+
+{% endblock %}
+
+{% block content %}
+  <div class="content-wrapper">
+    <div class="d-flex justify-content-end">
+      {% include 'partials/_messages.html' %}
+    </div>
+
+    
+
+    <section>
+      <h2>Detalhe da Vaga {{vacancy.title}}</h2>
+    </section>
+
+    
+  </div>
+{% endblock %}
+
+{% block local_script %}
+
+{% endblock %}

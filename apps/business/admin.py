@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import  Vacancy, Responsability, Skill, JobType
+from .models import  Vacancy, Responsibility, Skill, JobType
 
 # @admin.register(Skill)
 # class SkillAdmin(admin.ModelAdmin):
@@ -16,7 +16,7 @@ from .models import  Vacancy, Responsability, Skill, JobType
 #     list_per_page = 20
 
 class ResponsabilityAdminInline(admin.TabularInline):
-   model = Responsability
+   model = Responsibility
    extra = 0
 
 class SkillAdminInline(admin.TabularInline):

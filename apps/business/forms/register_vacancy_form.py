@@ -10,7 +10,7 @@ class RegisterVacancyForm(forms.ModelForm):
     class Meta:
         model = Vacancy
         fields = [
-            'title', 'job_position', 'description', 
+            'title', 'job_type', 'description', 
             'address', 'expiration_data', 'min_wage', 'max_wage', 
             'entry_time', 'exit_time']
 
@@ -28,7 +28,7 @@ class RegisterVacancyForm(forms.ModelForm):
         },
     )
 
-    job_position = forms.ModelChoiceField(
+    job_type = forms.ModelChoiceField(
         label='Tipo de Trabalho',
         required=True,
         queryset=JobType.objects.all(),
@@ -74,28 +74,28 @@ class RegisterVacancyForm(forms.ModelForm):
     )
 
     min_wage = forms.DecimalField(
-        label="Salário Mínino",
+        label="Mínimo Salarial(kz)",
         required=True,
         widget=forms.NumberInput(attrs={
-            "placeholder":"Salário Mínino",
+            "placeholder":"Mínimo Salário",
             "class":"form-control",
             "tamanho":"col-12 col-sm-6 mt-4",
         }),
         error_messages={
-            "required":"O campo salário mínino não pode estar vazio!" 
+            "required":"O campo 'mínimo salarial' não pode estar vazio!" 
         },
     )
     
     max_wage = forms.DecimalField(
-        label="Salário Máximo",
+        label="Máximo Salárial(kz)",
         required=True,
         widget=forms.NumberInput(attrs={
-            "placeholder":"Salário Máximo",
+            "placeholder":"Máximo Salárial",
             "class":"form-control",
             "tamanho":"col-12 col-sm-6 mt-4",
         }),
         error_messages={
-            "required":"O campo salário máximo não pode estar vazio!" 
+            "required":"O campo 'máximo salarial'  não pode estar vazio!" 
         },
     )
 
@@ -130,9 +130,6 @@ class RegisterVacancyForm(forms.ModelForm):
     def clean_address(self):
         return self.cleaned_data.get('address').strip()
     
-    def clean_address(self):
-        return self.cleaned_data.get('address').strip()
-    
     def clean_expiration_data(self):
         expiration_data = self.cleaned_data.get('expiration_data')
         if expiration_data and expiration_data <= timezone.now().date():
@@ -142,14 +139,15 @@ class RegisterVacancyForm(forms.ModelForm):
     def clean_min_wage(self):
         min_wage = self.cleaned_data.get('min_wage')
         if min_wage <= 0:
-            raise ValidationError("O salário mínimo deve ser maior que zero!", "invalid")
+            raise ValidationError("O mínimo salarial deve ser maior que zero!", "invalid")
         return min_wage
     
     def clean_max_wage(self):
         max_wage = self.cleaned_data.get('max_wage')
         if max_wage <= 0 :
-            raise ValidationError("O salário máximo deve ser maior que zero!", "invalid")
+            raise ValidationError("O máximo salarial deve ser maior que zero!", "invalid")
         return max_wage
+    
     
 
     def clean(self):
@@ -162,10 +160,10 @@ class RegisterVacancyForm(forms.ModelForm):
         
         if min_wage > max_wage:
             raise ValidationError({
-                'min_wage': "Os campo salario minimo não pode ser maior que o salario máximo!",
-                'max_wage': "Os campo salario minimo não pode ser maior que o salario máximo!"})
+                'min_wage': "Os campo minimo salarial  não pode ser maior que o máximo salario!",
+                'max_wage': "Os campo minimo salarial não pode ser maior que o máximo salario!"})
         
         if entry_time > exit_time:
             raise ValidationError({
-                'entry_time':"A hora do término é anterior a hora de início",
-                'exit_time': "A hora do término é anterior a hora de início"})
+                'entry_time':"A hora de saída é anterior a hora de entrada",
+                'exit_time': "A hora de saída é anterior a hora de entrada"})

@@ -102,10 +102,10 @@ DATABASES = {
         'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
         'HOST': os.environ.get('DATABASE_HOST'),
         'PORT':os.environ.get('DATABASE_PORT'),
-        'OPTIONS': {
-            'charset': os.environ.get('DATABASE_CHARSET'),
-            'init_command': os.environ.get('DATABASE_INIT_COMMAND'),
-        }
+        # 'OPTIONS': {
+        #     'charset': os.environ.get('DATABASE_CHARSET'),
+        #     'init_command': os.environ.get('DATABASE_INIT_COMMAND'),
+        # }
     }
 }
 
