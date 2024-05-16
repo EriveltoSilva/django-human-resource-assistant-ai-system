@@ -1,17 +1,30 @@
+"""register form for vacancy
+
+Raises:
+    ValidationError: expiration date can not be in a past date
+    ValidationError: The minimum salary cannot be higher than the maximum salary
+    ValidationError: The maximum salary cannot be lower than the minimum salary
+    ValidationError: _description_
+    ValidationError: _description_
+
+Returns:
+    _type_: _description_
+"""
 from django import forms
 from django.utils import timezone
-from ..models import Vacancy, JobType
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
+from ..models import Vacancy, JobType
 
 User = get_user_model()
 
 class RegisterVacancyForm(forms.ModelForm):
+    """register vacancy form model"""
     class Meta:
         model = Vacancy
         fields = [
             'title', 'job_type', 'description', 
-            'address', 'expiration_data', 'min_wage', 'max_wage', 
+            'city', 'expiration_data', 'min_wage', 'max_wage', 
             'entry_time', 'exit_time']
 
     title = forms.CharField(
@@ -36,7 +49,7 @@ class RegisterVacancyForm(forms.ModelForm):
             "placeholder":"Tipo de Trabalho", 
             "class":"form-control",
             "tamanho":"col-12 col-sm-6 mt-4", 
-        }), 
+        }),
     )
 
     description = forms.CharField(
@@ -49,17 +62,17 @@ class RegisterVacancyForm(forms.ModelForm):
         })
     )
 
-    address = forms.CharField(
-        label="Endereço",
+    city = forms.CharField(
+        label="Cidade",
         required=True,
         max_length=100,
         widget=forms.TextInput(attrs={
-            "placeholder":"Endereço",
+            "placeholder":"Cidade",
             "class":"form-control form-control-lg fs-6",
             "tamanho":"col-12 col-sm-6 mt-4", 
         }),
     )
-    
+
     expiration_data = forms.DateField(
         label='Data Limite de Contratação',
         required=True,
@@ -85,12 +98,12 @@ class RegisterVacancyForm(forms.ModelForm):
             "required":"O campo 'mínimo salarial' não pode estar vazio!" 
         },
     )
-    
+
     max_wage = forms.DecimalField(
-        label="Máximo Salárial(kz)",
+        label="Máximo Salarial(kz)",
         required=True,
         widget=forms.NumberInput(attrs={
-            "placeholder":"Máximo Salárial",
+            "placeholder":"Máximo Salarial",
             "class":"form-control",
             "tamanho":"col-12 col-sm-6 mt-4",
         }),
@@ -109,7 +122,7 @@ class RegisterVacancyForm(forms.ModelForm):
             "tamanho":"col-12 col-sm-6 mt-4",
         })
     )
-    
+
     exit_time = forms.TimeField(
         label='Hora de Saída do Trabalho',
         required=True,
@@ -122,47 +135,55 @@ class RegisterVacancyForm(forms.ModelForm):
     )
 
     def clean_title(self):
+        """remove the whitespaces at the end of string"""
         return self.cleaned_data.get('title').strip()
-    
+
     def clean_description(self):
+        """remove the whitespaces at the end of string"""
         return self.cleaned_data.get('description').strip()
-    
+
     def clean_address(self):
+        """remove the whitespaces at the end of string"""
         return self.cleaned_data.get('address').strip()
-    
+
     def clean_expiration_data(self):
+        """remove the whitespaces at the end of string"""
         expiration_data = self.cleaned_data.get('expiration_data')
         if expiration_data and expiration_data <= timezone.now().date():
             raise ValidationError("A data de expiração deve estar no futuro!", "invalid")
         return expiration_data
-    
+
     def clean_min_wage(self):
+        """verify if min_wage is higher than 0"""
         min_wage = self.cleaned_data.get('min_wage')
         if min_wage <= 0:
             raise ValidationError("O mínimo salarial deve ser maior que zero!", "invalid")
         return min_wage
-    
+
     def clean_max_wage(self):
+        """verify if max_wage is higher than 0"""
         max_wage = self.cleaned_data.get('max_wage')
         if max_wage <= 0 :
             raise ValidationError("O máximo salarial deve ser maior que zero!", "invalid")
         return max_wage
-    
-    
 
     def clean(self):
+        """verify:
+        1- if min_wage if lower than max_wage
+        2- if entry_time is a before date than exit_time
+        """
         cleaned_data = super().clean()
         min_wage = cleaned_data.get("min_wage")
         max_wage =  cleaned_data.get("max_wage")
 
         entry_time = self.cleaned_data.get('entry_time')
         exit_time = self.cleaned_data.get('exit_time')
-        
+
         if min_wage > max_wage:
             raise ValidationError({
                 'min_wage': "Os campo minimo salarial  não pode ser maior que o máximo salario!",
                 'max_wage': "Os campo minimo salarial não pode ser maior que o máximo salario!"})
-        
+
         if entry_time > exit_time:
             raise ValidationError({
                 'entry_time':"A hora de saída é anterior a hora de entrada",

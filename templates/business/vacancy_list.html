@@ -11,7 +11,6 @@
 {% endblock %}
 
 {% block local_style %}
-
 {% endblock %}
 
 {% block content %}
@@ -35,24 +34,32 @@
       <h2>Vagas Candidaturas</h2>
     </section>
 
-    <div class="row">
+    <div class="row justify-content-between">
       {% for vacancy in vacancies %}
-      <article class="col-12 mx-2 col-sm-6 col-md-4 col-lg-3">
-        <div class="card rounded-lg" style="width: 20rem;">
-          <img src="{{vacancy.imageURL}}" class="card-img-top" alt="{{vacancy.title}}" style="width:100%; max-height:230px;" />
-          <div class="card-body border-top">
-            <div class="d-flex justify-content-between">
-              <a href="{{vacancy.get_absolute_url}}"><h5 class="card-title">{{vacancy.title}}</h5></a>
-              <span class="card-title badge badge-success">{{vacancy.job_type}}</span>
+        <article class="col-12 col-sm-6 col-md-4 my-2">
+          <div class="card rounded-lg" style="width: 20rem; min-height: 520px;">
+            <img src="{{ vacancy.image_url }}" class="vacancy-image card-img-top" alt="{{ vacancy.title }}" style="width:100%; max-height:230px;" />
+            
+            <div class="card-body border-top">
+                <a href="{{ vacancy.get_absolute_url }}"><h5 class="card-title vacancy-title text-center text-primary">{{ vacancy.title }}</h5></a>
+              <div class="d-flex justify-content-between ">
+                <span class="card-title text-muted">
+                    <i class="bi bi-geo-alt-fill"></i>
+                    {{vacancy.city}}
+                </span>
+                <span class="card-title badge badge-success">{{ vacancy.job_type }}</span>
+              </div>
+              <p class="card-text align-self-end">{{ vacancy.description|slice:":135" }}...</p>
+              <a href="{{ vacancy.get_absolute_url }}" class="btn btn-primary">Ver mais..</a>
             </div>
-            <p class="card-text">{{vacancy.description}}</p>
-            <a href="{{vacancy.get_absolute_url}}" class="btn btn-primary">Ver mais..</a>
           </div>
-        </div>
-      </article>
+        </article>
       {% empty %}
-      <p class="text-muted">Ainda não há ofertas de trabalho publicadas!</p>
+        <p class="text-muted">Ainda não há ofertas de trabalho publicadas!</p>
       {% endfor %}
+
+      
+      
     </div>
   </div>
 {% endblock %}

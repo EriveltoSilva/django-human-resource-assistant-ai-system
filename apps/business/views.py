@@ -16,12 +16,26 @@ def home(request):
 def candidacy(request):
     return render(request, "business/candidacy.html")
 
+class DeleteVacancyView(View):
+    """delete vacancy view"""
+    def post(self, *args, **kwargs):
+        """post method for delete processing request
+        Returns:
+            http redirect response: redirect url view
+        """
+        vacancy = Vacancy.objects.get(vid=self.kwargs.get('vid'))
+        vacancy.delete()
+        messages.success(self.request, "Vaga eliminada com sucesso!")
+        return redirect(reverse('business:vacancy-list'))
+delete_vacancy = DeleteVacancyView.as_view()
+
 class VacancyDetailView(generic.DetailView):
     """Detail View for a specific vacancy"""
     model = Vacancy
     template_name = "business/vacancy_detail.html"
     context_object_name = "vacancy"
-    def get_object(self, queryset: QuerySet[Any] | None = ...) -> Model:
+
+    def get_object(self, *args, **kwargs):
         return Vacancy.objects.get(vid=self.kwargs.get('vid'))
 vacancy_detail = VacancyDetailView.as_view()
 
@@ -31,8 +45,8 @@ class VacancyListView(generic.ListView):
     template_name = "business/vacancy_list.html"
     context_object_name = 'vacancies'
 
-    def get_queryset(self) -> QuerySet[Any]:
-        return Vacancy.objects.filter(is_published=True)
+    def get_queryset(self):
+        return Vacancy.objects.filter(is_published=True, company=self.request.user)
 vacancy_list = VacancyListView.as_view()
 
 class RegisterVacancyView(View):

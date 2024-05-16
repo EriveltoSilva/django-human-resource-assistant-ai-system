@@ -5,7 +5,7 @@
     <li class="nav-item">
       <div class="d-flex sidebar-profile">
         <div class="sidebar-profile-image">
-          <img src="{{ request.user.company_profile.imageURL}}" alt="{{request.user.get_full_name}}" />
+          <img src="{{ request.user.company_profile.image_url}}" alt="{{request.user.get_full_name}}" />
           <span class="sidebar-status-indicator"></span>
         </div>
         <div class="sidebar-profile-name">
@@ -28,7 +28,7 @@
     </li>
 
     <li class="nav-item">
-      <a class="nav-link" href="{% url 'business:vacancy_list'  %}">
+      <a class="nav-link" href="{% url 'business:vacancy-list'  %}">
         <i class="typcn typcn-device-desktop menu-icon"></i>
         <span class="menu-title">Minha Vagas</span>
       </a>
