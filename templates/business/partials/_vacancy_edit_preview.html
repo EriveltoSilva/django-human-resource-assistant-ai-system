@@ -1,0 +1,65 @@
+{% load static %}
+
+<div class="card">
+  <div class="card-body">
+    <h2 class="card-title">Vaga: {{ vacancy.title }}</h2>
+    <p class="text-muted h5">
+      <i class="bi bi-clock-fill"></i> Data de registro: <span class="text-success">{{ vacancy.created_at }}</span>
+    </p>
+
+    <p class="card-title" style="font-size:medium;">
+      <span>
+        <i class="bi bi-geo-alt-fill"></i>
+        <span class="badge badge-warning">{{ vacancy.city }}</span>
+      </span>
+
+      <span class="mx-3">
+        <i class="bi bi-briefcase-fill"></i>
+        <span class="badge badge-success">{{ vacancy.job_type }}</span>
+      </span>
+    </p>
+
+    <div>
+      <p>{{ vacancy.description|safe }}</p>
+    </div>
+
+    {% if vacancy.get_skills %}
+      <div class="mt-5">
+        <h2 class="h4">Requisitos Técnicos</h2>
+        <ul class="ml-4">
+          {% for skill in vacancy.get_skills %}
+            <li>{{ skill.title }}</li>
+          {% empty %}
+            <p class="text-muted">Não há requisitos especificados para esta vaga</p>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+
+    {% if vacancy.get_responsibilities %}
+      <div class="mt-5">
+        <h2 class="h4">Responsabilidades</h2>
+        <ul class="ml-4">
+          {% for responsibility in vacancy.get_responsibilities %}
+            <li>{{ responsibility.title }}</li>
+          {% empty %}
+            <p class="text-muted">Não há responsabilidades especificadas para esta vaga</p>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+
+    {% if vacancy.get_benefits %}
+      <div class="mt-5">
+        <h2 class="h4">Benefícios</h2>
+        <ul class="ml-4">
+          {% for responsibility in vacancy.get_benefits %}
+            <li>{{ responsibility.title }}</li>
+          {% empty %}
+            <p class="text-muted">Não há responsabilidades especificadas para esta vaga</p>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+  </div>
+</div>

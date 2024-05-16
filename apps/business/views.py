@@ -1,14 +1,15 @@
 """ Business Views"""
 
-from django.db.models.query import QuerySet
 from django.views import View
 from django.urls import reverse
+from django.views import generic
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
-from django.views import generic
-from .forms import RegisterVacancyForm
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
 from .models import Vacancy
+from .forms import RegisterVacancyForm, VacancySkillForm, VacancyResponsibilityForm, VacancyBenefitForm
 
 
 def home(request):
@@ -16,6 +17,112 @@ def home(request):
 def candidacy(request):
     return render(request, "business/candidacy.html")
 
+
+class _BasicVacancyEditViewModel(View):
+    template_name = "business/vacancy_edit.html"
+    form_class = RegisterVacancyForm
+
+    def get_instance(self) -> Vacancy:
+        """get the current edit instance of vacancy 
+        Returns:
+            Vacancy: current vacancy
+        """
+        vacancy = Vacancy.objects.get(vid=self.kwargs.get("vid"))
+        return vacancy
+
+    def get(self, *args, **kwargs):
+        """retrieve edit page with forms"""
+        vacancy = self.get_instance()
+        vacancy_information_form = self.form_class(self.request.session.get("vacancy_basic_form_data", None),instance=vacancy)
+        vacancy_skills_form = VacancySkillForm(self.request.session.get("vacancy_skills_form_data", None))
+        vacancy_responsibilities_form = VacancySkillForm(self.request.session.get("vacancy_responsibility_form_data", None))
+        vacancy_benefits_form = VacancySkillForm(self.request.session.get("vacancy_benefits_form_data", None))
+        return render(self.request, self.template_name, {
+            "vacancy":vacancy, 
+            "vacancy_information_form":vacancy_information_form,
+            "vacancy_skills_form":vacancy_skills_form,
+            "vacancy_responsibilities_form":vacancy_responsibilities_form,
+            "vacancy_benefits_form":vacancy_benefits_form
+        })
+
+@method_decorator(
+    [login_required(login_url='landing_page', redirect_field_name="next")],name='dispatch')
+class VacancyBenefitsViewEdit(_BasicVacancyEditViewModel):
+    """edit vacancy skills view"""
+    form_class = VacancyBenefitForm
+
+    def post(self,*args, **kwargs):
+        """ save benefits"""
+        self.request.session['vacancy_benefits_form_data'] = self.request.POST
+        form = self.form_class(self.request.POST)
+        if form.is_valid():
+            benefit = form.save(commit=False)
+            benefit.vacancy = self.get_instance()
+            benefit.save()
+            messages.success(self.request, "Benefício salvo com sucesso!")
+            del self.request.session['vacancy_benefits_form_data']
+        print(form.errors)
+        return HttpResponseRedirect(self.request.META.get('HTTP_REFERER') or '')
+add_vacancy_benefits = VacancyBenefitsViewEdit.as_view()
+
+@method_decorator(
+    [login_required(login_url='landing_page', redirect_field_name="next")],name='dispatch')
+class VacancyResponsibilityViewEdit(_BasicVacancyEditViewModel):
+    """edit vacancy responsibility view"""
+    form_class = VacancyResponsibilityForm
+
+    def post(self,*args, **kwargs):
+        """ save responsibility"""
+        self.request.session['vacancy_responsibility_form_data'] = self.request.POST
+        form = self.form_class(self.request.POST)
+        if form.is_valid():
+            responsibility = form.save(commit=False)
+            responsibility.vacancy = self.get_instance()
+            responsibility.save()
+            messages.success(self.request, "Responsabilidade salva com sucesso!")
+            del self.request.session['vacancy_responsibility_form_data']
+        print(form.errors)
+        return HttpResponseRedirect(self.request.META.get('HTTP_REFERER') or '')
+add_vacancy_responsibilities = VacancyResponsibilityViewEdit.as_view()
+
+@method_decorator(
+    [login_required(login_url='landing_page', redirect_field_name="next")],name='dispatch')
+class VacancySkillSViewEdit(_BasicVacancyEditViewModel):
+    """edit vacancy skills view"""
+    form_class = VacancySkillForm
+
+    def post(self,*args, **kwargs):
+        """ save skills"""
+        self.request.session['vacancy_skills_form_data'] = self.request.POST
+        form = self.form_class(self.request.POST)
+        if form.is_valid():
+            skill = form.save(commit=False)
+            skill.vacancy = self.get_instance()
+            skill.save()
+            messages.success(self.request, "Requisito salvo com sucesso!")
+            del self.request.session['vacancy_skills_form_data']
+        print(form.errors)
+        return HttpResponseRedirect(self.request.META.get('HTTP_REFERER') or '')
+add_vacancy_skills = VacancySkillSViewEdit.as_view()
+
+@method_decorator(
+    [login_required(login_url='landing_page', redirect_field_name="next"),], name='dispatch')
+class EditVacancyView(_BasicVacancyEditViewModel):
+    """edit vacancy view"""
+    def post(self,request, *args, **kwargs):
+        """ save vacancy edit"""
+        request.session['vacancy_basic_form_data'] = request.POST
+        form = self.form_class(request.POST, instance=self.get_instance())
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Vaga Editada com sucesso!")
+            del request.session['vacancy_basic_form_data']
+        print(form.errors)
+        return HttpResponseRedirect(self.request.META.get('HTTP_REFERER') or '')
+edit_vacancy = EditVacancyView.as_view()
+
+@method_decorator(
+    [login_required(login_url='landing_page', redirect_field_name="next")],name='dispatch')
 class DeleteVacancyView(View):
     """delete vacancy view"""
     def post(self, *args, **kwargs):
@@ -29,6 +136,8 @@ class DeleteVacancyView(View):
         return redirect(reverse('business:vacancy-list'))
 delete_vacancy = DeleteVacancyView.as_view()
 
+@method_decorator(
+    [login_required(login_url='landing_page', redirect_field_name="next")],name='dispatch')
 class VacancyDetailView(generic.DetailView):
     """Detail View for a specific vacancy"""
     model = Vacancy
@@ -39,6 +148,8 @@ class VacancyDetailView(generic.DetailView):
         return Vacancy.objects.get(vid=self.kwargs.get('vid'))
 vacancy_detail = VacancyDetailView.as_view()
 
+@method_decorator(
+    [login_required(login_url='landing_page', redirect_field_name="next")],name='dispatch')
 class VacancyListView(generic.ListView):
     """List View for all vacancies"""
     model = Vacancy
@@ -49,6 +160,8 @@ class VacancyListView(generic.ListView):
         return Vacancy.objects.filter(is_published=True, company=self.request.user)
 vacancy_list = VacancyListView.as_view()
 
+@method_decorator(
+    [login_required(login_url='landing_page', redirect_field_name="next")],name='dispatch')
 class RegisterVacancyView(View):
     """ Register Vacancy View"""
     template_name = 'business/register_vacancy.html'
