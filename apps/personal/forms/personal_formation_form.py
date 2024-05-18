@@ -4,7 +4,7 @@ from apps.accounts import utils
 from django.utils import timezone 
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
-from ..models import AcademicInstituition, ProfissionalInstituition, AcademicFormationItem, ProfissionalFormationItem
+from ..models import AcademicInstitution, ProfissionalInstitution, AcademicFormationItem, ProfissionalFormationItem
 
 # from django.contrib.auth.models import User
 User = get_user_model()
@@ -28,7 +28,7 @@ class ProfissionalFormationForm(forms.ModelForm):
     institution = forms.ModelChoiceField(
         label='Instituição',
         required=True,
-        queryset = ProfissionalInstituition.objects.all(),
+        queryset = ProfissionalInstitution.objects.all(),
         widget=forms.Select(attrs={
             "placeholder":"Instituição", 
             "class":"form-control form-control-xl fs-6 ",
@@ -105,7 +105,7 @@ class AcademicFormationForm(forms.ModelForm):
     institution = forms.ModelChoiceField(
         label='Instituição',
         required=True,
-        queryset = AcademicInstituition.objects.all(),
+        queryset = AcademicInstitution.objects.all(),
         widget=forms.Select(attrs={
             "placeholder":"Instituição", 
             "class":"form-control form-control-lg fs-6",

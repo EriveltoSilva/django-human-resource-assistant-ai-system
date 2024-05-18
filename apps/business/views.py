@@ -8,14 +8,17 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
+
 from .models import Vacancy
-from .forms import RegisterVacancyForm, VacancySkillForm, VacancyResponsibilityForm, VacancyBenefitForm
+from .forms import RegisterVacancyForm, VacancySkillForm
+from .forms import VacancyResponsibilityForm, VacancyBenefitForm
+
 
 
 def home(request):
     return render(request, "business/home.html")
-def candidacy(request):
-    return render(request, "business/candidacy.html")
+def candidacy_list(request):
+    return render(request, "business/home.html")
 
 
 class _BasicVacancyEditViewModel(View):

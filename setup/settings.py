@@ -171,14 +171,14 @@ EMAIL_PORT = int(os.getenv('EMAIL_PORT'))
 EMAIL_HOST = str(os.getenv('EMAIL_HOST'))
 
 JAZZMIN_SETTINGS = {
-    "site_title": "HeadHunter",
-    "site_header": "HeadHunter",
-    "site_brand": "HeadHunter",
+    "site_title": "EJZ Tecnologia",
+    "site_header": "EJZ Tecnologia",
+    "site_brand": "EJZ Tecnologia",
     "site_logo": "assets/images/logo/logo.png",
-    "login_logo": "assets/images/logo/logo-horizontal.png",
+    "login_logo": "assets/images/logo/logo.png",
     "site_icon": "assets/images/logo/logo.png",
-    "welcome_sign": "Bem Vindo a Administração do HeadHunter",
-    "copyright": "HeadHunter",
+    "welcome_sign": "Bem Vindo a Administração da EJZ Tecnologia",
+    "copyright": "EJZ Tecnologia",
 }
 
 

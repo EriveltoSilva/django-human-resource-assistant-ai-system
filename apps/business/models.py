@@ -39,9 +39,7 @@ class Vacancy(models.Model):
     is_published = models.BooleanField(default=True)
 
     company = models.ForeignKey(User, on_delete=models.CASCADE)
-    # benefits = models.CharField(max_length=100)
-    # skills = models.ManyToManyField(Skill,blank=False)
-    # responsibilities = models.ManyToManyField(Responsibility,blank=False)
+    # candidates = models.ManyToManyField(User, blank=True, related_name="candidates")
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -137,3 +135,22 @@ class Responsibility(models.Model):
 
     def __str__(self) -> str:
         return f"{self.title}"
+
+class Candidate(models.Model):
+    """register vacancy candidates"""
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    vacancy = models.ForeignKey(Vacancy, on_delete=models.CASCADE)
+    cv = models.FileField(upload_to="candidates/")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name_plural = 'Candidaturas'
+        ordering = ['user', '-created_at']
+
+    def __str__(self) -> str:
+        return f"{self.user.get_full_name()}-{self.vacancy.title}"
+
+    def get_absolute_url(self):
+        """return the candidate string url"""
+        return reverse("model_detail", kwargs={"pk": self.pk})

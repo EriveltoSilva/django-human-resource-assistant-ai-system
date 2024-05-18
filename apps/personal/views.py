@@ -1,19 +1,85 @@
-from django.views import View
+from typing import Any
 from django.urls import reverse
-from django.contrib import messages
 from django.shortcuts import render
+from django.contrib import messages
+from django.views import View, generic
 from django.http import HttpResponseRedirect
-from apps.accounts.models import PersonalProfile
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
-from .models import Formation, AcademicFormationItem, ProfissionalFormationItem, ProfissionalExperienceItem, ProfissionalExperience, Documentation
-from .forms import PersonalInformationForm, PersonalProfileInformationForm, AcademicFormationForm, ProfissionalFormationForm, ProfissionalExperienceForm, PersonalDocumentationForm
 
+from apps.accounts.models import PersonalProfile
+from apps.business.models import Vacancy, Candidate
+from .forms import PersonalInformationForm, PersonalProfileInformationForm, AcademicFormationForm
+from .forms import ProfissionalFormationForm, ProfissionalExperienceForm, PersonalDocumentationForm
+from .models import Formation, AcademicFormationItem, ProfissionalFormationItem
+from .models import ProfissionalExperienceItem, ProfissionalExperience, Documentation
 
 
 def home(request):
     return render(request, "personal/home.html")
 
+class RegisterCandidacy(View):
+    """ Register Candidacy View"""
+
+    def post(self, request, *args, **kwargs):
+        """ registers a candidate"""
+        vacancy = Vacancy.objects.get(vid=self.kwargs.get('vid'))
+        candidate = Candidate.objects.filter(user=self.request.user, vacancy=vacancy)
+
+        if candidate.exists():
+            messages.error(self.request, "Você já se candidatou a está vaga")
+            return HttpResponseRedirect(self.request.META.get('HTTP_REFERER') or '')
+
+        if self.request.user.type != "P":
+            messages.error(self.request, "Só contas particulares podem se candidatar a vagas")
+            return HttpResponseRedirect(self.request.META.get('HTTP_REFERER') or '')
+
+        documentations = Documentation.objects.filter(user=self.request.user)
+        if not documentations.exists():
+            messages.error(self.request, "A sua conta não possui nenhuma documentação associada ao perfil. Conclua primeiro o seu perfil!")
+            return HttpResponseRedirect(self.request.META.get('HTTP_REFERER') or '')
+
+        documentation = documentations.first()
+        if not documentation.cv:
+            messages.error(self.request, "A sua conta não possui um CV registado no perfil! Adicione o seu cv primeiro")
+            return HttpResponseRedirect(self.request.META.get('HTTP_REFERER') or '')
+
+        Candidate.objects.create(user=self.request.user, vacancy=vacancy, cv=documentation.cv)
+        messages.success(self.request,"Sua candidatura foi enviada com sucesso!")
+        return HttpResponseRedirect(self.request.META.get('HTTP_REFERER') or '')
+apply_for_vacancy = RegisterCandidacy.as_view()
+
+
+@method_decorator(
+    [login_required(login_url='landing_page', redirect_field_name="next")],name='dispatch')
+class VacancyDetailView(generic.DetailView):
+    """Detail View for a specific vacancy"""
+    model = Vacancy
+    template_name = "personal/vacancy_detail.html"
+    context_object_name = "vacancy"
+
+    def get_object(self, *args, **kwargs):
+        return Vacancy.objects.get(vid=self.kwargs.get('vid'))
+
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        ctx = super().get_context_data(**kwargs)
+        ctx['applied'] = Candidate.objects.filter(
+            user=self.request.user,
+            vacancy = Vacancy.objects.get(vid=self.kwargs.get('vid'))
+        ).exists()
+        print(ctx)
+        return ctx
+vacancy_detail = VacancyDetailView.as_view()
+
+@method_decorator([login_required(login_url='landing_page', redirect_field_name="next"),], name='dispatch')
+class VacancyListView(View):
+    """render a list of vacancies for participants applying"""
+    template_name = "personal/vacancy_list.html"
+    def get(self, *args, **kwargs):
+        """get template list of vacancies"""
+        vacancies = Vacancy.objects.all()
+        return render(self.request, self.template_name, {"vacancies":vacancies})
+vacancy_list= VacancyListView.as_view()
 
 @method_decorator([login_required(login_url='landing_page', redirect_field_name="next"),], name='dispatch')
 class CareerView(View):

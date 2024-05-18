@@ -9,7 +9,7 @@ urlpatterns = [
     path('formacao/profissional/nova/', views.add_profissional_formation, name="add-profissional-formation"),
     path('formacao/profissional/deletar/<uuid:id>', views.delete_profissional_formation, name="delete-profissional-formation"),
     
-    path('expericia-profissional/nova/', views.add_profissional_experience, name="add-profissional-experience"),
+    path('experiencia-profissional/nova/', views.add_profissional_experience, name="add-profissional-experience"),
     path('documentacao/actualizar/', views.add_documentation, name="add-documentation"),
     
 
@@ -20,7 +20,10 @@ urlpatterns = [
 
     
 
-    path('vagas/', views.home, name="opportunities"),
+    path('vagas/', views.vacancy_list, name="vacancy-list"),
+    path('vagas/<slug:company_slug>/detalhes/<uuid:vid>/', views.vacancy_detail, name="vacancy-detail"),
+    path('candidaturas/adicionar-candidatura/<uuid:vid>/', views.apply_for_vacancy, name="apply-for-vacancy"),
+    
     path('candidaturas/', views.home, name="applications"),
     path('meu-emprego/', views.home, name="my-job"),
 ]

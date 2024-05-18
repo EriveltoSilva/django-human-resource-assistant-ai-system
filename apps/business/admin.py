@@ -1,7 +1,16 @@
 """ admin config for vacancy in the django admin dashboard"""
 from django.contrib import admin
-from .models import  Vacancy, Responsibility, Skill, JobType, Benefit
+from .models import JobType, Benefit, Candidate
+from .models import  Vacancy, Responsibility, Skill
 
+
+@admin.register(Candidate)
+class CandidatesAdmin(admin.ModelAdmin):
+    """register candidates in the django admin dashboard"""
+    list_display = ['user', 'vacancy', 'cv','created_at']
+    list_display_links = ['user', 'vacancy', 'cv','created_at']
+    search_fields = ['user', 'vacancy', 'cv','created_at']
+    list_per_page = 20
 
 class BenefitAdminInline(admin.TabularInline):
     """job benefits tabular mode for admin panel"""

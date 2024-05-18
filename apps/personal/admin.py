@@ -23,13 +23,13 @@ class ProfissionalExperienceAdmin(admin.ModelAdmin):
    inlines = [ProfissionalExperienceItemAdminInline]
 
 
-@admin.register(AcademicInstituition)
+@admin.register(AcademicInstitution)
 class AcademicInstituitionAdmin(admin.ModelAdmin):
    list_display = ['id', 'name', 'created_at']
    list_display_links = ['id', 'name', 'created_at']
    list_per_page = 20
 
-@admin.register(ProfissionalInstituition)
+@admin.register(ProfissionalInstitution)
 class ProfissionalInstituitionAdmin(admin.ModelAdmin):
     list_display = ['id', 'name', 'created_at']
     list_display_links = ['id', 'name', 'created_at']

@@ -1,4 +1,4 @@
-{% extends 'business/base.html' %}
+{% extends 'personal/base.html' %}
 {% load static %}
 
 {% block metas %}
@@ -87,16 +87,19 @@
             </div>
 
             <div class="d-sm-flex justify-content-end m-3">
-                <div>
-                  <button type="button" class="btn btn-sm btn-danger mr-2" data-toggle="modal" data-target="#exampleModal">
-                    <i class="bi bi-trash"></i>
-                    Apagar Anúncio de Vaga
+              <div>
+                {% if applied %}
+                  <button type="button" disabled class="btn btn-sm btn-success mr-2" data-toggle="modal" data-target="#exampleModal">
+                    <i class="typcn typcn-user-outline"></i>
+                    Candidatura Submetida
                   </button>
-                  <a href="{% url 'business:edit-vacancy' vacancy.vid %}" class="btn btn-sm btn-info mr-2">
-                    <i class="bi bi-pencil-square"></i>
-                    Editar Anúncio
-                  </a>
-                </div>
+                {% else %}
+                  <button type="button" class="btn btn-sm btn-danger mr-2" data-toggle="modal" data-target="#exampleModal">
+                    <i class="typcn typcn-user-outline"></i>
+                    Aplicar Candidatura
+                  </button>
+                {% endif %}
+              </div>
             </div>
           </div>
         </div>
@@ -115,7 +118,26 @@
       </div>
     </section>
 
-    {% include 'business/partials/_vacancy_delete_modal.html' %}
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Candidatura a vaga {{ vacancy.title }}</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          </div>
+          <div class="modal-body">Tem a certeza de que deseja se candidatar a esta vaga?</div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+            <form method="post" action="{% url 'personal:apply-for-vacancy' vacancy.vid %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-info">
+                Sim
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
   </main>
 {% endblock %}
 
