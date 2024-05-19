@@ -16,4 +16,5 @@ urlpatterns = [
     path('vagas/edit-vaga/<uuid:vid>/', views.edit_vacancy, name="edit-vacancy"),
     path('vagas/<slug:company_slug>/detalhes/<uuid:vid>/', views.vacancy_detail, name="vacancy-detail"),
     path('candidaturas/<uuid:vid>/', views.candidacy_list, name="candidacy-list"),
+
 ]

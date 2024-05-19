@@ -18,6 +18,7 @@ from .forms import VacancyResponsibilityForm, VacancyBenefitForm
 
 def home(request):
     return render(request, "business/home.html")
+
 @method_decorator(
     [login_required(login_url='landing_page', redirect_field_name="next")],name='dispatch')
 class CandidacyListView(View):

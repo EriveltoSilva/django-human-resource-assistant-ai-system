@@ -3,13 +3,13 @@ import json
 # import random
 # from uuid import uuid4
 
-from .utils import ChatPDFLangchain
-
-from .models import Chat, ChatMessage
-from apps.legalcases.models import Document
-from .models import Message, Room, ArquivoPDF
 from asgiref.sync import async_to_sync, sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
+
+from .utils import ChatPDFLangchain
+# from .models import Chat, ChatMessage
+# from apps.legalcases.models import Document
+# from .models import Message, Room, ArquivoPDF
 
 def deb(obj):
     print("#"*100)
@@ -102,20 +102,20 @@ class CandidateAnalysisConsumer(AsyncWebsocketConsumer):
         self.chatbot = ChatPDFLangchain()
         
         # Create docs from pdf in database
-        docs = await self.chatbot.create_docs([await self.get_pdf()], self.scope['cookies']['sessionid'])
+        #docs = await self.chatbot.create_docs([await self.get_pdf()], self.scope['cookies']['sessionid'])
         # print(docs)
 
         # split docs int chunks
-        chunks =  await self.chatbot.split_docs(docs)
+        #chunks =  await self.chatbot.split_docs(docs)
 
         # embeddings
-        embeddings = await self.chatbot.get_embeddings()
+        #embeddings = await self.chatbot.get_embeddings()
 
         # create vectorstore
-        self.chat_db = await self.chatbot.get_vectorstore(chunks, embeddings)
+        #self.chat_db = await self.chatbot.get_vectorstore(chunks, embeddings)
 
         # create conversation chain
-        self.chain = await self.chatbot.get_chain()
+        #self.chain = await self.chatbot.get_chain()
 
         #Join room
         await self.channel_layer.group_add(self.room_group_name,self.channel_name)
@@ -148,19 +148,22 @@ class CandidateAnalysisConsumer(AsyncWebsocketConsumer):
         }))
     
     async def response_message(self,message)-> str:
-        print("---------------------------------------------->response", self.chat_id, message)        
-        relevant_docs = await self.chatbot.get_similar_docs(db=self.chat_db, query=message, k=1)
-        response = await self.chatbot.get_answer(chain=self.chain,query=message, relevant_docs=relevant_docs)
-        await self.save_message(sender=None, message=response)
-        return response
+        #print("---------------------------------------------->response", self.chat_id, message)        
+        #relevant_docs = await self.chatbot.get_similar_docs(db=self.chat_db, query=message, k=1)
+        #response = await self.chatbot.get_answer(chain=self.chain,query=message, relevant_docs=relevant_docs)
+        #await self.save_message(sender=None, message=response)
+        # return response
+        return ""
     
     @sync_to_async
     def save_message(self,sender=None,message=""):
-        print("---------------------------------------------->save_message", self.chat_id, message)
-        ChatMessage.objects.create(chat=self.chat, user=sender,content=message)
+        ...
+    #     print("---------------------------------------------->save_message", self.chat_id, message)
+    #     ChatMessage.objects.create(chat=self.chat, user=sender,content=message)
         
     
     @sync_to_async
     def get_pdf(self):
-        self.chat = Chat.objects.get(id=self.chat_id)
-        return Document.objects.get(id=self.chat.file.id)
+        ...
+    #     self.chat = Chat.objects.get(id=self.chat_id)
+    #     return Document.objects.get(id=self.chat.file.id)
