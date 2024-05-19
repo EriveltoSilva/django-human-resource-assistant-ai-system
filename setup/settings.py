@@ -1,3 +1,5 @@
+"""project main settings"""
+
 import os
 from pathlib import Path
 from dotenv import load_dotenv
@@ -15,7 +17,7 @@ ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 # Application definition
 INSTALLED_APPS = [
     'jazzmin',
-    # "daphne", # django-channels
+    "daphne", # django-channels
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -140,7 +142,10 @@ USE_TZ = True
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-############################################### Extra Config ##############################################################
+#################################### Extra Config ################################################
+ROOT_URLCONF = 'setup.urls'
+ASGI_APPLICATION = "setup.asgi.application"
+
 # Customized User model
 AUTH_USER_MODEL = 'accounts.User'
 
