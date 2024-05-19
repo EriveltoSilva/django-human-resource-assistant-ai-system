@@ -21,6 +21,27 @@ def home(request):
 
 @method_decorator(
     [login_required(login_url='landing_page', redirect_field_name="next")],name='dispatch')
+class CandidacyAnalysesView(View):
+    """analyses View """
+    model = Candidate
+    template_name = "business/candidacy_analyses.html"
+    context_object_name = 'candidates'
+    def get(self, request, *args, **kwargs):
+        """get all  candidates applied to the vacancy"""
+        vacancy = Vacancy.objects.get(vid=self.kwargs.get('vid'))
+        list_candidates = Candidate.objects.filter(vacancy=vacancy)
+        total_candidates = len(list_candidates)
+        paginator = Paginator(list_candidates,5)
+        candidates = paginator.get_page(self.request.GET.get('page'))
+
+        return render(self.request, self.template_name,
+                      {'candidates': candidates, "vacancy": vacancy,
+                       "total_candidates":total_candidates})
+candidacy_analyses = CandidacyAnalysesView.as_view()
+
+
+@method_decorator(
+    [login_required(login_url='landing_page', redirect_field_name="next")],name='dispatch')
 class CandidacyListView(View):
     """List View for all candidate applied in a vacancy"""
     model = Candidate
@@ -36,7 +57,6 @@ class CandidacyListView(View):
         candidates = paginator.get_page(self.request.GET.get('page'))
 
         return render(self.request, self.template_name, {'candidates': candidates, "vacancy": vacancy, "total_candidates":total_candidates})
-
 candidacy_list = CandidacyListView.as_view()
 
 class _BasicVacancyEditViewModel(View):

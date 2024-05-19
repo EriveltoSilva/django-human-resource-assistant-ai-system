@@ -17,4 +17,5 @@ urlpatterns = [
     path('vagas/<slug:company_slug>/detalhes/<uuid:vid>/', views.vacancy_detail, name="vacancy-detail"),
     path('candidaturas/<uuid:vid>/', views.candidacy_list, name="candidacy-list"),
 
+    path('candidaturas/analise/<uuid:vid>/', views.candidacy_analyses, name="candidacy-analyses"),
 ]

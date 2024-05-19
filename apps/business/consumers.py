@@ -6,7 +6,7 @@ import json
 from asgiref.sync import async_to_sync, sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
 
-from .utils import ChatPDFLangchain
+# from .utils import ChatPDFLangchain
 # from .models import Chat, ChatMessage
 # from apps.legalcases.models import Document
 # from .models import Message, Room, ArquivoPDF
@@ -94,28 +94,11 @@ class ChatPDFConsumer(AsyncWebsocketConsumer):
 
 class CandidateAnalysisConsumer(AsyncWebsocketConsumer):
     async def connect(self):
-        self.chat_id = self.scope['url_route']['kwargs']['chat_id']
-        self.username = self.scope['url_route']['kwargs']['username']
-        self.room_group_name = 'chat_%s' % self.chat_id
-
-        # Inicialize chatbot class
-        self.chatbot = ChatPDFLangchain()
+        self.chat_id = self.scope['url_route']['kwargs']['vid']
+        self.username="Anonymous"
+        self.room_group_name = f'chat_erivelto'
         
-        # Create docs from pdf in database
-        #docs = await self.chatbot.create_docs([await self.get_pdf()], self.scope['cookies']['sessionid'])
-        # print(docs)
-
-        # split docs int chunks
-        #chunks =  await self.chatbot.split_docs(docs)
-
-        # embeddings
-        #embeddings = await self.chatbot.get_embeddings()
-
-        # create vectorstore
-        #self.chat_db = await self.chatbot.get_vectorstore(chunks, embeddings)
-
-        # create conversation chain
-        #self.chain = await self.chatbot.get_chain()
+        # deb(self.channel_name)
 
         #Join room
         await self.channel_layer.group_add(self.room_group_name,self.channel_name)
