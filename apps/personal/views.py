@@ -18,6 +18,22 @@ from .models import ProfissionalExperienceItem, ProfissionalExperience, Document
 def home(request):
     return render(request, "personal/home.html")
 
+
+@method_decorator(
+    [login_required(login_url='landing_page', redirect_field_name="next"),], name='dispatch')
+class MyCandidateListView(View):
+    """my candidate list view"""
+
+    template_name = "personal/my-candidates.html"
+    def get(self, request, *args, **kwargs):
+        """get template list of vacancies applied"""
+        candidates = Candidate.objects.filter(user=self.request.user)
+        return render(self.request, self.template_name, {"candidates":candidates})
+my_candidates = MyCandidateListView.as_view()
+
+
+@method_decorator(
+    [login_required(login_url='landing_page', redirect_field_name="next"),], name='dispatch')
 class RegisterCandidacy(View):
     """ Register Candidacy View"""
 

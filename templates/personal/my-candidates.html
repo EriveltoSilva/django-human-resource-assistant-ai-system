@@ -1,0 +1,74 @@
+{% extends 'personal/base.html' %}
+{% load static %}
+
+{% block metas %}
+  <meta name="description" content="Encontre as melhores oportunidades do mercado e inicie uma carreira de sucesso" />
+  <meta name="keywords" content="Trabalhos Váriados, EMpresas Váriadas, oportunidades variadadas,Valor" />
+{% endblock %}
+
+{% block title %}
+  Minhas Candidaturas
+{% endblock %}
+
+{% block local_style %}
+
+{% endblock %}
+
+{% block content %}
+  <div class="content-wrapper">
+    <div class="d-flex justify-content-end">
+      {% include 'partials/_messages.html' %}
+    </div>
+
+    <section>
+      <h2>Candidaturas Realizadas</h2>
+    </section>
+    
+    <div class="row justify-content-around">
+      {% for candidate in candidates %}
+        <div class="col-4 mt-5">
+          <img src="{{ candidate.vacancy.image_url }}" class="vacancy-image card-img-top" alt="{{ candidate.vacancy.title }}" style="width:100%; max-height:230px;" />
+        </div>
+
+        <div class="col-8  mt-5 p-4">
+          <a href="{% url 'personal:vacancy-detail' candidate.vacancy.company.slug candidate.vacancy.vid %}" class="mt-5"><h5 class="vacancy-title text-primary">{{ candidate.vacancy.title }}</h5></a>
+
+          <div class="d-flex justify-content-between">
+            <div>
+                <span class="h5 text-muted mr-2">
+                    <i class="bi bi-geo-alt-fill"></i>
+                    {{ candidate.vacancy.city }}
+                </span>
+                
+                <span class="h5 badge badge-success text-white">{{ candidate.vacancy.job_type }}</span>
+            </div>
+            <p class="ml-2 text-muted" style="text-decoration: underline;">Aplicada a <span>{{ candidate.created_at|date:'d-m-Y' }}</span></p>
+          </div>
+
+          <div class="h4">
+            <i class="text-muted bi bi-currency-exchange"></i>
+            Salario: <span class="">{{ candidate.vacancy.min_wage }}kz - {{ candidate.vacancy.max_wage }}kz</span>
+          </div>
+
+          <div class="h4">
+            Descrição
+            <i class="text-muted bi bi-journal-text"></i>:
+            <br />
+            <p class="card-text align-self-end">{{ candidate.vacancy.description|slice:':135' }}...</p>
+          </div>
+
+          <div class="d-flex justify-content-between">
+            <a href="{% url 'personal:vacancy-detail' candidate.vacancy.company.slug candidate.vacancy.vid %}" class="btn btn-primary">Ver mais...</a>
+            <a href="{{ candidate.cv.url }}" class="btn btm-sm btn-outline-primary" title="cv submetido"><i class="bi bi-file-earmark-person-fill"></i></a>
+          </div>
+        </div>
+      {% empty %}
+        <p class="text-muted">Você ainda não se candidatou a nenhuma vaga!</p>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}
+
+{% block local_script %}
+
+{% endblock %}
