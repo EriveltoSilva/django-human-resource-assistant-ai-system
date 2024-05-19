@@ -47,10 +47,15 @@
                     <i class="bi bi-geo-alt-fill"></i>
                     {{vacancy.city}}
                 </span>
-                <span class="card-title badge badge-success">{{ vacancy.job_type }}</span>
+                <span class="card-title badge badge-info text-white">{{ vacancy.job_type }}</span>
               </div>
               <p class="card-text align-self-end">{{ vacancy.description|slice:":135" }}...</p>
-              <a href="{{ vacancy.get_absolute_url }}" class="btn btn-primary">Ver mais..</a>
+              <a href="{{ vacancy.get_absolute_url }}" class="btn btn-outline-primary">Ver mais..</a>
+            </div>
+
+            <div class="card-footer d-flex justify-content-between">
+                <span>Candidaturas: {{vacancy.candidate_count}}</span>
+                <a href="{% url 'business:candidacy-list' vacancy.vid %}" class="">Ver</a>
             </div>
           </div>
         </article>

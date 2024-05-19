@@ -1,15 +1,16 @@
 """ Business Views"""
-
+from django.db.models import Count
 from django.views import View
 from django.urls import reverse
 from django.views import generic
 from django.contrib import messages
+from django.core.paginator import Paginator
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 
-from .models import Vacancy
+from .models import Vacancy, Candidate
 from .forms import RegisterVacancyForm, VacancySkillForm
 from .forms import VacancyResponsibilityForm, VacancyBenefitForm
 
@@ -17,9 +18,25 @@ from .forms import VacancyResponsibilityForm, VacancyBenefitForm
 
 def home(request):
     return render(request, "business/home.html")
-def candidacy_list(request):
-    return render(request, "business/home.html")
+@method_decorator(
+    [login_required(login_url='landing_page', redirect_field_name="next")],name='dispatch')
+class CandidacyListView(View):
+    """List View for all candidate applied in a vacancy"""
+    model = Candidate
+    template_name = "business/candidacy_list.html"
+    context_object_name = 'candidates'
+    paginate_by = 5
+    def get(self, request, *args, **kwargs):
+        """get all  candidates applied to the vacancy"""
+        vacancy = Vacancy.objects.get(vid=self.kwargs.get('vid'))
+        list_candidates = Candidate.objects.filter(vacancy=vacancy)
+        total_candidates = len(list_candidates)
+        paginator = Paginator(list_candidates,5)
+        candidates = paginator.get_page(self.request.GET.get('page'))
 
+        return render(self.request, self.template_name, {'candidates': candidates, "vacancy": vacancy, "total_candidates":total_candidates})
+
+candidacy_list = CandidacyListView.as_view()
 
 class _BasicVacancyEditViewModel(View):
     template_name = "business/vacancy_edit.html"
@@ -160,7 +177,10 @@ class VacancyListView(generic.ListView):
     context_object_name = 'vacancies'
 
     def get_queryset(self):
-        return Vacancy.objects.filter(is_published=True, company=self.request.user)
+        """get all my published vacancies annotated with the number of candidates"""
+        return Vacancy.objects.filter(is_published=True, company=self.request.user).annotate(
+            candidate_count=Count('candidate')
+        )
 vacancy_list = VacancyListView.as_view()
 
 @method_decorator(

@@ -39,7 +39,6 @@ class Vacancy(models.Model):
     is_published = models.BooleanField(default=True)
 
     company = models.ForeignKey(User, on_delete=models.CASCADE)
-    # candidates = models.ManyToManyField(User, blank=True, related_name="candidates")
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
