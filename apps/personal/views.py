@@ -15,9 +15,22 @@ from .models import Formation, AcademicFormationItem, ProfissionalFormationItem
 from .models import ProfissionalExperienceItem, ProfissionalExperience, Documentation
 
 
-def home(request):
-    return render(request, "personal/home.html")
+class HomeView(View):
+    template_name = "personal/home.html"
+    def get(self, request, *args, **kwargs):
+        formation = Formation.objects.get(user=self.request.user)
+        experience, _ = ProfissionalExperience.objects.get_or_create(user=request.user)
 
+        acad_formation_items = AcademicFormationItem.objects.filter(formation=formation)
+        prof_formation_items = ProfissionalFormationItem.objects.filter(formation=formation)
+        prof_experience_items = ProfissionalExperienceItem.objects.filter(profissional_experience=experience)
+
+        return render(self.request, self.template_name, {
+            "acad_formation_items":acad_formation_items,
+            "prof_formation_items":prof_formation_items,
+            "prof_experience_items":prof_experience_items
+        })
+home = HomeView.as_view()
 
 @method_decorator(
     [login_required(login_url='landing_page', redirect_field_name="next"),], name='dispatch')
