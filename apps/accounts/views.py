@@ -11,7 +11,7 @@ from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import LoginForm, SignupPersonalForm, SignupBusinessForm, PasswordChangeForm, PasswordResetForm
-
+from . import emails
 User = get_user_model()
 
 
@@ -154,7 +154,7 @@ class PasswordResetEmailVerifyView(View):
                 print("#"*100)           
                 print('Clique aqui:',link)
                 print("#"*100)  
-
+                emails.send_password_reset(user, user.email, 'EJZ Tecnologia', '', link)
                 del request.session['password_reset_form_data'] 
                 messages.success(request, "Enviamos um email de recuperação de palavra-passe para si!")
             except:
