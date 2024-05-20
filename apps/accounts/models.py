@@ -41,6 +41,9 @@ class User(AbstractUser):
 
         if not self.username:
             self.username = email_username
+            
+        if self.is_superuser:
+            self.type='B'
 
         if not self.slug:
             self.slug = slugify(f"{self.first_name} {self.last_name} {utils.generate_short_id(4)}")
