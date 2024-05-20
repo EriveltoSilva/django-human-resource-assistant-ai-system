@@ -11,7 +11,14 @@
 {% endblock %}
 
 {% block local_style %}
-
+<style>
+    /* Estilo para ativar o scroll na coluna de resumo */
+    .summary {
+        max-height: 100px; /* Ajuste conforme necessário */
+        overflow-y:auto;
+        overflow-x: hidden;
+    }
+</style>
 {% endblock %}
 
 {% block content %}
@@ -25,13 +32,9 @@
       <p class="lead">Contrate pessoas não só com habilidades, mas também com valores alinhados à cultura da empresa</p>
       <hr class="my-4" />
       <p>Grandes profissionais aguardam por grandes companhias lá fora. Está pronto para recebe-los?</p>
-      <a href="{% url 'business:register-vacancy' %}" class="btn btn-outline-primary">
-        <i class="bi bi-funnel"></i>
-        Filtrar Candidaturas
-      </a>
     </div>
 
-    <div class="row justify-content-around">
+    <div class="row justify-content-around" id="formContainer">
       <div class="col-lg-12 grid-margin stretch-card">
         <div class="card">
           <div class="card-body">
@@ -66,6 +69,8 @@
                     <th>Nome</th>
                     <th>Data de Nascimento</th>
                     <th>CV</th>
+                    <th>Compatibilidade</th>
+                    <th>Resumo</th>
                   </tr>
                 </thead>
 
@@ -79,11 +84,12 @@
 
                       <td>{{ candidate.user.personal_profile.birthday }}</td>
                       <td>
-                        <a href="{{ candidate.cv.url }}" target="_blank" class="text-primary h3">
+                        <a href="{{ candidate.cv.url }}" target="_blank" class="text-primary h3" title="Curriculum Vitae de {{candidate.user.get_full_name}}">
                           <i class="bi bi-file-pdf"></i>
-                          Cv
                         </a>
                       </td>
+                      <td> <span class="compatibility  p-2">-</span></td>
+                      <td><p class="summary p-2">-</p></td>
                     </tr>
                   {% empty %}
                     <tr>
