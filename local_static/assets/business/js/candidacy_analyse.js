@@ -2,9 +2,10 @@
 const vacancy_vid = JSON.parse(document.getElementById('json-vacancy_vid').textContent)
 const numDocuments = document.getElementById('numDocuments');
 const btnStart = document.getElementById('btnStart');
-let chatSocket =null;
 const container = document.getElementById('default-chat-container');
 const rows = document.querySelectorAll("table tbody tr");
+
+let chatSocket = null;
 
 const removeForm = ()=>{
     document.getElementById('formContainer').remove();
@@ -32,6 +33,24 @@ const alterTable = (data)=>{
     });
 }
 
+const setBtnProcessing = ()=>{
+    let child = `
+        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        Processando...
+    `;
+    btnStart.innerHTML=``;
+    btnStart.setAttribute('disabled', true);
+    btnStart.insertAdjacentHTML('beforeend', child);
+};
+
+const setBtnAnalyzing = ()=>{
+    let child = `
+    <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+    Analisando Documentos...`;
+    btnStart.innerHTML=``;
+    btnStart.setAttribute('disabled', true);
+    btnStart.insertAdjacentHTML('beforeend', child);
+}
 
 btnStart.addEventListener('click', () => {
     if(!numDocuments.value)
@@ -39,20 +58,14 @@ btnStart.addEventListener('click', () => {
         alert("Preencha o número de documentos que devem ser retornados!");
         return;
     }
+
+    setBtnProcessing();
         
     chatSocket = new WebSocket(`ws://${window.location.host}/ws/analisar-candidaturas/${vacancy_vid}/${numDocuments.value}/`);
-        
     chatSocket.onopen = function(e) {
         console.log('Conexão estabelecida.');
         // window.alert('Conexão estabelecida.');
-
-        let child = `
-            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-            Processando...
-        `;
-        btnStart.innerHTML=``;
-        btnStart.setAttribute('disabled', true);
-        btnStart.insertAdjacentHTML('beforeend', child);
+        setBtnAnalyzing();
         chatSocket.send(JSON.stringify({"message": "data"}))
     };
         
@@ -65,12 +78,21 @@ btnStart.addEventListener('click', () => {
             {
                 removeForm();
                 alterTable(data.data);
+                Swal.fire({
+                    title: "Análise de Cvs!",
+                    text: "Documentos analisados com sucesso!",
+                    icon: "success"
+                });
             }
         } 
         catch (error) 
         {
-            console.error(error);
-            alert("Error ao ler os dados dos Cvs");
+            // console.error(error);
+            Swal.fire({
+                title: "Analise de Cvs!",
+                text: "Error ao ler os dados dos Cvs!",
+                icon: "error"
+              });
         }
     }
         
@@ -80,3 +102,8 @@ btnStart.addEventListener('click', () => {
     };
         
 });
+
+
+window.addEventListener('load', ()=>{
+   
+})
