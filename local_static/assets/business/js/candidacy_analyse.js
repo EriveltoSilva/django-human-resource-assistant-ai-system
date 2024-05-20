@@ -1,9 +1,3 @@
-/**
- * 13 000
- * 1 Mês 4 Semanas
- * Vaga espontanea
- */
-
 /***************************************************** Variables  ****************************************************/
 // const chatInput = document.querySelector("#chat-input");
 // const sendButton = document.querySelector("#send-btn");
@@ -11,17 +5,77 @@
 // const themeButton = document.querySelector("#theme-btn");
 // const deleteButton = document.querySelector("#delete-btn");
 // const initialInputHeight = chatInput.scrollHeight;
+
+
 const vacancy_vid = JSON.parse(document.getElementById('json-vacancy_vid').textContent)
+const numDocuments = document.getElementById('numDocuments');
+const btnStart = document.getElementById('btnStart');
+let chatSocket =null;
+const container = document.getElementById('default-chat-container');
 
 
+const createAlert = (text)=>{
+    let p = document.createElement('p');
+    p.innertHTML = ""
+    p.className = 'alert alert-success';
+    p.textContent = text;
+    return p;
+}
+btnStart.addEventListener('click', () => {
+    if(!numDocuments.value)
+        {
+            alert("Preencha o número de documentos que devem ser retornados!");
+            return;
+        }
+        
+        chatSocket = new WebSocket(`ws://${window.location.host}/ws/analisar-candidaturas/${vacancy_vid}/${numDocuments.value}/`);
+        
+        chatSocket.onopen = function(e) {
+            console.log('Conexão estabelecida.');
+            // window.alert('Conexão estabelecida.');
 
+            let child = `
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                Processando...
+            `;
+            btnStart.innerHTML=``;
+            btnStart.setAttribute('disabled', true);
+            btnStart.insertAdjacentHTML('beforeend', child);
+            chatSocket.send(JSON.stringify({"message": "data"}))
+        };
+        
+        
+        chatSocket.onmessage = function (e) {
+            const data = JSON.parse(e.data)
+            console.log("Data Received:", data);
 
-let userText = null;
-let chatResponseElement = null;
+            if(data.type==='response')
+            {
+                container.innerHTML = "";
+                const child=`
+                    <p class="alert alert-success">
+                        Os Dados chegaram
+                    </p>
+                `;
+                container.insertAdjacentHTML('beforeend', child);
+            }
+        }
+        
+        chatSocket.onclose = function() {
+            console.log('Conexão fechada.');
+            // window.alert("Conexão fechada");
+        };
+        
+    });
+
+// chatSocket.send(JSON.stringify({"message": userText, "room_name":chatID, "username":username}))
+
+// let userText = null;
+// let chatResponseElement = null;
 
 /***************************************************** FunctionS  ****************************************************/
 // const clearInput = () => {
-//     chatInput.value = "";
+    //     chatInput.value = "";
 //     chatInput.style.height = `${initialInputHeight}px`;
 // }
 
@@ -87,14 +141,10 @@ let chatResponseElement = null;
 //     showTypingAnimation();
 // }
 
-const chatSocket = new WebSocket(`ws://${window.location.host}/ws/analisar-candidaturas/${vacancy_vid}/`);
 // const chatSocket = new WebSocket(`ws://${window.location.host}/ws/chat-pdf/${username}/${roomName}/`);
-chatSocket.onopen = function() {
-    console.log('Conexão estabelecida.');
-    window.alert('Conexão estabelecida.');
-};
 
-chatSocket.onmessage = function (e) {
+
+// chatSocket.onmessage = function (e) {
     // const pElement = document.createElement("p");
     // const data = JSON.parse(e.data)
     
@@ -114,12 +164,12 @@ chatSocket.onmessage = function (e) {
     // localStorage.setItem("all-chats", chatContainer.innerHTML);
     // chatContainer.scrollTo(0, chatContainer.scrollHeight);
     // chatInput.focus();
-}
+// }
 
-chatSocket.onclose = function() {
-    console.log('Conexão fechada.');
-    // window.alert("Conexão fechada");
-};
+// chatSocket.onclose = function() {
+//     console.log('Conexão fechada.');
+//     // window.alert("Conexão fechada");
+// };
 
 /***************************************************** Events  ****************************************************/
 // sendButton.addEventListener("click", handleOutgoingChat);
@@ -154,6 +204,6 @@ chatSocket.onclose = function() {
 
 // loadDataFromLocalstorage();
 
-window.addEventListener("load", ()=>{
+// window.addEventListener("load", ()=>{
     // chatContainer.querySelector(".default-text")?.remove();
-})
+// })

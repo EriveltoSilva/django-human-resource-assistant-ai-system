@@ -4,20 +4,74 @@ from dotenv import load_dotenv
 from langchain.prompts import PromptTemplate
 from langchain_core.documents import Document
 from langchain.memory import ConversationBufferMemory
-from langchain_openai import OpenAI, OpenAIEmbeddings
 from langchain_community.vectorstores.chroma import Chroma
+from langchain.chains.summarize import load_summarize_chain
 from langchain.chains.question_answering import load_qa_chain
+from langchain_openai import ChatOpenAI, OpenAI, OpenAIEmbeddings
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain_community.document_loaders import PyPDFDirectoryLoader
+from typing import ( List, Tuple)
 
 # from langchain import HuggingFaceHub
 from langchain_community.embeddings import HuggingFaceEmbeddings
 # from langchain.embeddings.sentence_transformer import SentenceTransformerEmbeddings
 
-
-from asgiref.sync import async_to_sync, sync_to_async
-
 load_dotenv()
+
+class CVAnalyzer():
+    async def get_pdf_text(self, pdf_docs)->str:
+        text = ""
+        pdf_reader = PdfReader(pdf_docs)
+        
+        for page in pdf_reader.pages:
+            text += page.extract_text()
+        return text
+    
+    async def create_docs(self, cvs_list:list, unique_id):
+        docs = []
+        for file_obj in cvs_list:
+            file_details = file_obj.get_file_details()
+            chunks = await self.get_pdf_text(file_obj.cv)
+
+            docs.append(Document(
+                page_content=chunks, 
+                metadata={
+                    "name": file_details.get('name'), 
+                    "id":file_details.get('id'), 
+                    "type":file_details.get('type'), 
+                    "size":file_details.get('size'), 
+                    "unique_id":unique_id
+                }
+            ))
+        return docs
+    
+    async def create_embeddings_load_data(self) -> OpenAIEmbeddings:
+        embeddings = OpenAIEmbeddings()
+        # embeddings = SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-V2")
+        return embeddings
+    
+    async def get_vectorstore(self, documents, embeddings):
+        vectorstore = Chroma.from_documents(documents=documents, embedding=embeddings)
+        return vectorstore
+    
+    async def similar_docs(self, query, number_response_docs, vectorstore, unique_id) -> List[Tuple[Document, float]]:
+       return vectorstore.similarity_search_with_score(query, int(number_response_docs), {"unique_id":unique_id})
+
+    async def get_summary(self, current_doc):
+        # llm = HuggingFaceHub(repo_id="bigscience/bloom", model_kwargs={"temperature":1e-10})
+        llm = ChatOpenAI(temperature=0, model_name="gpt-3.5-turbo-1106")
+        # llm = OpenAI(temperature=0)
+        chain = load_summarize_chain(llm, chain_type="map_reduce")
+        summary = chain.run(current_doc)
+        return summary
+
+    async def get_summary_str(self, text):
+        # llm = HuggingFaceHub(repo_id="bigscience/bloom", model_kwargs={"temperature":1e-10})
+        # llm = ChatOpenAI(temperature=0, model_name="gpt-3.5-turbo-1106")
+        llm = OpenAI(temperature=0)
+        chain = load_summarize_chain(llm, chain_type="map_reduce")
+        summary = chain.run(Document(page_content=text))
+        return summary
+    
 
 class ChatPDFLangchain():
     #----------------------- Load Documents ------------------------------------

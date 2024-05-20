@@ -26,19 +26,19 @@
           <div class="card">
             <div class="card-body">
               <h2 class="card-title">Vaga: {{ vacancy.title }}</h2>
-              <p class="text-muted h5">
-                <i class="bi bi-clock-fill"></i> Data de registro: <span class="text-success">{{ vacancy.created_at }}</span>
+              <p class="text-muted h5 mb-4">
+                <i class="bi bi-clock-fill"></i> Limite da Candidatura: <span class="p-1 alert-danger rounded ">{{ vacancy.created_at }}</span>
               </p>
 
               <p class="card-title" style="font-size:medium;">
                 <span>
                   <i class="bi bi-geo-alt-fill"></i>
-                  <span class="badge badge-warning">{{ vacancy.city }}</span>
+                  <span class="p-2 alert-success rounded ">{{ vacancy.city }}</span>
                 </span>
 
                 <span class="mx-3">
                   <i class="bi bi-briefcase-fill"></i>
-                  <span class="badge badge-success">{{ vacancy.job_type }}</span>
+                  <span class="p-2 alert-success rounded ">{{ vacancy.job_type }}</span>
                 </span>
               </p>
 

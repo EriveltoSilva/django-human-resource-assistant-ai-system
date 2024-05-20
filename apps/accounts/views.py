@@ -15,6 +15,7 @@ from .forms import LoginForm, SignupPersonalForm, SignupBusinessForm, PasswordCh
 User = get_user_model()
 
 
+
 @method_decorator([login_required(login_url='landing_page', redirect_field_name="next"),], name='dispatch')
 class AccountController(View):
     def get(self, *args,**kwargs):

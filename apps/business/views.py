@@ -226,6 +226,6 @@ class RegisterVacancyView(View):
             vacancy.save()
             del request.session['register_vacancy_form_data']
             messages.success(self.request, "Vaga Registada com sucesso!")
-            return redirect(reverse('business:vacancy'))
+            return redirect(reverse('business:vacancy-list' ))
         return HttpResponseRedirect(self.request.META.get('HTTP_REFERER') or '')
 register_vacancy = RegisterVacancyView.as_view()

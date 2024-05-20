@@ -90,6 +90,25 @@ class Vacancy(models.Model):
         """
         return Benefit.objects.filter(vacancy=self)
 
+    def get_job_description(self) -> str:
+        job_description = f"Titulo:{self.title}\n"
+        job_description += f"Tipo de trabalho:{self.job_type}\n"
+        job_description += f"Descrição:\n{self.description}\n"
+        job_description += f"Localização: {self.city}\n"
+
+        job_description += f"Habilidades Requeridas:\n"
+        for item in self.get_skills():
+            job_description += f"{item.title}\n"
+            
+        job_description += f"Responsabilidades a exercer:\n"
+        for item in self.get_responsibilities():
+            job_description += f"{item.title}\n"
+        
+        job_description += f"Benefícios a receber:\n"
+        for item in self.get_benefits():
+            job_description += f"{item.title}\n"
+        return job_description
+
 class Benefit(models.Model):
     """ model for employment benefits for the person hiring for the position """
     bid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
@@ -153,3 +172,12 @@ class Candidate(models.Model):
     def get_absolute_url(self):
         """return the candidate string url"""
         return reverse("model_detail", kwargs={"pk": self.pk})
+    
+    def get_file_details(self):
+        file_id = self.id          # Obtém o ID do arquivo (no banco de dados)
+        file_name = self.cv.name.split('/')[-1], # obtém o nome do arquivo puro, 
+        file_path = self.cv.path # Obtém o caminho completo do arquivo
+        file_size = self.cv.size # Obtém o tamanho do arquivo em bytes
+        file_type = self.cv.name.split('.')[-1]  # Obtém o tipo de arquivo (extensão) 
+        return {'name': file_name[0], 'path': file_path, 'size': file_size, 'id': file_id, 'type': file_type}
+
