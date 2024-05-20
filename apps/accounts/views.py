@@ -89,7 +89,14 @@ class SignupPersonalView(View):
                 address = form.cleaned_data.get("address"),
                 birthday = form.cleaned_data.get("birthday")
             )
-            messages.success(request, "Usuário Registrado com sucesso!")
+            try:
+                emails.send_register_welcome(user, user.email, 'EJZ Tecnologia', '', 
+                                            'http://127.0.0.1:8000/accounts/login/', '',
+                                            'http://127.0.0.1:8000/accounts/login/', '')
+            except Exception as e:
+                print("Error sending email", e)
+
+            messages.success(request, "Usuário Registado com sucesso!")
             del(request.session['signup_personal_form_data'])
             return redirect("accounts:login")
         print(form.errors)
@@ -149,12 +156,11 @@ class PasswordResetEmailVerifyView(View):
                 user.save()
                 uidb64 = user.id
                 link = f'http://localhost:8000/accounts/alterar-palavra-passe?otp={otp}&uidb64={uidb64}'
-
-                # Send email do user with link 
-                print("#"*100)           
-                print('Clique aqui:',link)
-                print("#"*100)  
-                emails.send_password_reset(user, user.email, 'EJZ Tecnologia', '', link)
+                try:
+                    emails.send_password_reset(user, user.email, 'EJZ Tecnologia', '', link)
+                except Exception as e:
+                    print("Error sending email for reset password", e)
+                    
                 del request.session['password_reset_form_data'] 
                 messages.success(request, "Enviamos um email de recuperação de palavra-passe para si!")
             except:
@@ -179,8 +185,8 @@ class PasswordChangeView(View):
             user = User.objects.get(id=request.GET.get("uidb64"), otp=request.GET.get("otp"))
             if user:
                 user.set_password(form.cleaned_data.get('new_password'))
-                user.otp=""
-                user.reset_token=""
+                user.otp = ""
+                user.reset_token = ""
                 user.save()
                 messages.success(request, "Palavra-passe alterada com sucesso!")   
                 return redirect('accounts:login')
@@ -189,56 +195,4 @@ class PasswordChangeView(View):
         previous_page = request.META.get('HTTP_REFERER')
         return HttpResponseRedirect(previous_page or '')    
 password_change = PasswordChangeView.as_view()
-
-###############################################################################################
-# @require_POST
-# @login_required(login_url='landing_page', redirect_field_name="next")
-# def delete_user(request, id):
-#     user = get_object_or_404(User, pk=id)
-#     user.delete()
-#     messages.success(request, "Usuário eliminado com sucesso")
-#     return redirect(reverse('accounts:list'))
-
-
-###############################################################################################
-# @require_POST
-# @login_required(login_url='landing_page', redirect_field_name="next")
-# def list_accounts(request):
-#     list_accounts = User.objects.all()
-#     paginator = Paginator(list_accounts, 10)
-#     page = request.GET.get('page')
-#     accounts = paginator.get_page(page)
-#     # page = utils.get_sub_nav_headers("Listagem","Usuários", "Usuários registrados")
-#     return render(request, "accounts/list.html",{"accounts":accounts, "page":page})
-
-###############################################################################################
-# @login_required(login_url='landing_page', redirect_field_name="next")
-# def edit_view(request, id):
-#     user = get_object_or_404(User, pk=id)
-#     if request.session.get("edit_form_data", None):
-#         form = EditUserForm(request.session.get("edit_form_data", None), instance=user)
-#     else:
-#         form = EditUserForm(instance=user)
-#     return render(request, "accounts/edit.html", {"form": form, "user":user})
-
-
-###############################################################################################
-# @login_required(login_url='landing_page', redirect_field_name="next")
-# def edit_user(request, id):
-#     if request.method != 'POST':
-#         raise Http404()
-    
-#     user = get_object_or_404(User, pk=id)
-#     request.session['edit_form_data'] = request.POST
-#     form = EditUserForm(request.POST, instance=user)
-#     if form.is_valid():
-#        form_user = form.save(commit=False)
-#        form_user.set_password(form_user.password)
-#        form_user.save() 
-#        messages.success(request, "Usuário Editado com sucesso!")
-#        del(request.session['edit_form_data'])
-#        return redirect(reverse("accounts:list"))
-#     print(form.errors)
-#     messages.error(request, "Formulário de Edição Inválido!")
-#     return redirect(reverse("accounts:edit-view", args=(user.id,)))
 
