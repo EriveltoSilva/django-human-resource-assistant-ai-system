@@ -67,10 +67,12 @@
                     <span class="nav-profile-name">{{ request.user.get_full_name }}</span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
-                    <a class="dropdown-item" href="">
+                    {% if request.user.type == 'P' %}
+                    <a class="dropdown-item" href="{% url "personal:career" %}">
                         <i class="bi bi-gear text-primary"></i>
                         Edição de Perfil
                     </a>
+                    {% endif %}
                     <form method="post" action="{% url 'accounts:logout' %}">
                         {% csrf_token %}
                         <button type="submit" class="dropdown-item">

@@ -23,7 +23,7 @@ class ProfissionalExperienceForm(forms.ModelForm):
         label="Quantos anos de trabalho",
         required=True,
         widget=forms.NumberInput(attrs={
-            "placeholder":"Nº de Horas", 
+            "placeholder":"Quantos anos de trabalho você teve na empresa?", 
             "class":"form-control",
             "min":0,
             "max":80,

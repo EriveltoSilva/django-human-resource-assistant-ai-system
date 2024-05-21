@@ -136,6 +136,13 @@ class AcademicFormationForm(forms.ModelForm):
         }), 
     )
 
+    is_finished = forms.BooleanField(
+        label="Terminado?",
+        widget=forms.CheckboxInput(attrs={
+            "placeholder":"Curso", 
+            # "class":"form-control",
+        }), 
+    )
         
     def clean_start_year(self):
         start_year = self.cleaned_data.get('start_year')

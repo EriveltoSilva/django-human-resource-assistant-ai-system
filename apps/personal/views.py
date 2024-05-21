@@ -18,7 +18,7 @@ from .models import ProfissionalExperienceItem, ProfissionalExperience, Document
 class HomeView(View):
     template_name = "personal/home.html"
     def get(self, request, *args, **kwargs):
-        formation = Formation.objects.get(user=self.request.user)
+        formation, _ = Formation.objects.get_or_create(user=self.request.user)
         experience, _ = ProfissionalExperience.objects.get_or_create(user=request.user)
 
         acad_formation_items = AcademicFormationItem.objects.filter(formation=formation)

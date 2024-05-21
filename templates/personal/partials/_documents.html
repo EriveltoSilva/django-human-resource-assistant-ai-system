@@ -1,5 +1,5 @@
 {% load static %}
-<div class="tab-pane fade show active" id="pills-documents" role="tabpanel" aria-labelledby="pills-documents-tab">
+<div class="tab-pane fade" id="pills-documents" role="tabpanel" aria-labelledby="pills-documents-tab">
     <div class="row">
         <div class="col-12 grid-margin stretch-card">
             <div class="card">
@@ -8,6 +8,10 @@
                     <p class="card-description">
                         Ter os documentos actualizados é fundamental para aproveitar as oportunidades que aparecem
                     </p>
+                    <p class="card-description text-danger">
+                        Campos marcados com * são obrigatórios
+                    </p>
+
                     <form id="documentationForm" method="post" action="{% url 'personal:add-documentation' %}"
                         enctype="multipart/form-data" class="forms-sample">
                         {% csrf_token %}
@@ -26,13 +30,22 @@
                                         <input type="text" class="form-control file-upload-info" disabled placeholder="{{ field.label }}">
                                         {% endif %}
                                         <span class="input-group-append">
-                                            <button class="file-upload-browse btn btn-primary" type="button">Carregar
-                                                Ficheiro</button>
+                                            <button class="file-upload-browse btn btn-primary" type="button">
+                                                Carregar Ficheiro
+                                            </button>
                                         </span>
                                     </div>
 
+                                    {% if field.value %}
+                                    <a target="_blank" href="{{ field.value.url }}" > 
+                                        <i class='bi bi-file'></i>
+                                        Documento
+                                    </a>
+                                    {% endif %}
+
+
                                     {% if field.help_text %}
-                                    <p class="text-muted"> <small>{{ field.help_text }}</small> </p>
+                                    <p class="text-danger"> <small>{{ field.help_text }}</small> </p>
                                     {% endif %}
 
                                     {% if field.errors %}

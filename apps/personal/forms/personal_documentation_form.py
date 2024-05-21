@@ -29,19 +29,22 @@ class PersonalDocumentationForm(forms.ModelForm):
     bi = forms.FileField(
         label='Bilhete de Identidade',
         required=True,
-        widget=forms.FileInput(attrs={"class":"file-upload-default", "accept":"image/*,application/pdf"}), 
+        widget=forms.FileInput(attrs={"class":"file-upload-default", "accept":"image/*,application/pdf"}),
+        help_text="*" 
     )
     
     cv = forms.FileField(
-        label='Currriculum Vitae',
+        label='Curriculum Vitae',
         required=True,
         widget=forms.FileInput(attrs={"class":"file-upload-default", "accept":"image/*,application/pdf"}), 
+        help_text="*" 
     )
     
     certificate_literary = forms.FileField(
         label='Certificado de Habilitações Literais',
         required=True,
         widget=forms.FileInput(attrs={"class":"file-upload-default", "accept":"image/*,application/pdf"}), 
+        help_text="*" 
     )
     
     medical_certificate = forms.FileField(
