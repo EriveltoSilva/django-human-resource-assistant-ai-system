@@ -1,5 +1,4 @@
 """ Business Models """
-
 import uuid
 from django.db import models
 from django.urls import reverse
@@ -180,4 +179,3 @@ class Candidate(models.Model):
         file_size = self.cv.size # Obtém o tamanho do arquivo em bytes
         file_type = self.cv.name.split('.')[-1]  # Obtém o tipo de arquivo (extensão) 
         return {'name': file_name[0], 'path': file_path, 'size': file_size, 'id': file_id, 'type': file_type}
-

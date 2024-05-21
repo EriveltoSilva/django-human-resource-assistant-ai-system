@@ -65,7 +65,7 @@ class RegisterVacancyForm(forms.ModelForm):
     city = forms.CharField(
         label="Cidade",
         required=True,
-        max_length=100,
+        max_length=150,
         widget=forms.TextInput(attrs={
             "placeholder":"Cidade",
             "class":"form-control form-control-lg fs-6",

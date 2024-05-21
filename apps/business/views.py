@@ -12,6 +12,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from django.contrib.auth import get_user_model
 
+from apps.business.models import Skill, Responsibility, Benefit
 from .models import Vacancy, Candidate
 from .forms import RegisterVacancyForm, VacancySkillForm
 from .forms import VacancyResponsibilityForm, VacancyBenefitForm
@@ -172,6 +173,53 @@ class VacancySkillSViewEdit(_BasicVacancyEditViewModel):
         print(form.errors)
         return HttpResponseRedirect(self.request.META.get('HTTP_REFERER') or '')
 add_vacancy_skills = VacancySkillSViewEdit.as_view()
+
+@method_decorator(
+    [login_required(login_url='landing_page', redirect_field_name="next")],name='dispatch')
+class DeleteResponsibilityView(View):
+    """delete vacancy responsibility view"""
+    def post(self, *args, **kwargs):
+        """post method for delete processing request
+        Returns:
+            http redirect response: redirect url view
+        """
+        responsibility = Responsibility.objects.get(rid=self.kwargs.get('rid'))
+        responsibility.delete()
+        messages.success(self.request, "Responsabilidade eliminada com sucesso!")
+        return HttpResponseRedirect(self.request.META.get('HTTP_REFERER') or '')
+delete_responsibility = DeleteResponsibilityView.as_view()
+
+
+@method_decorator(
+    [login_required(login_url='landing_page', redirect_field_name="next")],name='dispatch')
+class DeleteBenefitView(View):
+    """delete vacancy benefit view"""
+    def post(self, *args, **kwargs):
+        """post method for delete processing request
+        Returns:
+            http redirect response: redirect url view
+        """
+        benefit = Benefit.objects.get(bid=self.kwargs.get('bid'))
+        benefit.delete()
+        messages.success(self.request, "Beneficio eliminado com sucesso!")
+        return HttpResponseRedirect(self.request.META.get('HTTP_REFERER') or '')
+delete_benefit = DeleteBenefitView.as_view()
+
+
+@method_decorator(
+    [login_required(login_url='landing_page', redirect_field_name="next")],name='dispatch')
+class DeleteSkillView(View):
+    """delete vacancy skill view"""
+    def post(self, *args, **kwargs):
+        """post method for delete processing request
+        Returns:
+            http redirect response: redirect url view
+        """
+        skill = Skill.objects.get(sid=self.kwargs.get('sid'))
+        skill.delete()
+        messages.success(self.request, "Requisito eliminado com sucesso!")
+        return HttpResponseRedirect(self.request.META.get('HTTP_REFERER') or '')
+delete_skill = DeleteSkillView.as_view()
 
 @method_decorator(
     [login_required(login_url='landing_page', redirect_field_name="next"),], name='dispatch')

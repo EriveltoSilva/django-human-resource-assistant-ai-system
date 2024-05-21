@@ -13,7 +13,7 @@ class VacancyResponsibilityForm(forms.ModelForm):
     title = forms.CharField(
         label="Curta Descrição",
         required=True,
-        max_length=100,
+        max_length=255,
         widget=forms.TextInput(attrs={
             "placeholder":"Descrição",
             "class":"form-control",
