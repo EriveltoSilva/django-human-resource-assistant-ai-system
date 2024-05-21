@@ -2,158 +2,93 @@
 {% load static %}
 
 {% block metas %}
-<meta name="description" content="Encontre os melhores talentos para sua organização">
-<meta name="keywords" content="Talentos, Trabalhador, Recurso, Contratação, Valor">
+  <meta name="description" content="Encontre os melhores talentos para sua organização" />
+  <meta name="keywords" content="Talentos, Trabalhador, Recurso, Contratação, Valor" />
 {% endblock %}
 
 {% block title %}
-Dashboard
+  Dashboard
 {% endblock %}
 
-
 {% block local_style %}
+
 {% endblock %}
 
 {% block content %}
-<div class="content-wrapper">
-  <div class="row">
-    <div class="col-sm-6">
-      <h3 class="mb-0 font-weight-bold">{{ request.user.get_full_name }}</h3>
-      <p>Os melhores profissionais logo aqui</p>
+  <div class="content-wrapper">
+    <div class="row">
+      <div class="col-sm-6">
+        <h3 class="mb-0 font-weight-bold">{{ request.user.get_full_name }}</h3>
+        <p>Os melhores profissionais logo aqui</p>
+      </div>
     </div>
 
-    {% comment %} <div class="col-sm-6">
-      <div class="d-flex align-items-center justify-content-md-end">
-        <div class="mb-3 mb-xl-0 pr-1">
-          <div class="dropdown">
-            <button class="btn bg-white btn-sm dropdown-toggle btn-icon-text border mr-2" type="button"
-              id="dropdownMenu3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <i class="typcn typcn-calendar-outline mr-2"></i>Last 7 days
-            </button>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuSizeButton3" data-x-placement="top-start">
-              <h6 class="dropdown-header">Last 14 days</h6>
-              <a class="dropdown-item" href="#">Last 21 days</a>
-              <a class="dropdown-item" href="#">Last 28 days</a>
-            </div>
+    <div class="row g-4 justify-content-left">
+      <div class="col-sm-6 col-xl-3 mt-2">
+        <div class="border border-primary text-primary rounded d-flex align-items-center justify-content-between p-4">
+          <img class="rounded-circle" src="{% static 'assets/images/icons/anuncio.png' %}" style="width: 80px; height: 80px;" />
+          <div class="ms-5">
+            <p class="mb-2">Total de Anúncios Públicados</p>
+            <h6 class="mb-0">{{ total_vacancies.count }}</h6>
           </div>
-        </div>
-
-
-        <div class="pr-1 mb-3 mr-2 mb-xl-0">
-          <button type="button" class="btn btn-sm bg-white btn-icon-text border"><i
-              class="typcn typcn-arrow-forward-outline mr-2"></i>Export</button>
-        </div>
-        <div class="pr-1 mb-3 mb-xl-0">
-          <button type="button" class="btn btn-sm bg-white btn-icon-text border"><i
-              class="typcn typcn-info-large-outline mr-2"></i>info</button>
         </div>
       </div>
-    </div> {% endcomment %}
-  </div>
 
-  <div class="row g-4 justify-content-left">
-    <div class="col-sm-6 col-xl-3 mt-2">
-        <div class=" border border-primary text-primary rounded d-flex align-items-center justify-content-between p-4">
-            <img class="rounded-circle" src="{% static 'assets/images/icons/anuncio.png' %}"
-                style="width: 80px; height: 80px;">
-            <div class="ms-5">
-                <p class="mb-2">Total de Anúncios Públicados</p>
-                <h6 class="mb-0">{{total_vacancies.count}}</h6>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-sm-6 col-xl-3 mt-2">
-        <div class=" border border-primary text-primary rounded d-flex align-items-center justify-content-between p-4">
-            <img class="rounded-circle" src="{% static 'assets/images/icons/procura.png' %}"
-                style="width: 80px; height: 80px;">
-            <div class="ms-5">
-                <p class="mb-2">Total de Vagas Activas</p>
-                <h6 class="mb-0">{{total_vacancies_active.count}}</h6>
-            </div>
-        </div>
-    </div>
-    
-    <div class="col-sm-6 col-xl-3 mt-2">
-        <div class=" border border-primary text-primary rounded d-flex align-items-center justify-content-between p-4">
-            <img class="rounded-circle" src="{% static 'assets/images/icons/user.png' %}"
-                style="width: 80px; height: 80px;">
-            <div class="ms-5">
-                <p class="mb-2">Total de Usuários</p>
-                <h6 class="mb-0">{{total_users.count}}</h6>
-            </div>
-        </div>
-    </div>
-    
-    <div class="col-sm-6 col-xl-3 mt-2">
-        <div class=" border border-primary text-primary rounded d-flex align-items-center justify-content-between p-4">
-            <img class="rounded-circle" src="{% static 'assets/images/icons/candidaturas.png' %}"
-                style="width: 80px; height: 80px;">
-            <div class="ms-5">
-                <p class="mb-2">Total de Candidaturas</p>
-                <h6 class="mb-0">{{total_candidates.count}}</h6>
-            </div>
-        </div>
-    </div>
-</div>
-
-  <div class="row  mt-3">
-    
-    <div class="col-xl-3 d-flex grid-margin stretch-card">
-      <div class="card">
-        <div class="card-body">
-          <div class="d-flex flex-wrap justify-content-between">
-            <h4 class="card-title mb-3">Events</h4>
+      <div class="col-sm-6 col-xl-3 mt-2">
+        <div class="border border-primary text-primary rounded d-flex align-items-center justify-content-between p-4">
+          <img class="rounded-circle" src="{% static 'assets/images/icons/procura.png' %}" style="width: 80px; height: 80px;" />
+          <div class="ms-5">
+            <p class="mb-2">Total de Vagas Activas</p>
+            <h6 class="mb-0">{{ total_vacancies_active.count }}</h6>
           </div>
-          <div class="row">
-            <div class="col-12">
-              <div class="row">
-                <div class="col-sm-12">
-                  <div class="d-flex justify-content-between mb-md-5 mt-3">
-                    <div class="small">Critical</div>
-                    <div class="text-danger small">Error</div>
-                    <div class="text-warning small">Warning</div>
-                  </div>
-                  <canvas id="eventChart"></canvas>
-                </div>
-              </div>
-            </div>
+        </div>
+      </div>
+
+      <div class="col-sm-6 col-xl-3 mt-2">
+        <div class="border border-primary text-primary rounded d-flex align-items-center justify-content-between p-4">
+          <img class="rounded-circle" src="{% static 'assets/images/icons/user.png' %}" style="width: 80px; height: 80px;" />
+          <div class="ms-5">
+            <p class="mb-2">Total de Usuários</p>
+            <h6 class="mb-0">{{ total_users.count }}</h6>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-6 col-xl-3 mt-2">
+        <div class="border border-primary text-primary rounded d-flex align-items-center justify-content-between p-4">
+          <img class="rounded-circle" src="{% static 'assets/images/icons/candidaturas.png' %}" style="width: 80px; height: 80px;" />
+          <div class="ms-5">
+            <p class="mb-2">Total de Candidaturas</p>
+            <h6 class="mb-0">{{ total_candidates.count }}</h6>
           </div>
         </div>
       </div>
     </div>
-    <div class="col-xl-4 d-flex grid-margin stretch-card">
-      <div class="card">
-        <div class="card-body">
-          <div class="d-flex flex-wrap justify-content-between">
-            <h4 class="card-title mb-3">Device stats</h4>
+
+    <div class="row mt-3">
+      <div class="col-lg-6 d-flex grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <div class="d-flex flex-wrap justify-content-between">
+              <h4 class="card-title mb-3">Vagas Por Mês</h4>
+            </div>
+
+            <div class="chart-container mt-4">
+              <canvas id="bar_total_vacancies_by_month"></canvas>
+            </div>
           </div>
-          <div class="row">
-            <div class="col-12">
-              <div class="row">
-                <div class="col-sm-12">
-                  <div class="d-flex justify-content-between mb-4">
-                    <div>Uptime</div>
-                    <div class="text-muted">195 Days, 8 hours</div>
-                  </div>
-                  <div class="d-flex justify-content-between mb-4">
-                    <div>First Seen</div>
-                    <div class="text-muted">23 Sep 2019, 2.04PM</div>
-                  </div>
-                  <div class="d-flex justify-content-between mb-4">
-                    <div>Collected time</div>
-                    <div class="text-muted">23 Sep 2019, 2.04PM</div>
-                  </div>
-                  <div class="d-flex justify-content-between mb-4">
-                    <div>Memory space</div>
-                    <div class="text-muted">168.3GB</div>
-                  </div>
-                  <div class="progress progress-md mt-4">
-                    <div class="progress-bar bg-success" role="progressbar" style="width: 50%"
-                      aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
-                </div>
-              </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6 d-flex grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <div class="d-flex flex-wrap justify-content-between">
+              <h4 class="card-title mb-3">Usuários Por Mês</h4>
+            </div>
+
+            <div class="chart-container mt-4">
+              <canvas id="total_user_by_month_line"></canvas>
             </div>
           </div>
         </div>
@@ -161,93 +96,37 @@ Dashboard
     </div>
   </div>
 
-  <div class="row">
-    <div class="col-lg-12 d-flex grid-margin stretch-card">
-      <div class="card">
-        <div class="card-body">
-          <div class="d-flex flex-wrap justify-content-between">
-            <h4 class="card-title mb-3">E-Commerce Analytics</h4>
-          </div>
-          <div class="row">
-            <div class="col-lg-9">
-              <div class="d-sm-flex justify-content-between">
-                <div class="dropdown">
-                  <button class="btn bg-white btn-sm dropdown-toggle btn-icon-text pl-0" type="button"
-                    id="dropdownMenuSizeButton4" data-toggle="dropdown" aria-haspopup="true"
-                    aria-expanded="false">
-                    Mon,1 Oct 2019 - Tue,2 Oct 2019
-                  </button>
-                  <div class="dropdown-menu" aria-labelledby="dropdownMenuSizeButton4"
-                    data-x-placement="top-start">
-                    <h6 class="dropdown-header">Mon,17 Oct 2019 - Tue,25 Oct 2019</h6>
-                    <a class="dropdown-item" href="#">Tue,18 Oct 2019 - Wed,26 Oct 2019</a>
-                    <a class="dropdown-item" href="#">Wed,19 Oct 2019 - Thu,26 Oct 2019</a>
-                  </div>
-                </div>
-                <div>
-                  <button type="button" class="btn btn-sm btn-light mr-2">Day</button>
-                  <button type="button" class="btn btn-sm btn-light mr-2">Week</button>
-                  <button type="button" class="btn btn-sm btn-light">Month</button>
-                </div>
-              </div>
-              <div class="chart-container mt-4">
-                <canvas id="ecommerceAnalytic"></canvas>
-              </div>
-            </div>
-            <div class="col-lg-3">
-              <div>
-                <div class="d-flex justify-content-between mb-3">
-                  <div class="text-success font-weight-bold">Inbound</div>
-                </div>
-                <div class="d-flex justify-content-between mb-3">
-                  <div class="font-weight-medium">Current</div>
-                  <div class="text-muted">38.34M</div>
-                </div>
-                <div class="d-flex justify-content-between mb-3">
-                  <div class="font-weight-medium">Average</div>
-                  <div class="text-muted">38.34M</div>
-                </div>
-                <div class="d-flex justify-content-between mb-3">
-                  <div class="font-weight-medium">Maximum</div>
-                  <div class="text-muted">68.14M</div>
-                </div>
-                <div class="d-flex justify-content-between mb-3">
-                  <div class="font-weight-medium">60th %</div>
-                  <div class="text-muted">168.3GB</div>
-                </div>
-              </div>
-              <hr>
-              <div class="mt-4">
-                <div class="d-flex justify-content-between mb-3">
-                  <div class="text-success font-weight-bold">Outbound</div>
-                </div>
-                <div class="d-flex justify-content-between mb-3">
-                  <div class="font-weight-medium">Current</div>
-                  <div class="text-muted">458.77M</div>
-                </div>
-                <div class="d-flex justify-content-between mb-3">
-                  <div class="font-weight-medium">Average</div>
-                  <div class="text-muted">1.45K</div>
-                </div>
-                <div class="d-flex justify-content-between mb-3">
-                  <div class="font-weight-medium">Maximum</div>
-                  <div class="text-muted">15.50K</div>
-                </div>
-                <div class="d-flex justify-content-between">
-                  <div class="font-weight-medium">60th %</div>
-                  <div class="text-muted">45.5</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  
-</div>
-
+  {% comment %}labels: {{ labels_get_total_meetings_per_month_bar_chart|safe }},{% endcomment %}
+  {% comment %}data: {{ data_get_total_meetings_per_month_bar_chart|safe }},{% endcomment %}
 {% endblock %}
 
 {% block local_script %}
+  <script>
+    var barTotalVacanciesByMonth = document.getElementById('bar_total_vacancies_by_month').getContext("2d");
+        var mybarReqByMonth = new Chart(barTotalVacanciesByMonth, {
+            type: "bar",
+            data: {
+                labels: {{ labels_bar_vacancies_by_month|safe }},
+                datasets: [{
+                    label: 'Total de Requisições por Mês',
+                    data: {{ data_bar_vacancies_by_month|safe }},
+                    backgroundColor: [
+                        "rgb(27,123, 233)",
+                        "rgb(13, 202, 240)",
+                        "rgb(255, 193, 7)",
+                        "rgb(254, 130, 151)",
+                        "rgb(228, 79, 38)",
+                        "rgb(123, 131, 235)",
+                        "rgb(75, 240, 123)",
+                    ],
+                    borderColor: "#FFFFFF",
+                    borderWidth: 0.2,
+                }]
+            },
+        });
+
+
+       
+
+  </script>
 {% endblock %}

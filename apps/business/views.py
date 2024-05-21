@@ -15,7 +15,7 @@ from django.contrib.auth import get_user_model
 from .models import Vacancy, Candidate
 from .forms import RegisterVacancyForm, VacancySkillForm
 from .forms import VacancyResponsibilityForm, VacancyBenefitForm
-
+from . import charts
 User = get_user_model()
 
 def user_profile(request, uid):
@@ -23,11 +23,17 @@ def user_profile(request, uid):
     total_vacancies_active = Vacancy.objects.filter(company=request.user, expiration_data__gt = timezone.now().date())
     total_users = User.objects.exclude(uid=request.user.uid)
     total_candidates = Candidate.objects.all()
+    labels_bar_vacancies_by_month, data_bar_vacancies_by_month = charts.get_vacancies_by_month()
+    print(labels_bar_vacancies_by_month)
+    print(data_bar_vacancies_by_month)
+
     return render(request, "business/user-profile.html", {
         'total_vacancies': total_vacancies,
         'total_vacancies_active': total_vacancies_active,
         'total_users': total_users,
         'total_candidates': total_candidates,
+        'labels_bar_vacancies_by_month':labels_bar_vacancies_by_month,
+        'data_bar_vacancies_by_month':data_bar_vacancies_by_month,
         })
 
 @method_decorator(
