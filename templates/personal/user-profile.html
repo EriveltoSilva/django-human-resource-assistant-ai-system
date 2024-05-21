@@ -115,6 +115,7 @@
                       <div class="text-muted">{{owner.personal_profile.address}}</div>
                     </div>
                     
+                    {% if documentation.cv %}
                     <div class="d-flex justify-content-between mb-4">
                       <div>Curriculum Vitae</div>
                       <div class="text-muted">
@@ -123,6 +124,7 @@
                         </a>
                       </div>
                     </div>
+                    {% endif %}
 
                     {% if owner.personal_profile.linkedin %}
                     <div class="d-flex justify-content-between mb-4">
@@ -262,7 +264,7 @@
                     {% for candidate in candidates %}
                     <div class="d-flex justify-content-between mb-4">
                         <div class="text-secondary font-weight-medium">
-                            <a href="{% url "personal:vacancy-detail" %}">
+                            <a href="{% url 'personal:vacancy-detail' candidate.vacancy.company.slug candidate.vacancy.vid %}">
                                 {{candidate.vacancy.title}}
                             </a>
                         </div>
