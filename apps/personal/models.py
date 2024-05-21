@@ -43,7 +43,6 @@ class ProfissionalExperienceItem(models.Model):
     def __str__(self) -> str:
         return f"Experiência - {self.institution}"
 
-
 class AcademicInstitution(models.Model):
     """academic institutions model"""
     name = models.CharField(max_length=255, null=False, blank=False)

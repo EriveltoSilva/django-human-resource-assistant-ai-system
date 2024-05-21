@@ -93,40 +93,125 @@
           </div>
         </div>
       </div>
+
+      <div class="col-lg-6 d-flex grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <div class="d-flex flex-wrap justify-content-between">
+              <h4 class="card-title mb-3">Distribuição de Gêneros dos Usuários</h4>
+            </div>
+
+            <div class="chart-container mt-4">
+              <canvas id="pie_total_users_gender"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6 d-flex grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <div class="d-flex flex-wrap justify-content-between">
+              <h4 class="card-title mb-3">Distribuição de Usuários com CV</h4>
+            </div>
+
+            <div class="chart-container mt-4">
+              <canvas id="pie_total_users_without_cv"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
-
-  {% comment %}labels: {{ labels_get_total_meetings_per_month_bar_chart|safe }},{% endcomment %}
-  {% comment %}data: {{ data_get_total_meetings_per_month_bar_chart|safe }},{% endcomment %}
 {% endblock %}
 
 {% block local_script %}
   <script>
+    
     var barTotalVacanciesByMonth = document.getElementById('bar_total_vacancies_by_month').getContext("2d");
-        var mybarReqByMonth = new Chart(barTotalVacanciesByMonth, {
-            type: "bar",
-            data: {
-                labels: {{ labels_bar_vacancies_by_month|safe }},
-                datasets: [{
-                    label: 'Total de Requisições por Mês',
-                    data: {{ data_bar_vacancies_by_month|safe }},
-                    backgroundColor: [
-                        "rgb(27,123, 233)",
-                        "rgb(13, 202, 240)",
-                        "rgb(255, 193, 7)",
-                        "rgb(254, 130, 151)",
-                        "rgb(228, 79, 38)",
-                        "rgb(123, 131, 235)",
-                        "rgb(75, 240, 123)",
-                    ],
-                    borderColor: "#FFFFFF",
-                    borderWidth: 0.2,
-                }]
-            },
-        });
+    var myChart1 = new Chart(barTotalVacanciesByMonth, {
+        type: "bar",
+        data: {
+            labels: {{ labels_bar_vacancies_by_month|safe }},
+            datasets: [{
+                label: 'Total de Requisições por Mês',
+                data: {{ data_bar_vacancies_by_month|safe }},
+                backgroundColor: [
+                    "rgb(27,123, 233)",
+                    "rgb(13, 202, 240)",
+                    "rgb(255, 193, 7)",
+                    "rgb(254, 130, 151)",
+                    "rgb(228, 79, 38)",
+                    "rgb(123, 131, 235)",
+                    "rgb(75, 240, 123)",
+                ],
+                borderColor: "#FFFFFF",
+                borderWidth: 0.2,
+            }]
+        },
+    });
+    
+    var totalUserByMonthLine = document.getElementById('total_user_by_month_line').getContext("2d");
+    var myChart2 = new Chart(totalUserByMonthLine, {
+        type: "line",
+        data: {
+            labels: {{ labels_users_by_month_line|safe }},
+            datasets: [{
+                label: "Valor total",
+                fill: false,
+                backgroundColor: "rgb(27,123, 233)",
+                data: {{ data_users_by_month_line|safe }},
+            }]
+        },
+        options: {
+            responsive: true
+        }
+    });
 
-
-       
+    var pieTotalUserGender = document.getElementById('pie_total_users_gender').getContext("2d");
+    var myChart3 = new Chart(pieTotalUserGender, {
+        type: "pie",
+        data: {
+            labels: {{ labels_users_gender_pie|safe }},
+            datasets: [{
+                backgroundColor: [
+                    "rgb(254, 130, 151)",
+                    "rgb(13, 202, 240)",
+                    "rgb(75, 240, 123)",
+                    "rgb(123, 131, 235)",
+                    "rgb(228, 79, 38)",
+                    "rgb(255, 193, 7)",
+                ],
+                data: {{ data_users_gender_pie|safe }},
+            }]
+        },
+        options: {
+            responsive: true
+        }
+    });
+        
+    var pieUserWithoutCV = document.getElementById('pie_total_users_without_cv').getContext("2d");
+    var myChart4 = new Chart(pieUserWithoutCV, {
+        type: "pie",
+        data: {
+            labels: {{ labels_users_without_pie|safe }},
+            datasets: [{
+                backgroundColor: [
+                    "rgb(13, 202, 240)",
+                    "rgb(254, 130, 151)",
+                    "rgb(75, 240, 123)",
+                    "rgb(123, 131, 235)",
+                    "rgb(228, 79, 38)",
+                    "rgb(255, 193, 7)",
+                ],
+                data: {{ data_users_without_pie|safe }},
+            }]
+        },
+        options: {
+            responsive: true
+        }
+    });
 
   </script>
 {% endblock %}

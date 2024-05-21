@@ -24,8 +24,12 @@ def user_profile(request, uid):
     total_users = User.objects.exclude(uid=request.user.uid)
     total_candidates = Candidate.objects.all()
     labels_bar_vacancies_by_month, data_bar_vacancies_by_month = charts.get_vacancies_by_month()
-    print(labels_bar_vacancies_by_month)
-    print(data_bar_vacancies_by_month)
+    labels_users_by_month_line, data_users_by_month_line = charts.get_users_by_month()
+    labels_users_gender_pie, data_users_gender_pie = charts.get_users_gender_pie()
+    labels_users_without_pie, data_users_without_pie = charts.get_users_without_cv_pie()
+
+    print(labels_users_by_month_line)
+    print(data_users_by_month_line)
 
     return render(request, "business/user-profile.html", {
         'total_vacancies': total_vacancies,
@@ -34,6 +38,12 @@ def user_profile(request, uid):
         'total_candidates': total_candidates,
         'labels_bar_vacancies_by_month':labels_bar_vacancies_by_month,
         'data_bar_vacancies_by_month':data_bar_vacancies_by_month,
+        'labels_users_by_month_line':labels_users_by_month_line,
+        'data_users_by_month_line':data_users_by_month_line,
+        'labels_users_gender_pie':labels_users_gender_pie,
+        'data_users_gender_pie':data_users_gender_pie,
+        'labels_users_without_pie':labels_users_without_pie,
+        'data_users_without_pie':data_users_without_pie,
         })
 
 @method_decorator(
