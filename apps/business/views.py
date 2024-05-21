@@ -16,8 +16,8 @@ from .forms import VacancyResponsibilityForm, VacancyBenefitForm
 
 
 
-def home(request):
-    return render(request, "business/home.html")
+def user_profile(request, uid):
+    return render(request, "business/user-profile.html")
 
 @method_decorator(
     [login_required(login_url='landing_page', redirect_field_name="next")],name='dispatch')

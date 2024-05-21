@@ -1,0 +1,289 @@
+{% extends 'personal/base.html' %}
+{% load static %}
+
+{% block metas %}
+  <meta name="description" content="Encontre as melhores vagas" />
+  <meta name="keywords" content="Vagas, Disponibilidades" />
+{% endblock %}
+
+{% block title %}
+  Vagas expontâneas
+{% endblock %}
+
+{% block local_style %}
+
+{% endblock %}
+
+{% block content %}
+  <div class="content-wrapper">
+    <div class="row">
+      <div class="col-sm-6">
+        <h3 class="mb-0 font-weight-bold">{{ request.user.get_full_name }}</h3>
+        <p>Aqui desde: {{ request.user.date_joined }}.</p>
+      </div>
+      {% if request.user == owner and not documentation.cv %}
+      <div class="col-sm-6">
+        <p class="alert alert-danger">O seu perfil não têm um CV associado. Faça o upload por favor!</p>
+      </div>
+      {%endif%}
+
+    </div>
+
+    <div class="row g-4 justify-content-left">
+        <div class="col-sm-6 col-xl-3 mt-2">
+            <div class=" border border-primary text-primary rounded d-flex align-items-center justify-content-between p-4">
+                <img class="rounded-circle" src="{% static 'assets/images/icons/academic.png' %}"
+                    style="width: 80px; height: 80px;">
+                <div class="ms-5">
+                    <p class="mb-2">Formações Acadêmicas</p>
+                    <h6 class="mb-0">{{acad_formation_items.count}}</h6>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-xl-3 mt-2">
+            <div class=" border border-primary text-primary rounded d-flex align-items-center justify-content-between p-4">
+                <img class="rounded-circle" src="{% static 'assets/images/icons/profissional1.png' %}"
+                    style="width: 80px; height: 80px;">
+                <div class="ms-5">
+                    <p class="mb-2">Formações Profissional</p>
+                    <h6 class="mb-0">{{prof_formation_items.count}}</h6>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-sm-6 col-xl-3 mt-2">
+            <div class=" border border-primary text-primary rounded d-flex align-items-center justify-content-between p-4">
+                <img class="rounded-circle" src="{% static 'assets/images/icons/vagas.png' %}"
+                    style="width: 80px; height: 80px;">
+                <div class="ms-5">
+                    <p class="mb-2">Vagas Concorridas</p>
+                    <h6 class="mb-0">{{candidates.count}}</h6>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+
+    <div class="row mt-3">
+      <div class="col-xl-3 d-flex grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <div class="d-flex flex-wrap justify-content-between">
+              <h4 class="card-title mb-3">Perfil</h4>
+            </div>
+            <div class="row">
+                <img src="{{ request.user.personal_profile.image_url }}" alt="" class="card-img-top" style="width:100%; max-height:230px;" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xl-9 d-flex grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <div class="d-flex flex-wrap justify-content-between">
+              <h4 class="card-title mb-3">Dados Pessoais</h4>
+            </div>
+            <div class="row">
+              <div class="col-12">
+                <div class="row">
+                  <div class="col-sm-12">
+                    <div class="d-flex justify-content-between mb-4">
+                      <div>Nome Completo</div>
+                      <div class="text-muted">{{owner.get_full_name}}</div>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between mb-4">
+                      <div>Gênero</div>
+                      <div class="text-muted">{{owner.personal_profile.get_gender_string}}</div>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between mb-4">
+                      <div>Data de Nascimento</div>
+                      <div class="text-muted">{{owner.personal_profile.birthday}}</div>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between mb-4">
+                      <div>Telefone</div>
+                      <div class="text-muted">{{owner.personal_profile.phone}}</div>
+                    </div>
+                
+                    <div class="d-flex justify-content-between mb-4">
+                      <div>Endereço</div>
+                      <div class="text-muted">{{owner.personal_profile.address}}</div>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between mb-4">
+                      <div>Curriculum Vitae</div>
+                      <div class="text-muted">
+                        <a href="{{documentation.cv.url}}" target="_blank" title="Curriculum Vitae">
+                            <i class="bi bi-file-pdf h3"></i>Curriculum Vitae
+                        </a>
+                      </div>
+                    </div>
+
+                    {% if owner.personal_profile.linkedin %}
+                    <div class="d-flex justify-content-between mb-4">
+                        <div>Linkedin</div>
+                        <div class="text-muted">
+                            <a href="owner.personal_profile.linkedin">{{owner.personal_profile.linkedin}}</a>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    {% if owner.personal_profile.facebook %}
+                    <div class="d-flex justify-content-between mb-4">
+                        <div>Facebook</div>
+                        <div class="text-muted">
+                            <a href="owner.personal_profile.facebook">{{owner.personal_profile.facebook}}</a>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {% if owner.personal_profile.facebook %}
+                    <div class="d-flex justify-content-between mb-4">
+                        <div>Website</div>
+                        <div class="text-muted">
+                            <a href="owner.personal_profile.website">{{owner.personal_profile.website}}</a>
+                        </div>
+                    </div>
+                    {% endif %}
+
+
+                    <div class="progress progress-md mt-4">
+                      <div class="progress-bar bg-info" role="progressbar" style="width: 100%"
+                        aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>    
+
+    <div class="row">
+      <div class="col-lg-6 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Formações Académicas</h4>
+                <p class="card-description">
+                    Formações já registradas</code>
+                </p>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Curso</th>
+                                <th>Instituição</th>
+                                <th>Início</th>
+                                <th>Termino</th>
+                                <th>Terminado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for formation in acad_formation_items %}
+                            <tr>
+                                <td>{{formation.course}}</td>
+                                <td>{{formation.institution}}</td>
+                                <td>{{formation.start_year}}</td>
+                                <td>{{formation.end_year}}</td>
+                                <td>{{formation.get_finished_status}}</td>
+                                
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="4"><p>Não há formações academicas registradas!</p></td>
+                            </tr>
+                            {% endfor %}
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+      <div class="col-lg-6 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Formações Profissionais</h4>
+                    <p class="card-description">
+                        Suas formações profissionais já registradas</code>
+                    </p>
+                    <div class="table-responsive">
+                        <table class="table text-left">
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>Instituição</th>
+                                    <th>Horas</th>
+                                    <th>Ano</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for formation in prof_formation_items %}
+                                <tr>
+                                    <td>{{formation.title}}</td>
+                                    <td>{{formation.institution}}</td>
+                                    <td>{{formation.hours}}horas</td>
+                                    <td>{{formation.year}}</td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="4"><p>Não há formações academicas registradas!</p></td>
+                                </tr>
+                                {% endfor %}
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if request.user == owner %}
+    <div class="row">
+      <div class="col-xl-3 d-flex grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <div class="d-flex flex-wrap justify-content-between">
+              <h4 class="card-title mb-3">Candidaturas ({{candidates.count}})</h4>
+            </div>
+            <div class="row">
+              <div class="col-12">
+                <div class="row">
+                  <div class="col-sm-12">
+                    {% for candidate in candidates %}
+                    <div class="d-flex justify-content-between mb-4">
+                        <div class="text-secondary font-weight-medium">
+                            <a href="{% url "personal:vacancy-detail" %}">
+                                {{candidate.vacancy.title}}
+                            </a>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <p class="text-muted">Você ainda não se candidatou em nenhuma vaga!</p>
+                    {% endfor %}
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+  </div>
+{% endblock %}
+
+{% block local_script %}
+
+{% endblock %}

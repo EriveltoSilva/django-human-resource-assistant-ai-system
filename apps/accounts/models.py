@@ -120,6 +120,10 @@ class PersonalProfile(AbstractProfile):
     def get_gender(self) -> list:
         """gets de a friendly representation of a gender field."""
         return [item for item in (utils.GENDER) ]
+    
+    def get_gender_string(self) -> list:
+        """gets de a friendly representation of a gender field."""
+        return self.gender
 
     def get_absolute_url(self) -> str:
         """gets url for personal detail profile

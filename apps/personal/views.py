@@ -6,6 +6,7 @@ from django.views import View, generic
 from django.http import HttpResponseRedirect
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import get_user_model
 
 from apps.accounts.models import PersonalProfile
 from apps.business.models import Vacancy, Candidate
@@ -14,23 +15,32 @@ from .forms import ProfissionalFormationForm, ProfissionalExperienceForm, Person
 from .models import Formation, AcademicFormationItem, ProfissionalFormationItem
 from .models import ProfissionalExperienceItem, ProfissionalExperience, Documentation
 
+User = get_user_model()
 
-class HomeView(View):
-    template_name = "personal/home.html"
+class UserProfileView(View):
+    template_name = "personal/user-profile.html"
     def get(self, request, *args, **kwargs):
-        formation, _ = Formation.objects.get_or_create(user=self.request.user)
-        experience, _ = ProfissionalExperience.objects.get_or_create(user=request.user)
+        owner = User.objects.get(uid=self.kwargs.get('uid'))
+        formation, _ = Formation.objects.get_or_create(user=owner)
+        experience, _ = ProfissionalExperience.objects.get_or_create(user=owner)
+        documentation, _ = Documentation.objects.get_or_create(user=owner)
 
         acad_formation_items = AcademicFormationItem.objects.filter(formation=formation)
         prof_formation_items = ProfissionalFormationItem.objects.filter(formation=formation)
         prof_experience_items = ProfissionalExperienceItem.objects.filter(profissional_experience=experience)
 
+        candidates = Candidate.objects.filter(user=owner)
+        
+
         return render(self.request, self.template_name, {
             "acad_formation_items":acad_formation_items,
             "prof_formation_items":prof_formation_items,
-            "prof_experience_items":prof_experience_items
+            "prof_experience_items":prof_experience_items,
+            "documentation": documentation,
+            "candidates":candidates,
+            "owner":owner,
         })
-home = HomeView.as_view()
+user_profile = UserProfileView.as_view()
 
 @method_decorator(
     [login_required(login_url='landing_page', redirect_field_name="next"),], name='dispatch')

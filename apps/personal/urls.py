@@ -15,7 +15,6 @@ urlpatterns = [
     path('documentacao/atualizar/', views.add_documentation, name="add-documentation"),
     
 
-    path('home/', views.home, name="home"),
     path('minha-carreira-profissional/', views.career, name="career"),
 
     path('vagas/', views.vacancy_list, name="vacancy-list"),
@@ -24,5 +23,5 @@ urlpatterns = [
 
     path('minhas-candidaturas/', views.my_candidates, name="my-candidates"),
     
-    path('meu-emprego/', views.home, name="my-job"),
+    path('perfil-do-usuario/<uuid:uid>', views.user_profile, name="user-profile"),
 ]

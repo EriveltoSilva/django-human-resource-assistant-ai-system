@@ -23,7 +23,7 @@ class AccountController(View):
         print("---------------------------------------------->")
         print("Middleware".center(25))
         print("---------------------------------------------->")
-        return redirect(reverse(f'{user_type}:home'))
+        return redirect(reverse(f'{user_type}:user-profile', kwargs={'uid':self.request.user.uid}))
 account_controller = AccountController.as_view()
 
 class LoginView(View):

@@ -17,7 +17,7 @@
     </li>
 
     <li class="nav-item">
-      <a class="nav-link" href="{% url 'personal:home' %}">
+      <a class="nav-link" href="{% url 'personal:user-profile' request.user.uid %}">
         <i class="bi bi-pc-display-horizontal menu-icon"></i>
         <span class="menu-title">Início</span>
       </a>
