@@ -9,15 +9,26 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
+from django.utils import timezone
+from django.contrib.auth import get_user_model
 
 from .models import Vacancy, Candidate
 from .forms import RegisterVacancyForm, VacancySkillForm
 from .forms import VacancyResponsibilityForm, VacancyBenefitForm
 
-
+User = get_user_model()
 
 def user_profile(request, uid):
-    return render(request, "business/user-profile.html")
+    total_vacancies = Vacancy.objects.filter(company=request.user)
+    total_vacancies_active = Vacancy.objects.filter(company=request.user, expiration_data__gt = timezone.now().date())
+    total_users = User.objects.exclude(uid=request.user.uid)
+    total_candidates = Candidate.objects.all()
+    return render(request, "business/user-profile.html", {
+        'total_vacancies': total_vacancies,
+        'total_vacancies_active': total_vacancies_active,
+        'total_users': total_users,
+        'total_candidates': total_candidates,
+        })
 
 @method_decorator(
     [login_required(login_url='landing_page', redirect_field_name="next")],name='dispatch')
