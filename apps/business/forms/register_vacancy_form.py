@@ -140,7 +140,10 @@ class RegisterVacancyForm(forms.ModelForm):
 
     def clean_description(self):
         """remove the whitespaces at the end of string"""
-        return self.cleaned_data.get('description').strip()
+        description = self.cleaned_data.get('description')
+        description = description.strip()
+        description = description.replace('\n', '<br/>')
+        return description
 
     def clean_address(self):
         """remove the whitespaces at the end of string"""

@@ -25,9 +25,17 @@
         <div class="col-12 col-lg-8 grid-margin stretch-card">
           <div class="card">
             <div class="card-body">
-              <h2 class="card-title">Vaga: {{ vacancy.title }}</h2>
+                <div class="d-flex justify-content-between">
+                    <a href="{{ vacancy.get_absolute_url }}" class="btn btn-primary">
+                        <i class="bi bi-arrow-left"></i>
+                        Ver Vaga
+                    </a>
+                    <h2 class="card-title">
+                        Vaga: <span class="text-primary">{{ vacancy.title }}</span>
+                    </h2>
+                </div>
 
-              <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+              <ul class="nav nav-pills mb-3 mt-4" id="pills-tab" role="tablist">
                 <li class="nav-item" role="presentation">
                   <button class="nav-link " id="pills-basic-informations-tab" data-toggle="pill" data-target="#pills-basic-informations" type="button" role="tab" aria-controls="pills-basic-informations" aria-selected="true">
                     <i class="bi bi-person-vcard"></i> Informações Gerais</button>
@@ -78,9 +86,17 @@
         <div class="col-12 col-lg-4 grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
-                  <h2 class="card-title">Vaga: {{ vacancy.title }}</h2>
-                  <p class="text-muted h5">
-                    <i class="bi bi-clock-fill"></i> Data de registro: <span class="text-success">{{ vacancy.created_at }}</span>
+                  <h2 class="card-title">
+                    Vaga: <span class="text-primary">{{ vacancy.title }}</span>
+                </h2>
+                  <p class="h5">
+                    <div class="d-flex">
+                        <i class="bi bi-clock-fill"></i> 
+                        Data de registro: 
+                    </div>
+                    <p class="mt-2">
+                        <span class=" p-1 alert-danger">{{ vacancy.created_at }}</span>
+                    </p>
                   </p>
               
                   <p class="card-title" style="font-size:medium;">

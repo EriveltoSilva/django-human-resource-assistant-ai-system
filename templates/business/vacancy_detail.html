@@ -25,7 +25,9 @@
         <div class="col-8 grid-margin stretch-card">
           <div class="card">
             <div class="card-body">
-              <h2 class="card-title">Vaga: {{ vacancy.title }}</h2>
+              <h2 class="card-title">
+                Vaga: <span class="text-primary">{{ vacancy.title }}</span>
+            </h2>
               <p class="text-muted h5 mb-4">
                 <i class="bi bi-clock-fill"></i> Limite da Candidatura: <span class="p-1 alert-danger rounded ">{{ vacancy.created_at }}</span>
               </p>
