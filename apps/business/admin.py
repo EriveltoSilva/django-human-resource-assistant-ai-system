@@ -1,8 +1,11 @@
 """ admin config for vacancy in the django admin dashboard"""
 from django.contrib import admin
+from django.contrib.auth import get_user_model
+
 from .models import JobType, Benefit, Candidate
 from .models import  Vacancy, Responsibility, Skill
 
+User = get_user_model()
 
 @admin.register(Candidate)
 class CandidatesAdmin(admin.ModelAdmin):
@@ -43,3 +46,19 @@ class VacancyAdmin(admin.ModelAdmin):
     list_filter = ['title', 'company', 'min_wage', 'max_wage', 'description']
     list_per_page = 20
     inlines = [SkillAdminInline, ResponsibilityAdminInline, BenefitAdminInline]
+
+    def save_model(self, request, obj, form, change):
+        if not obj.pk:  # Only set the company if the vacancy is being created
+            obj.company = request.user
+        super().save_model(request, obj, form, change)
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        if request.user.is_superuser:
+            return qs
+        return qs.filter(company=request.user)
+    
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "company":
+            kwargs["queryset"] = User.objects.filter(pk=request.user.pk)
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
