@@ -27,20 +27,13 @@
       {% include 'partials/_messages.html' %}
     </div>
 
-    <div class="jumbotron bg-white">
-      <h1 class="display-4">O controle e filtragem dos candidatos nunca foi tão fácil</h1>
-      <p class="lead">Contrate pessoas não só com habilidades, mas também com valores alinhados à cultura da empresa</p>
-      <hr class="my-4" />
-      <p>Grandes profissionais aguardam por grandes companhias lá fora. Está pronto para recebe-los?</p>
-    </div>
-
     <div class="row justify-content-around" id="formContainer">
       <div class="col-lg-12 grid-margin stretch-card">
         <div class="card">
           <div class="card-body">
             <div class="default-text text-center" id="default-chat-container">
               <div class="text-center">
-                <h1><span class="text-primary">Estou</span> pronto pars começar a <span class="text-primary">Análise</span></h1>
+                <h1><span class="text-primary">Estou</span> pronto para começar a <span class="text-primary">Análise</span></h1>
                 <h2 class="text-primary">EJZ Tecnologia</h2>
                 <div class="d-flex flex-column justify-content-center align-items-center">
                   <input type="number" id="numDocuments" min="1" placeholder="Quantos 'Currículos' devem ser retornados?" class="form-control" />
@@ -67,7 +60,8 @@
                   <tr>
                     <th>Candidato</th>
                     <th>Nome</th>
-                    <th>Data de Nascimento</th>
+                    <th>E-mail</th>
+                    <th>D. de Nascimento</th>
                     <th>CV</th>
                     <th>Compatibilidade</th>
                     <th>Resumo</th>
@@ -77,19 +71,30 @@
                 <tbody>
                   {% for candidate in candidates %}
                     <tr>
-                      <td class="py-1">
-                        <img src="{{ candidate.user.personal_profile.image_url }}" alt="{{ candidate.user.get_full_name }}" />
-                      </td>
-                      <td>{{ candidate.user.get_full_name }}</td>
-
-                      <td>{{ candidate.user.personal_profile.birthday }}</td>
-                      <td>
-                        <a href="{{ candidate.cv.url }}" target="_blank" class="text-primary h3" title="Curriculum Vitae de {{candidate.user.get_full_name}}">
-                          <i class="bi bi-file-pdf"></i>
-                        </a>
-                      </td>
-                      <td> <span class="compatibility  p-2">-</span></td>
-                      <td><p class="summary p-2">-</p></td>
+                        <td class="py-1">
+                            <a href='{% url "business:candidate-user-profile" candidate.user.uid %}' target="_blank">
+                                <img src="{{ candidate.user.personal_profile.image_url }}" alt="{{ candidate.user.get_full_name }}" />
+                            </a>
+                        </td>
+                        <td>
+                            <a href='{% url "business:candidate-user-profile" candidate.user.uid %}' target="_blank">
+                                {{ candidate.user.get_full_name }}
+                            </a>
+                        </td>
+                        <td>
+                            <a href='{% url "business:candidate-user-profile" candidate.user.uid %}' target="_blank">
+                                {{ candidate.user.email }}
+                            </a>
+                        </td>
+                        
+                        <td>{{ candidate.user.personal_profile.birthday|date:"d-m-Y" }}</td>
+                        <td>
+                            <a href="{{ candidate.cv.url }}" target="_blank" class="text-primary h3" title="Curriculum Vitae de {{candidate.user.get_full_name}}">
+                                <i class="bi bi-file-pdf"></i>
+                            </a>
+                        </td>
+                        <td> <span class="compatibility  p-2">-</span></td>
+                        <td><p class="summary p-2">-</p></td>
                     </tr>
                   {% empty %}
                     <tr>
@@ -100,33 +105,7 @@
                   {% endfor %}
                 </tbody>
               </table>
-              <div class="clearfix">
-                <div class="hint-text">
-                  Mostrando <b>{{ candidates.number }}</b> de <b>{{ candidates.paginator.num_pages }}</b>
-                </div>
-                <ul class="pagination">
-                  {% if candidates.has_previous %}
-                    <li class="page-item">
-                      <a href="?page={{ candidates.previous_page_number }}{{ additional_url_query }}" class="page-link">Anterior</a>
-                    </li>
-                  {% endif %}
-
-                  {% for num_page in candidates.paginator.page_range %}
-                    <li class="page-item {% if num_page == candidates.number %}{% endif %}">
-                      <a href="?page={{ num_page }}{{ additional_url_query }}" class="page-link">{{ num_page }}</a>
-                    </li>
-                  {% endfor %}
-
-                  {% if candidates.has_next %}
-                    <li class="page-item">
-                      <a href="?page={{ candidates.next_page_number }}{{ additional_url_query }}" class="page-link">Próximo</a>
-                    </li>
-                    <li class="page-item">
-                      <a href="?page={{ candidates.paginator.num_pages }}{{ additional_url_query }}" class="page-link">Última &raquo;</a>
-                    </li>
-                  {% endif %}
-                </ul>
-              </div>
+              {% comment %} a paginação estaria aqui {% endcomment %}
             </div>
           </div>
         </div>
@@ -140,3 +119,32 @@
 {% block local_script %}
   <script src="{% static 'assets/business/js/candidacy_analyse.js' %}" defer></script>
 {% endblock %}
+
+
+<div class="clearfix">
+    <div class="hint-text">
+      Mostrando <b>{{ candidates.number }}</b> de <b>{{ candidates.paginator.num_pages }}</b>
+    </div>
+    <ul class="pagination">
+      {% if candidates.has_previous %}
+        <li class="page-item">
+          <a href="?page={{ candidates.previous_page_number }}{{ additional_url_query }}" class="page-link">Anterior</a>
+        </li>
+      {% endif %}
+
+      {% for num_page in candidates.paginator.page_range %}
+        <li class="page-item {% if num_page == candidates.number %}{% endif %}">
+          <a href="?page={{ num_page }}{{ additional_url_query }}" class="page-link">{{ num_page }}</a>
+        </li>
+      {% endfor %}
+
+      {% if candidates.has_next %}
+        <li class="page-item">
+          <a href="?page={{ candidates.next_page_number }}{{ additional_url_query }}" class="page-link">Próximo</a>
+        </li>
+        <li class="page-item">
+          <a href="?page={{ candidates.paginator.num_pages }}{{ additional_url_query }}" class="page-link">Última &raquo;</a>
+        </li>
+      {% endif %}
+    </ul>
+  </div>

@@ -12,12 +12,42 @@ from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from django.contrib.auth import get_user_model
 
+from apps.personal.models import Formation, ProfissionalExperience, Documentation
+from apps.personal.models import AcademicFormationItem, ProfissionalFormationItem
+from apps.personal.models import ProfissionalExperienceItem
+
 from apps.business.models import Skill, Responsibility, Benefit
 from .models import Vacancy, Candidate
 from .forms import RegisterVacancyForm, VacancySkillForm
 from .forms import VacancyResponsibilityForm, VacancyBenefitForm
 from . import charts
 User = get_user_model()
+
+
+class CandidateUserProfileView(View):
+    template_name = "business/candidate-user-profile.html"
+    def get(self, request, *args, **kwargs):
+        owner = User.objects.get(uid=self.kwargs.get('uid'))
+        formation, _ = Formation.objects.get_or_create(user=owner)
+        experience, _ = ProfissionalExperience.objects.get_or_create(user=owner)
+        documentation, _ = Documentation.objects.get_or_create(user=owner)
+
+        acad_formation_items = AcademicFormationItem.objects.filter(formation=formation)
+        prof_formation_items = ProfissionalFormationItem.objects.filter(formation=formation)
+        prof_experience_items = ProfissionalExperienceItem.objects.filter(profissional_experience=experience)
+
+        candidates = Candidate.objects.filter(user=owner)
+        
+
+        return render(self.request, self.template_name, {
+            "acad_formation_items":acad_formation_items,
+            "prof_formation_items":prof_formation_items,
+            "prof_experience_items":prof_experience_items,
+            "documentation": documentation,
+            "candidates":candidates,
+            "owner":owner,
+        })
+candidate_user_profile = CandidateUserProfileView.as_view()
 
 def user_profile(request, uid):
     total_vacancies = Vacancy.objects.filter(company=request.user)
@@ -45,7 +75,7 @@ def user_profile(request, uid):
         'data_users_gender_pie':data_users_gender_pie,
         'labels_users_without_pie':labels_users_without_pie,
         'data_users_without_pie':data_users_without_pie,
-        })
+    })
 
 @method_decorator(
     [login_required(login_url='landing_page', redirect_field_name="next")],name='dispatch')
@@ -57,10 +87,10 @@ class CandidacyAnalysesView(View):
     def get(self, request, *args, **kwargs):
         """get all  candidates applied to the vacancy"""
         vacancy = Vacancy.objects.get(vid=self.kwargs.get('vid'))
-        list_candidates = Candidate.objects.filter(vacancy=vacancy)
-        total_candidates = len(list_candidates)
-        paginator = Paginator(list_candidates,5)
-        candidates = paginator.get_page(self.request.GET.get('page'))
+        candidates = Candidate.objects.filter(vacancy=vacancy)
+        total_candidates = len(candidates)
+        # paginator = Paginator(list_candidates,5)
+        # candidates = paginator.get_page(self.request.GET.get('page'))
 
         return render(self.request, self.template_name,
                       {'candidates': candidates, "vacancy": vacancy,

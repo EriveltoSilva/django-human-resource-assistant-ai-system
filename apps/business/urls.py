@@ -19,6 +19,7 @@ urlpatterns = [
     path('vagas/responsabilidade/apagar/<uuid:rid>/', views.delete_responsibility, name="delete-responsibility"),
     
     path('perfil-do-usuario/<uuid:uid>/', views.user_profile, name="user-profile"),
+    path('perfil-do-usuario/candidato/<uuid:uid>/', views.candidate_user_profile, name="candidate-user-profile"),
     path('candidaturas/<uuid:vid>/', views.candidacy_list, name="candidacy-list"),
     path('candidaturas/analise/<uuid:vid>/', views.candidacy_analyses, name="candidacy-analyses"),
 ]

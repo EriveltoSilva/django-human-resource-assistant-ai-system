@@ -156,6 +156,9 @@ class PasswordResetEmailVerifyView(View):
                 user.save()
                 uidb64 = user.id
                 link = f'http://localhost:8000/accounts/alterar-palavra-passe?otp={otp}&uidb64={uidb64}'
+                print("#"*100)
+                print(link)
+                print("#"*100)
                 try:
                     emails.send_password_reset(user, user.email, 'EJZ Tecnologia', '', link)
                 except Exception as e:
