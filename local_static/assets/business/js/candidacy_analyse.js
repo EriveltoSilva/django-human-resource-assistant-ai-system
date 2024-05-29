@@ -13,7 +13,7 @@ const removeForm = ()=>{
 
 const alterTable = (data)=>{
     rows.forEach(row => {
-        const link = row.querySelector("a");
+        const link = row.querySelector("a.cvLink");
         if (link) {
             const href = link.getAttribute('href');
             const match = data.find(item => href.includes(item.filename));

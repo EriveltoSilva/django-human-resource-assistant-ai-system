@@ -89,7 +89,7 @@
                         
                         <td>{{ candidate.user.personal_profile.birthday|date:"d-m-Y" }}</td>
                         <td>
-                            <a href="{{ candidate.cv.url }}" target="_blank" class="text-primary h3" title="Curriculum Vitae de {{candidate.user.get_full_name}}">
+                            <a href="{{ candidate.cv.url }}" target="_blank" class="text-primary h3 cvLink" title="Curriculum Vitae de {{candidate.user.get_full_name}}">
                                 <i class="bi bi-file-pdf"></i>
                             </a>
                         </td>

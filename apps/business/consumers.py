@@ -62,6 +62,7 @@ class CandidateAnalysisConsumer(AsyncWebsocketConsumer):
             relevant_docs = await self.chatbot.similar_docs(self.job_description, self.num_docs, self.vectorstore, self.scope['cookies']['sessionid'])
             response = await self.get_response_formatted(relevant_docs)
             deb(f"SENDING RESPONSE TO FRONT...")
+            deb(response)
             await self.send(text_data=json.dumps({
                 'type': 'response',
                 'message': "Estes são os candidatos que melhor se adequam a vaga!",
