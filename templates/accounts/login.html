@@ -19,13 +19,13 @@
 <body>
     <div class="row vh-100 g-0">
         <div class="col-lg-6 position-relative d-none d-lg-block">
-            <img src="{% static 'assets/accounts/images/bg.jpg' %}" alt="Imagem de Fundo do Login na EJZ Tecnologia" class="bg-holder">
+            <img src="{% static 'assets/accounts/images/bg-login.jpg' %}" alt="Imagem de Fundo do Login na EJZ Tecnologia" class="bg-holder">
         </div>
 
         <div class="col-lg-6">
             <div class="row align-items-center justify-content-center h-100 g-0 px-4 px-sm-0">
                 <div class="col col-sm-6 col-lg-7 col-xl-6">
-                    <a href="#" class="d-flex justify-content-center mb-4">
+                    <a href="{% url 'landing_page' %}" class="d-flex justify-content-center mb-4">
                         <img src="{% static 'assets/images/logo/logo.png' %}" alt="Logotipo da EJZ Tecnologia" width="220">
                     </a>
 
