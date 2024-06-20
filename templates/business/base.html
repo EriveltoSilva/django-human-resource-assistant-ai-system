@@ -54,7 +54,8 @@
   <script src="{% static 'assets/js/template.js' %}"></script>
   <script src="{% static 'assets/js/todolist.js' %}"></script>
   <script src="{% static 'assets/vendors/progressbar.js/progressbar.min.js' %}"></script>
-  <script src="{% static 'assets/vendors/chart.js/Chart.min.js' %}"></script>
+  {% comment %} <script src="{% static 'assets/vendors/chart.js/Chart.min.js' %}"></script> {% endcomment %}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   {% block local_script %} {% endblock %}
