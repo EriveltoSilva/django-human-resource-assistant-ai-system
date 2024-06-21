@@ -31,7 +31,7 @@
 
 
 <p align="center">
-    <img src="./Docs/projects-images/vacancy-filter.PNG" alt="Image Example" width="400px">
+    <img src="./Docs/projects-images/vacancy-filter.PNG" alt="Image Example">
 </p>
 
 <h2 id="about">📌 About</h2>
