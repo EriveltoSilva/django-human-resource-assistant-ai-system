@@ -8,7 +8,7 @@
 [DJANGO_BADGE]:https://img.shields.io/badge/django-%23092E20.svg?style=for-the-badge&logo=django&logoColor=white
 
 
-<h1 align="center">EJZ Tecnologia Human Resources Assistent AI System</h1>
+<h1 align="center">EJZ Tecnologia Human Resources Assistant AI System</h1>
 
 ![HTML5][HTML5_BADGE]
 ![CSS3][CSS3_BADGE]
